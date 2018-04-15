@@ -66,10 +66,6 @@ ansible_ssh_private_key_file=~/.ssh/id_rsa
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@grid05.spacescience.ro:60000'
 
 [wn_auger]
-wna01 ansible_host=172.16.1.1
-wna02 ansible_host=172.16.1.2
-wna03 ansible_host=172.16.1.3
-wna04 ansible_host=172.16.1.4
 
 [wn_alice:vars]
 ansible_connection=ssh
@@ -79,11 +75,15 @@ ansible_ssh_private_key_file=~/.ssh/id_rsa
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@grid03.spacescience.ro:60000'
 
 [wn_alice]
-wn01 ansible_host=172.16.0.1
-wn02 ansible_host=172.16.0.2
-wn03 ansible_host=172.16.0.3
-wn04 ansible_host=172.16.0.4
 
+[wn_alien:vars]
+ansible_connection=ssh
+ansible_user=root
+ansible_port=22
+ansible_ssh_private_key_file=~/.ssh/id_rsa
+ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@alien.spacescience.ro:60000'
+
+[wn_alien]
 
 [areca_raid]
 issaf.spacescience.ro

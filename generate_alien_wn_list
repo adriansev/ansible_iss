@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ssh alien_root cat /etc/hosts | grep "alien-.*\." | sort -r | awk 'BEGIN{print("[wn_alien]")}  {printf ("%s ansible_host=%s\n",$3,$1) ;}' > inventory/wn_alien
+
