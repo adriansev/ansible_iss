@@ -1,8 +1,5 @@
 ---
-  - name: Install hardware monitoring tools on hardware machines (not vms)
-
-
-
-
-
+- hosts : seau.spacescience.ro
+  tasks:
+  - include_tasks: tasks/hardware_mon_task.yml
 
