@@ -10,7 +10,7 @@
 
 # Ex 1: Ungrouped hosts, specify before any group headers.
 
-localhost  ansible_connection=local
+localhost  ansible_connection=local ansible_python_interpreter=/usr/bin/python
 
 monitor.spacescience.ro
 paoshift.spacescience.ro
