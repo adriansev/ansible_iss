@@ -1,4 +1,0 @@
-#!/bin/bash
-
-ssh grid05_root cat /etc/hosts | grep "wna0.\." | sort | awk 'BEGIN{print("[wn_auger]")}  {printf ("%s ansible_host=%s\n",$3,$1) ;}' > inventory/wn_auger
-

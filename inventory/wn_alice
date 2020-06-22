@@ -1,5 +1,0 @@
-[wn_alice]
-wn01 ansible_host=172.16.0.1
-wn02 ansible_host=172.16.0.2
-wn03 ansible_host=172.16.0.3
-wn04 ansible_host=172.16.0.4

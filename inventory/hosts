@@ -10,7 +10,7 @@
 
 # Ex 1: Ungrouped hosts, specify before any group headers.
 
-localhost  ansible_connection=local ansible_python_interpreter=/usr/bin/python
+localhost  ansible_connection=local ansible_python_interpreter=/usr/bin/python3
 
 monitor.spacescience.ro
 paoshift.spacescience.ro
@@ -20,62 +20,66 @@ r3bsuit.spacescience.ro
 ansible_connection=ssh
 ansible_user=root
 ansible_port=60000
+##ansible_ssh_private_key_file=~/.ssh/id_rsa
+ansible_ssh_private_key_file=~/.ssh/id_ed25519
 
 [rocks]
 alien.spacescience.ro
 issaf.spacescience.ro
+grid05.spacescience.ro
 
 [xrd_redir]
 rd.spacescience.ro
 
 [xrd_servers]
-storage[02:07].spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa
+storage[02:08].spacescience.ro
 
 [xrd_cluster:children]
 xrd_redir
 xrd_servers
 
+[eos_mgm]
+mgm.spacescience.ro
+
+[eos_fst]
+fst01.spacescience.ro
+
+[eos_servers:children]
+eos_mgm
+eos_fst
+
 [cream_ce]
-grid03.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa
-grid05.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa
+grid05.spacescience.ro
 
 [sbdii]
-grid04.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa
+grid04.spacescience.ro
 
 [dpm]
-grid02.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa
-seau.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa
-
-[argus]
-argus.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa
+seau.spacescience.ro
 
 [vobox]
-vobox.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa
+vobox.spacescience.ro
 
 [emi_servers:children]
 cream_ce
 sbdii
 dpm
-argus
 vobox
 
-[wn_auger:vars]
+
+[areca_raid]
+seau.spacescience.ro
+storage[02:07].spacescience.ro
+
+
+[wn_umd:vars]
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
 ansible_ssh_private_key_file=~/.ssh/id_rsa
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@grid05.spacescience.ro:60000'
 
-[wn_auger]
-
-[wn_alice:vars]
-ansible_connection=ssh
-ansible_user=root
-ansible_port=22
-ansible_ssh_private_key_file=~/.ssh/id_rsa
-ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@grid03.spacescience.ro:60000'
-
-[wn_alice]
+[wn_umd]
 
 [wn_alien:vars]
 ansible_connection=ssh
@@ -86,9 +90,32 @@ ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@alien.spacescience
 
 [wn_alien]
 
-[areca_raid]
-issaf.spacescience.ro
-seau.spacescience.ro
-storage[02:07].spacescience.ro
+[wn_issaf:vars]
+ansible_connection=ssh
+ansible_user=root
+ansible_port=22
+ansible_ssh_private_key_file=~/.ssh/id_rsa
+ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000'
 
+[wn_issaf]
+
+[switch_dell:vars]
+ansible_user=admin
+ansible_port=22
+ansible_network_os=dellos10
+
+[switch_dell]
+dell01 ansible_host=172.20.0.125
+dell02 ansible_host=172.20.0.124
+
+[switch_hp:vars]
+ansible_connection=netconf
+ansible_network_os=network-os
+ansible_user=levantica
+ansible_port=22
+ansible_ssh_private_key_file=~/.ssh/id_rsa_root_monitor
+ansible_ssh_common_args='-o Compression=yes -o Ciphers +3des-cbc'
+
+[switch_hp]
+core0 ansible_host=172.20.0.99
 

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ssh issaf_root cat /etc/hosts | grep "issaf-.*\." | sort -r | awk 'BEGIN{print("[wn_issaf]")}  {printf ("%s ansible_host=%s\n",$3,$1) ;}' > inventory/wn_issaf
+

@@ -1,0 +1,15 @@
+---
+- name: Install CVMFS repository
+  yum:
+    name: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+    state: present
+  tags: repo
+
+- name: Install CVMFS packages
+  yum:
+    name:
+      - cvmfs
+      - cvmfs-config-default
+    state: latest
+    enablerepo: "cernvm,cernvm-config"
+  tags: packages
