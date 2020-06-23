@@ -1,0 +1,29 @@
+---
+- include_tasks: yum-utils.yml
+
+- name: Install IGTF repo file
+  get_url:
+    url: http://repository.egi.eu/sw/production/cas/1/current/repo-files/EGI-trustanchors.repo
+    dest: /etc/yum.repos.d/EGI-trustanchors.repo
+    mode: 0660
+    validate_certs: no
+    owner: root
+    group: root
+    force: yes
+  tags: igtf_repo
+
+- name: Install key
+  rpm_key:
+    state: present
+    key: http://repository.egi.eu/sw/production/cas/1/current/GPG-KEY-EUGridPMA-RPM-3
+  tags: igtf_repo
+
+- name: Install certificates
+  yum:
+    name:
+      - ca-policy-egi-core
+      - ca-policy-egi-cam
+      - ca-policy-lcg
+    state: latest
+    enablerepo: "EGI-trustanchors"
+  tags: igtf_certs

@@ -1,0 +1,13 @@
+---
+- name: yum utils
+  yum :
+    name:
+      - yum-utils
+      - yum-plugin-fastestmirror
+      - yum-plugin-priorities
+      - yum-plugin-protectbase
+    state: latest
+
+- name: Enable keepcache
+  command: yum-config-manager --save --setopt=keepcache=True &> /dev/null
+

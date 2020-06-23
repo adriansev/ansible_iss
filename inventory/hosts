@@ -14,12 +14,14 @@ localhost  ansible_connection=local ansible_python_interpreter=/usr/bin/python3
 
 monitor.spacescience.ro
 paoshift.spacescience.ro
-r3bsuit.spacescience.ro
+r3bsuit.spacescience.ro  ansible_python_interpreter=/usr/bin/python3
+auger01.spacescience.ro
 
 [all:vars]
 ansible_connection=ssh
 ansible_user=root
 ansible_port=60000
+##ansible_python_interpreter=/usr/bin/python3
 ##ansible_ssh_private_key_file=~/.ssh/id_rsa
 ansible_ssh_private_key_file=~/.ssh/id_ed25519
 
@@ -52,13 +54,13 @@ eos_fst
 grid05.spacescience.ro
 
 [sbdii]
-grid04.spacescience.ro
+grid04.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
 
 [dpm]
-seau.spacescience.ro
+seau.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
 
 [vobox]
-vobox.spacescience.ro
+vobox.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
 
 [emi_servers:children]
 cream_ce
@@ -99,23 +101,23 @@ ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@issaf.spacescience
 
 [wn_issaf]
 
-[switch_dell:vars]
-ansible_user=admin
-ansible_port=22
-ansible_network_os=dellos10
+#[switch_dell:vars]
+#ansible_user=admin
+#ansible_port=22
+#ansible_network_os=dellos10
 
-[switch_dell]
-dell01 ansible_host=172.20.0.125
-dell02 ansible_host=172.20.0.124
+#[switch_dell]
+#dell01 ansible_host=172.20.0.125
+#dell02 ansible_host=172.20.0.124
 
-[switch_hp:vars]
-ansible_connection=netconf
-ansible_network_os=network-os
-ansible_user=levantica
-ansible_port=22
-ansible_ssh_private_key_file=~/.ssh/id_rsa_root_monitor
-ansible_ssh_common_args='-o Compression=yes -o Ciphers +3des-cbc'
+#[switch_hp:vars]
+#ansible_connection=netconf
+#ansible_network_os=network-os
+#ansible_user=levantica
+#ansible_port=22
+#ansible_ssh_private_key_file=~/.ssh/id_rsa_root_monitor
+#ansible_ssh_common_args='-o Compression=yes -o Ciphers +3des-cbc'
 
-[switch_hp]
-core0 ansible_host=172.20.0.99
+#[switch_hp]
+#core0 ansible_host=172.20.0.99
 

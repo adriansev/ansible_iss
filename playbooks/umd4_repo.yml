@@ -1,4 +1,4 @@
 ---
-- hosts : seau.spacescience.ro
+- hosts : grid05.spacescience.ro
   tasks:
   - include_tasks: tasks/umd4_repo_task.yml

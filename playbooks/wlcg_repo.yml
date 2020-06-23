@@ -1,5 +1,4 @@
 ---
 - hosts: grid05.spacescience.ro
   tasks:
-  - include_tasks: tasks/lldpd_task.yml
-
+  - include_tasks: tasks/wlcg_repo_task.yml

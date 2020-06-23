@@ -1,0 +1,21 @@
+---
+- name: Enable epel
+  command: yum-config-manager --enable epel
+
+- name: Install lldpd
+  yum:
+    name: lldpd
+    state: latest
+
+- name: Ansible create file with content example
+  copy:
+    dest: "/etc/lldpd.d/lldpd.conf"
+    content: |
+      configure lldp portidsubtype ifname
+      update
+
+- name: Restart network service for interface eth0
+  service:
+    name: lldpd
+    state: restarted
+

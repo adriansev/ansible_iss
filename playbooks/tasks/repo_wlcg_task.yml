@@ -1,14 +1,8 @@
 ---
-- include_tasks: yum-utils.yml
-
 - name: Install CVMFS repository
   yum:
     name: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
     state: present
-  tags: repo
-
-- name: Enable cernvm-config
-  command: yum-config-manager --enable cernvm-config
   tags: repo
 
 - name: Install CVMFS packages
