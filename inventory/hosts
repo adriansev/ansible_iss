@@ -22,7 +22,6 @@ ansible_connection=ssh
 ansible_user=root
 ansible_port=60000
 ##ansible_python_interpreter=/usr/bin/python3
-##ansible_ssh_private_key_file=~/.ssh/id_rsa
 ansible_ssh_private_key_file=~/.ssh/id_ed25519
 
 [rocks]
@@ -34,7 +33,9 @@ grid05.spacescience.ro
 rd.spacescience.ro
 
 [xrd_servers]
-storage[02:08].spacescience.ro
+storage[02:07].spacescience.ro
+storage09.spacescience.ro
+storage10.spacescience.ro
 
 [xrd_cluster:children]
 xrd_redir
@@ -45,12 +46,14 @@ mgm.spacescience.ro
 
 [eos_fst]
 fst01.spacescience.ro
+fst02.spacescience.ro
+fst03.spacescience.ro
 
 [eos_servers:children]
 eos_mgm
 eos_fst
 
-[cream_ce]
+[umd_ce]
 grid05.spacescience.ro
 
 [sbdii]
@@ -63,22 +66,36 @@ seau.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
 vobox.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
 
 [emi_servers:children]
-cream_ce
+umd_ce
 sbdii
 dpm
 vobox
 
-
 [areca_raid]
 seau.spacescience.ro
 storage[02:07].spacescience.ro
+
+[lsi]
+fst01.spacescience.ro
+fst02.spacescience.ro
+fst03.spacescience.ro
+
+[mdraid]
+alien.spacescience.ro
+issaf.spacescience.ro
+mgm.spacescience.ro
+fst01.spacescience.ro
+fst02.spacescience.ro
+fst03.spacescience.ro
+storage[02:07].spacescience.ro
+storage09.spacescience.ro
+storage10.spacescience.ro
 
 
 [wn_umd:vars]
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
-ansible_ssh_private_key_file=~/.ssh/id_rsa
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@grid05.spacescience.ro:60000'
 
 [wn_umd]
@@ -87,7 +104,6 @@ ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@grid05.spacescienc
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
-ansible_ssh_private_key_file=~/.ssh/id_rsa
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@alien.spacescience.ro:60000'
 
 [wn_alien]
@@ -96,7 +112,6 @@ ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@alien.spacescience
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
-ansible_ssh_private_key_file=~/.ssh/id_rsa
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000'
 
 [wn_issaf]

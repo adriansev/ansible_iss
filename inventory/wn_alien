@@ -18,3 +18,8 @@ alien-0-59 ansible_host=172.18.3.194
 alien-0-60 ansible_host=172.18.3.193
 alien-0-61 ansible_host=172.18.3.192
 alien-0-62 ansible_host=172.18.3.191
+alien-0-63 ansible_host=172.18.3.190
+alien-0-64 ansible_host=172.18.3.189
+alien-0-65 ansible_host=172.18.3.188
+alien-0-66 ansible_host=172.18.3.187
+
