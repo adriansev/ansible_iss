@@ -1,0 +1,30 @@
+#!/bin/bash
+
+NAME="3"
+
+# devices
+##raid_comp="/dev/sda /dev/sdb /dev/sdc /dev/sdd /dev/sdf /dev/sde /dev/sdg /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl"
+##raid_comp="/dev/sdm /dev/sdn /dev/sdo /dev/sdp /dev/sdq /dev/sdr /dev/sds /dev/sdt /dev/sdu /dev/sdv /dev/sdw /dev/sdx"
+raid_comp="/dev/sdz /dev/sdab /dev/sdac /dev/sdad /dev/sdae /dev/sdaf /dev/sdag /dev/sdah /dev/sdai /dev/sdaj /dev/sdak /dev/sdal"
+
+PART_NAME="md${NAME}"
+RAID_NAME="xrootd${NAME}"
+
+# get how many devices
+raid_comp_arr=(${raid_comp})
+raid_devices=${#raid_comp_arr[@]}
+
+# customize devices to be partitions
+MDADM_PART_LIST=""
+for disk in ${raid_comp}; do
+    [[ -z "${MDADM_PART_LIST}" ]] && MDADM_PART_LIST="${disk}1" || MDADM_PART_LIST="${MDADM_PART_LIST} ${disk}1"
+done
+
+# create partition tables and define an ext4 partion on each device
+for disk in ${raid_comp}; do
+    ./format_disk ${disk} ${PART_NAME}
+done
+
+# create mdadm raid
+mdadm --create --raid-devices="${raid_devices}" --metadata=1.2 --chunk=16K --level=raid6 --name=${RAID_NAME} /dev/${PART_NAME} ${MDADM_PART_LIST}
+

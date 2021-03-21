@@ -1,0 +1,8 @@
+#!/bin/bash
+
+dev="sdb"
+name="xrd02"
+
+parted -s -a optimal /dev/${dev} mklabel gpt
+parted -s -a optimal /dev/${dev} mkpart ${name} 0% 100%
+mkfs.ext4 -L ${name} -b 4096 -m 0 -E stride=8,stripe-width=80 /dev/${dev}1

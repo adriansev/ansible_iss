@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+[[ -z "${1}" ]] && { echo "Usage is : $0 <opt> where <opt> is : cfg, smart or info"; exit 1; }
+
+SCRIPT=$(/usr/bin/readlink -f ${0})
+ARC_PATH=$(/usr/bin/dirname ${SCRIPT})
+
+CLI="${ARC_PATH}/cli64"
+
+get_smart_drv () { timeout --kill-after=10 15 ${CLI} disk smart drv="${1}" | tail -n +4 | head -n -2; }
+get_disk_info () { timeout --kill-after=10 15 ${CLI} disk info drv="${1}" | tail -n +3 | head -n -2; }
+
+extract_section () {
+local TAG FILE
+TAG="${1}"
+FILE="${2}"
+/usr/bin/sed -n "/${TAG}/,/GuiErrMsg<0x00>: Success\./p;s/GuiErrMsg<0x00>: Success\.//g" "${FILE}" | /usr/bin/head -n -2 | /usr/bin/tail -n +2
+}
+
+SAVE_PATH="/home/raid_info"
+[[ -e "/export/home" && -d "/export/home" ]] && SAVE_PATH="/export${SAVE_PATH}"
+
+ARC_CONF_PATH="${SAVE_PATH}/arc_cfg"
+ARC_SMART_PATH="${SAVE_PATH}/smart"
+ARC_INFO_PATH="${SAVE_PATH}/info"
+
+/usr/bin/mkdir -p ${ARC_CONF_PATH} ${ARC_SMART_PATH} ${ARC_INFO_PATH}
+
+if [[ "${1}" == "cfg" ]] ; then
+    LOCK="/tmp/areca_cli_ops_cfg.lock"
+    [[ -e "${LOCK}" ]] && exit
+    /usr/bin/touch ${LOCK}
+
+    [[ -z ${ARECA_PASS} ]] && { echo "ARECA_PASS not defined! Required for configuration saving"; exit 1; }
+    ${CLI} set password=${ARECA_PASS}
+
+    #CFG_FILE="$(/bin/hostname -s)_arc.cfg"
+    #[[ -e "${ARC_CONF_PATH}/${CFG_FILE}" ]] && rm -rf "${ARC_CONF_PATH}/${CFG_FILE}"
+    echo "Savebin :"
+    BIN_NAME="${ARC_CONF_PATH}/$(/usr/bin/hostname -s)_arc.cfg"
+    [[ -f "${BIN_NAME}" ]] && /usr/bin/rm -f "${BIN_NAME}"
+    timeout --kill-after=10 40 ${CLI} sys savebin path="${BIN_NAME}"
+
+    echo "Savecfg :"
+    timeout --kill-after=10 40 ${CLI} set savecfg path=${ARC_INFO_PATH}
+
+    ctrl_list="$(ls -1 ${ARC_INFO_PATH}/Controller??.txt)"
+    for f in ${ctrl_list}; do
+        NAME_FULLFILE="${ARC_INFO_PATH}/$(/usr/bin/hostname -s)_$(basename ${f})"
+        mv -f "${f}" "${NAME_FULLFILE}"
+        NAME_OUT_PREFIX="${ARC_INFO_PATH}/$(basename ${NAME_FULLFILE} .txt)"
+
+        extract_section "The System Information" "${NAME_FULLFILE}" > "${NAME_OUT_PREFIX}_sys.txt"
+        echo >> "${NAME_OUT_PREFIX}_sys.txt"
+        extract_section "Physical Hardware Information" "${NAME_FULLFILE}" >> "${NAME_OUT_PREFIX}_sys.txt"
+        extract_section "RaidSet Information" "${NAME_FULLFILE}" > "${NAME_OUT_PREFIX}_raid.txt"
+        extract_section "VolumeSet Information" "${NAME_FULLFILE}" > "${NAME_OUT_PREFIX}_volume.txt"
+        extract_section "Physical Drive Information" "${NAME_FULLFILE}" > "${NAME_OUT_PREFIX}_hdd.txt"
+        extract_section "Event Information" "${NAME_FULLFILE}" > "${NAME_OUT_PREFIX}_eventlog.txt"
+        /usr/bin/rm -f "${NAME_FULLFILE}"
+    done
+    [[ -f "${LOCK}" ]] && /usr/bin/rm -f "${LOCK}"
+
+elif [[ "${1}" == "info" ]] ; then
+    LOCK="/tmp/areca_cli_ops_hddinfo.lock"
+    [[ -e "${LOCK}" ]] && exit
+    /usr/bin/touch ${LOCK}
+
+    hdd_list_files="$(ls -1 ${ARC_INFO_PATH}/$(/usr/bin/hostname -s)_Controller??_hdd.txt)"
+    for l in ${hdd_list_files}; do
+        disk_list_nr="$(awk '!/N\.A\./ {if (NR>2) print $1}' ${l})"
+        for hdd_id in ${disk_list_nr}; do
+            get_disk_info ${hdd_id} > "${ARC_INFO_PATH}/disk_${hdd_id}.info";
+        done
+    done
+    [[ -f "${LOCK}" ]] && /usr/bin/rm -f "${LOCK}"
+
+elif [[ "${1}" == "smart" ]] ; then
+    LOCK="/tmp/areca_cli_ops_smart.lock"
+    [[ -e "${LOCK}" ]] && exit
+    /usr/bin/touch ${LOCK}
+
+    hdd_list_files="$(ls -1 ${ARC_INFO_PATH}/$(/usr/bin/hostname -s)_Controller??_hdd.txt)"
+    for l in ${hdd_list_files}; do
+        disk_list_nr="$(awk '!/N\.A\./ {if (NR>2) print $1}' ${l})"
+        for hdd_id in ${disk_list_nr}; do
+            get_smart_drv ${hdd_id} >> "${ARC_SMART_PATH}/disk_${hdd_id}.smart";
+        done
+    done
+    [[ -f "${LOCK}" ]] && /usr/bin/rm -f "${LOCK}"
+fi
+

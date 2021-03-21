@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+for ETH in $(/usr/bin/nmcli -t -f DEVICE con show --active); do
+    /usr/sbin/ip link set ${ETH} txqueuelen 20000;
+done
+

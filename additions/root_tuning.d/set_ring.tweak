@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+
+ETHTOOL="/usr/sbin/ethtool"
+
+set_ring () {
+RING_INFO=$(${ETHTOOL} -g "${1}")
+eval $(echo "${RING_INFO}" | /usr/bin/grep -A4 'Pre-set maximum' | /usr/bin/tail -n +2 | /usr/bin/awk '{gsub(" |\t", "", $0); gsub(":", "=", $0); print;}') #'
+${ETHTOOL} -G ${ETH} rx ${RX} rx-mini ${RXMini} rx-jumbo ${RXJumbo} tx ${TX} &> /dev/null
+}
+
+eth_list=$(/usr/bin/find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n' | /usr/bin/sort)
+
+for ETH in ${eth_list}; do
+    set_ring ${ETH}
+done
+

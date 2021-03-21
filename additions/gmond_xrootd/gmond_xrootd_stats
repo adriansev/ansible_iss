@@ -1,0 +1,13 @@
+#!/bin/bash
+
+LOC="https://raw.githubusercontent.com/ganglia/gmond_python_modules"
+BRANCH="master"
+
+curl -fsSLk --create-dirs ${LOC}/${BRANCH}/xrootd_stats/python_modules/xrootd_stats.py -o /usr/lib64/ganglia/python_modules/xrootd_stats.py ${LOC}/${BRANCH}/xrootd_stats/conf.d/xrootd_stats.pyconf -o /etc/ganglia/conf.d/xrootd_stats.pyconf
+
+python -m compileall /usr/lib64/ganglia/python_modules/xrootd_stats.py
+python -O -m compileall /usr/lib64/ganglia/python_modules/xrootd_stats.py
+
+systemctl restart gmond
+systemctl status gmond
+

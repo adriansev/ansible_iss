@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+systemctl enable tuned
+systemctl restart tuned
+tuned-adm profile throughput-performance
+

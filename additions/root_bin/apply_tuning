@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+
+TWEAK_DIR="/root/tuning.d"
+
+for TWEAK in $(find ${TWEAK_DIR} -name '*.tweak'); do
+    ${TWEAK}
+done
+

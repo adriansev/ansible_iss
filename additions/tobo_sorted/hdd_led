@@ -1,0 +1,48 @@
+#!/bin/bash
+
+help () {
+echo "1st arg is the device : dev_id, ata_id/sas_id or wwn_id"
+echo "2nd arg is <set> : this will modify the led"
+echo "3rd optional arg is <fault> : this will modify the fault led"
+}
+
+DEV="${1}"
+[[ -z "${DEV}" ]] && { help; exit 1; }
+shift
+
+if [[ "${1}" == "set" ]]; then
+    SET="1"; shift
+fi
+
+LEDID="locate"
+[[ "${1}" == "fault" ]] && LEDID="fault"
+
+LED () {
+local SLOT TGT STATUS SLOT_NAME DISK_DEV
+SLOT="${1}"
+TGT="${SLOT}/${LEDID}"
+
+if [[ "${SET}" == "1" ]]; then
+    STATUS=$(cat "${TGT}")
+    if [[ "${STATUS}" == 0 ]]; then
+        echo 1 > "${TGT}"
+    else
+        echo 0 > "${TGT}"
+    fi
+fi
+
+STATUS=$(cat "${TGT}")
+SLOT_NAME=$(basename "${SLOT}")
+echo "Led __${LEDID}__ status of slot/disk __${SLOT_NAME}__ : __${STATUS}__"
+}
+
+if [[ "${DEV}" = "all"  ]]; then
+    SLOT_LIST=$(/root/bin/list_hdds | awk '{print $1}')
+    for SLOT in ${SLOT_LIST}; do LED "${SLOT}"; done
+else
+    SLOT=$(/root/bin/list_hdds getdev "${DEV}" | awk '{print $1}')
+    LED "${SLOT}"
+fi
+
+
+

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+ARG1="${1}"
+ARG2="${2}"
+
+slot_list=$(find -L /sys/class/enclosure/* -maxdepth 1 -name "Slot*" |sort)
+
+byid_map=$(find /dev/disk/by-id -type l \( \( -name "ata-*" -o -name "wwn-*"  -o -name "scsi-*" \) ! -name "*-part*" \) -printf "%p %l\n")
+wwn2dev_map=$(echo "${byid_map}" | grep wwn- )
+ata2dev_map=$(echo "${byid_map}" | grep ata- )
+sas2dev_map=$(echo "${byid_map}" | grep scsi- )
+
+info_list=$(
+for slot in ${slot_list}; do
+    dev_id=$(ls -1 ${slot}/device/block/)
+    wwn_id=$(awk -v d=${dev_id} 'match($0,d"$") {n=split ($1,wwn,"/"); print wwn[n];}' <<< "${wwn2dev_map}") #'
+    ata_id=$(awk -v d=${dev_id} 'match($0,d"$") {n=split ($1,ata,"/"); print ata[n];}' <<< "${ata2dev_map}") #'
+    sas_id=$(awk -v d=${dev_id} 'match($0,d"$") {n=split ($1,scsi,"/"); print scsi[n];}' <<< "${sas2dev_map}") #'
+
+    [[ -n "${ata_id}" ]] && BY_ID="${ata_id}" || BY_ID="${sas_id}"
+    [[ "$(basename ${slot})" == "Slot00" ]] && echo
+    echo -e "${slot}\t${dev_id}\t/dev/disk/by-id/\t${wwn_id}\t${BY_ID}"
+done
+)
+
+if [[ "${ARG1}" == "getdev" ]]; then
+    [[ -z "${ARG2}" ]] && { echo "second argument should be slot, dev, ata_id or wwn_id"; exit 1; }
+    echo "${info_list}" | grep -i -w "${ARG2}"
+else
+    echo "${info_list}"
+fi
+

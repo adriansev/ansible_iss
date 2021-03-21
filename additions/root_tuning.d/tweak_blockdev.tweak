@@ -1,0 +1,29 @@
+#!/usr/bin/bash
+
+while IFS= read -r LINE; do
+    eval "${LINE}"
+    [[ "${ROTA}" == "1" ]] && SCHED="bfq" || SCHED="mq-deadline"
+    [[ -z "${WWN}" ]] && [[ "${VENDOR}" == "Areca"* ]] && SCHED="none"
+
+    DEVPATH="/sys/block/${NAME}"
+    is_available=$(grep ${SCHED} ${DEVPATH}/queue/scheduler)
+    if [[ -z "${is_available}" ]]; then
+        modprobe ${SCHED}
+        mod_name=$(modinfo ${SCHED} | awk -F":[[:space:]]*" '/^name/ {print $2}')
+        is_present=$(lsmod | grep ${mod_name})
+        [[ -z "${is_present}" ]] && { echo "scheduler module could not be loaded"; continue; }
+    fi
+
+    echo ${SCHED} > ${DEVPATH}/queue/scheduler
+
+    # This controls how many requests may be allocated in the block layer for read or write requests.
+    [[ "${SCHED}" != "none" ]] && echo 1024 > ${DEVPATH}/queue/nr_requests
+
+    # Maximum number of kilobytes to read-ahead for filesystems on this block device.
+    echo 4096 > ${DEVPATH}/queue/read_ahead_kb
+
+    # This is the maximum number of kilobytes that the block layer will allow for a filesystem request
+    cat ${DEVPATH}/queue/max_hw_sectors_kb > ${DEVPATH}/queue/max_sectors_kb
+
+done < <(/usr/bin/lsblk -dnP -o NAME,SCHED,RA,ROTA,TRAN,WWN,VENDOR)
+

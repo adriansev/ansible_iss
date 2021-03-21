@@ -1,0 +1,4 @@
+---
+- hosts: "{{ target | default('areca_raid') }}"
+  tasks:
+  - include_tasks: tasks/areca_cli.yml

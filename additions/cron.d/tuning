@@ -1,0 +1,4 @@
+SHELL=/usr/bin/bash
+PATH=/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+MAILTO=root
+@reboot root run-parts /root/bin/apply_tuning &> /dev/null
