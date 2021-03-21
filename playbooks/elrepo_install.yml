@@ -1,4 +1,4 @@
 ---
-- hosts: grid05.spacescience.ro
+- hosts: "{{ target }}"
   tasks:
   - include_tasks: tasks/elrepo_install_task.yml

@@ -1,5 +1,6 @@
-  - name: Install hardware monitoring tools on hardware machines (not vms)
-    yum :
-      name: linux-firmware,lshw,smartmontools,lm_sensors,dmraid,dmraid-events,mdadm,pciutils,edac-utils
-      state: latest
+---
+- name: Install hardware monitoring tools on hardware machines (not vms)
+  yum :
+    name: linux-firmware,lshw,smartmontools,lm_sensors,dmraid,dmraid-events,mdadm,pciutils,edac-utils
+    state: latest
 

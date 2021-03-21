@@ -1,0 +1,15 @@
+---
+- name: EGI IGTF repo install
+  yum_repository:
+    name: EGI-trustanchors
+    description: EGI-trustanchors
+    file: /etc/yum.repos.d/EGI-trustanchors.repo
+    baseurl: http://repository.egi.eu/sw/production/cas/1/current/
+    gpgkey: http://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-3
+    gpgcheck: yes
+    enabled: yes
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  tags: repo

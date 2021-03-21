@@ -1,0 +1,12 @@
+---
+- include_tasks: repo_egi_igtf.yml
+
+- name: Install certificates
+  yum:
+    name:
+      - ca-policy-egi-core
+      - ca-policy-egi-cam
+      - ca-policy-lcg
+    state: latest
+    enablerepo: "EGI-trustanchors"
+

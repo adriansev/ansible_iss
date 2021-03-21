@@ -1,5 +1,5 @@
 ---
-- hosts : seau.spacescience.ro
+- hosts : "{{ target }}"
   tasks:
   - include_tasks: tasks/hardware_mon_task.yml
 
