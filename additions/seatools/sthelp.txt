@@ -1,0 +1,1099 @@
+STHELP.TXT                                     Revision: 01-JUN-2001
+_____________________________________________________________________
+   _ _ _
+  / / (_)
+ _\ \ \      Seagate Technology LLC
+(_)_/_/      SeaTools Enterprise Edition v2.54 for Linux command line
+             1-800-SEAGATE  www.seagate.com
+_____________________________________________________________________
+Copyright (c) 2001 by Seagate Technology LLC All rights reserved.
+
+Software Copyright (c) 2001 by Peripheral Test Instruments, LLC
+(303)763-7488  www.scsitools.com
+
+
+      Welcome to Seagate's SeaTools Enterprise Edition for Linux
+      Disc Diagnostic Software!
+
+This README file contains important information about Seagate's
+SeaTools Enterprise Edition for Linux Disc Diagnostic. Please read
+this entire file before using this software.
+
+Table of Contents
+-----------------
+ 1.  SeaTools Disc Diagnostic System Requirements
+ 2.  Introduction
+ 3.  Command Line Options Overview
+ 4.  Using SeaTools Disc Test Diagnostic
+ 5.  Advanced Options (some cause data loss)
+ 6.  Troubleshooting
+ 7.  Disc Diagnostic Utility v2.54 KNOWN LIMITATIONS
+ 8.  SeaTools Disc Diagnostic Revision History
+ 9.  USER LICENSE AGREEMENT
+ 10.  Data Recovery Information
+ 11. Seagate Technology Support Services
+ 12. Product Return Procedure
+
+=====================================================================
+
+1. SeaTools Disc Diagnostic System Requirements
+-----------------------------------------------
+* Seagate Technology SCSI interface disc drive(s)
+* IBM-compatible PC with a 486 or greater processor
+* Linux kernel 2.4.x or higher
+* sg driver version = 3xxx or higher to support Drive Self Test (DST)
+commands
+=====================================================================
+
+2. Introduction
+---------------
+Seagate's Customer Service organization strives to be Best In Class in
+everything it does. No matter how friendly and efficient we are,
+returning a drive for warranty service means system downtime and
+inconvenience for you in packing and returning your drive product. Of
+the drives returned to Seagate for warranty replacement, a large
+percentage are perfectly good drives with "No Problem Found" (NPF)
+after testing. Your drive may be completely healthy. Before you send
+it in, it is in your best interest to determine if a replacement drive
+is really necessary to solve your problem. This troubleshooting
+diagnostic utility will help you make that determination and possibly
+save you time and money and preserve your data.
+
+    Some typical reasons for NPFs are:
+
+    * File System Corruption
+    * Driver Corruption
+    * Broken Master Boot Record
+    * Virus Attack
+    * Hardware Conflicts
+
+The SeaTools software for Linux command line is easy to load and
+simple to use. The following instructions will help you get the most
+out of this new software tool. If you have questions about this or any
+other Seagate software or service products, please contact Seagate at
+the numbers listed below.
+
+Check http://www.seagate.com often for new and updated versions of
+SeaTools disc diagnostic software as well as updates to the
+"Frequently Asked Questions" (FAQ's) list.  Seagate will continue to
+add new features, functions and capabilities to this software.
+
+Seagate Disc Diagnostic is a product of Seagate, a leading provider of
+technology and products enabling people to store, access, and manage
+information. Seagate is committed to providing best-in-class products
+to help people get their information when, where and how they want it.
+
+The Company is recognized as the world's largest manufacturer of disc
+drives, magnetic discs and read-write heads, an innovator in tape
+drives, and a leading developer of software for Enterprise Information
+Management. Founded in 1979, Seagate can be found around the globe and
+on the World Wide Web at www.seagate.com.
+
+=====================================================================
+
+3. Command Line Options Overview
+--------------------------------
+Usage: SeaTools Enterprise [-option][variable][device]
+        Allowed options are:
+        -l  list all attached SCSI disks
+        -i  display drive Inquiry information
+        -I  display drive Inquiry information for all SCSI devices
+        -t ###  execute ###% (10% - 100%) short Drive Self Test (DST)
+                ex: st -t 10 /dev/sga   execute 10 % of the short
+                Drive Self Test (DST)
+        -T ###  execute ###% (10% - 100%) long Drive Self Test (DST)
+                ex: st -T 20 /dev/sga   execute 20 % of the long Drive
+                Self Test (DST)
+        -s  stop Drive Self Test (DST)
+        -g ### execute ###% (1-% - 100%) generic short test for legacy
+        & non-Seagate drives
+                ex: st -g 10 /dev/sga    execute 10 % of the short
+                legacy test
+        -G  generic long test (sequential verify test of entire drive)
+        -r  generate Seagate RMA form
+        -v  show SeaTools version and license agreement
+
+
+example: ./st -i /dev/sga  displays inquiry for /dev/sga
+
+Advanced options (many of these options are destructive to data):
+
+        Some of these functions, such as format, cause loss of data.
+        Other functions should be used with caution.  Be sure to read
+        and follow all program instructions and cautions.  Backup all
+        critical data files, if possible, prior to running and Advance
+        Options.  If you have any questions about these option,
+        contact Seagate technical support for assistance.
+
+        -Marg Drive Preferences (mode page) change
+         Note: Use -i INQUIRY option to display the supported &
+         current settings.
+
+                Performance Mode (PM)
+                        -Mpmon set to desktop mode
+                        -Mpmoff set to server mode
+                Write Cache Enable (WCE)
+                        -Mwceon  set WCE bit
+                        -Mwceoff disables write cache
+                Read Cache Disable (RCD)
+                        -Mrcdon  set RCD bit
+                        -Mrcdoff enables read cache
+                Just In Time (JIT)
+                        -Mjitdefault set all JIT bits, factory default
+                        -Mjit1on set only JIT bit 1, clears any others
+                        -Mjit2on set only JIT bit 2, clears any others
+                Automatic Write Reallocation Enable (AWRE)
+                        -Mawreon  set AWRE bit
+                        -Mawreoff disables Auto Write Reallocation
+                Automatic Read Reallocation Enable (ARRE)
+                        -Marreon  set ARRE bit
+                        -Marreoff disables Auto Read Reallocation
+                Disable Exception Control (DExcpt, SMART logging)
+                        -Mdexon  set DExcpt bit
+                        -Mdexoff enables SMART logging
+                Disable Loop Master (DLM, fibre channel only)
+                        -Mdlmon  sets DLM bit
+                        -Mdlmoff enables Loop Master
+                Disable Target Oriented Loop Initialization  (DTOLI,
+                fibre channel only)
+                        -Mdtolion  sets DTOLI bit
+                        -Mdtolioff enables Target Oriented Loop Init.
+                Number of Cache Segments
+                        -Mcache#  set # cache segments
+                ex: -Mcache8 set # of cache segments to 8
+        -F  default low-level SCSI format
+
+Usage: [-option] [variable] [device]
+        -d file  firmware download
+                ex: st -d fwfile /dev/sga  download firmware file
+                fwfile into /dev/sga
+        -C ### capacity change
+                ex: -C 1234567890 set high blocks to 1234567890 (zero
+                based)
+                ex: -C max change capacity to factory maximum
+        -B ### sector size change followed by a format
+                ex: -B 1024 change to 1024 bytes/sector
+
+=====================================================================
+
+4. Using SeaTools Disc Diagnostic
+---------------------------------
+ -l  list all attached SCSI disks
+
+ Displays an abbreviated list of devices physically connected to your
+ system and provides the /dev/ device names you'll use to select one
+ for testing. The bus scan listing gives device, vendor, model,
+ firmware rev and number of blocks (sectors, typically 512 bytes
+ each).
+
+ The listing may also begin with host adapter information.  For
+ example:
+
+ Host adapter information:
+ Adaptec AHA274x/284x/294x (EISA/VLB/PCI-Fast SCSI) 5.2.4/5.2.0
+        <Adaptec AIC-7899 Ultra 160/m SCSI host adapter>
+ Adaptec AHA274x/284x/294x (EISA/VLB/PCI-Fast SCSI) 5.2.4/5.2.0
+        <Adaptec AIC-7899 Ultra 160/m SCSI host adapter>
+
+ Drive information:
+ /dev/sga SEAGATE  ST39204LC        0006 17921834 blocks
+ /dev/sgb SEAGATE  ST318436LW       0010 35885167 blocks
+
+-------------------------------------------------------------
+-i  display drive Inquiry information
+
+Display detailed information about a specific device including,
+standard inquiry data, drive serial number, as well as firmware and
+servo revision information.  In addition, the inquiry screen also
+lists the current mode page settings that might be modifiable by the
+software.  The following example for a /dev/sga
+
+/dev/sga [=/dev/sda  bus1 ch=0 target=0 lun=0]
+        /dev/sga
+        Vendor = SEAGATE
+        Product = ST39204LC
+        Version = 0006
+        Serial Number = 1BV031 M
+        Copyright = Copyright (c) 2000 Seagate All rights reserved
+        SCSI Firmware = 83473238
+        Servo RAM Release = 83470818
+        Servo ROM Release = 00000001
+        Servo RAM Date = C21B
+        Servo ROM Date = 1999
+
+        Blocksize = 512, Highblock = 17921834, Capacity = 8961 MB
+        -this is a Seagate drive
+        -this drive supports DST
+                -short DST time = 120 seconds
+                -long DST time = 419 seconds
+        -Mode Page Settings [current value (default)]:
+                -WCE bit = 1 (1)
+                -RCD bit = 0 (0)
+                -AWRE bit = 1 (1)
+                -ARRE bit = 1 (1)
+                -DExcpt bit = 1 (0)
+                -Number of cache segments = 16 (3)
+                -PM  bit = 1 (0)
+
+-------------------------------------------------------------
+-I  displays drive Inquiry information for all SCSI devices
+
+Using the same output structure as the -i option, the uppercase -I
+provides details on all the SCSI devices in the system.  This is a
+complete bus scan with details.  Each SCSI drives detected in the bus
+scan will display the -i Inquiry information level of detail.
+
+-------------------------------------------------------------
+-t ###  execute ###% (10% - 100%) short Drive Self Test (DST)
+
+Drive Self Test (DST) is a diagnostic technology within the drive
+designed to recognize drive fault conditions.  DST validates the
+functionality of the drive in background mode and will suspend self-
+testing to service any other commands.  DST utilizes the SCSI Send
+Diagnostic command in background mode.  The short test is 120 seconds
+long and consists of a collection of factory test routines that have
+the highest likelihood of detecting drive problems.  All tests are
+safe to user data.
+
+The short DST may be shortened by setting a lower test depth
+percentage.  The 10% level is approximately 12 seconds long.  The
+ability of the DST to detect problems is lessened by shortening the
+test.  Therefore, this feature should be used more as a fast, good
+health check when confidence in the drive is not an issue.
+
+DST is a capability of drives manufactured after 1999.  If a DST -t
+options is given to an older drive, the software will recognize the
+situation and switch over to the -g generic legacy test.
+
+If a drive fails testing, follow your system's authorized service
+procedures.  It is possible for a drive to pass the short DST and fail
+the long DST.  This is because not all sectors are read on the short
+DST.  See the -T option for the long DST.
+
+ex: st -t 10 /dev/sga   execute 10 % of the short Drive Self Test
+(DST)
+
+-------------------------------------------------------------
+-T ###  execute ###% (10% - 100%) long Drive Self Test (DST)
+
+The long DST reads every sector on the drive. The duration of the
+complete test is based on the capacity of the drive.  Since the drive
+reports its progress as a percentage of completion, the test may be
+shortened by utilizing a lower percentage.
+
+ex: st -T 20 /dev/sga   execute 20 % of the long Drive Self Test (DST)
+
+-------------------------------------------------------------
+-s  stop Drive Self Test (DST)
+
+DST operates in a background mode.  It is sometimes necessary to halt
+the test.  Since this command line utility will exit on ^C, the drive
+could still be running its DST.  Generic tests end with ^C, DST tests
+do not.  Use the -s to send the abort DST command.
+
+ex: st -s /dev/sga   send abort DST command to /dev/sga.
+
+-------------------------------------------------------------
+-g ### execute ###% (1-% - 100%) generic short test for legacy & non-
+Seagate drives
+
+Similar to the -t option.  This short test option is approximately 120
+seconds long and is used on older drives that do not support DST.
+However, drives that do support DST may also run these tests.    All
+tests are safe to user data.  All test commands are issued by the host
+and operate in the foreground.  In this situation, the ability of the
+drive to suspend testing in order to service other disc IO requests is
+managed by the operating system.
+
+ex: st -g 10 /dev/sga    execute 10 % of the short legacy test
+
+-------------------------------------------------------------
+-G  generic long test (sequential verify test of entire drive)
+
+All sectors on the drive are verified from the outer diameter to the
+inner diameter.
+
+-------------------------------------------------------------
+-r  generate Seagate RMA form
+
+In the unlikely event of failure, SeaTools -r helps organize the model
+and serial number information and basic removal instructions and
+cautions into a simple text file named rmalog.txt.   You can verify
+warranty status for distribution Seagate drives at www.seagate.com.
+Drives that are part of an OEM system package are not supported on the
+web site.  You will need to contact the system OEM for product return
+instructions.
+
+-------------------------------------------------------------
+-v  show SeaTools version and license agreement
+
+Please read the Right To Use License Agreement.  This option also
+displays the SeaTools version number and the version number of the all
+important SCSI "SG" driver.  SG driver versions need to be higher than
+3xxxx to support the DST commands.  If SeaTools encounters a 2xxxx SG
+driver, only generic legacy tests will operate.
+
+=====================================================================
+
+5. Advanced Options (many of these options are destructive to data)
+-------------------------------------------------------------------
+Some of these functions, such as format, cause loss of data.  Other
+functions should be used with caution.  Be sure to read and follow all
+program instructions and cautions.  Backup all critical data files, if
+possible, prior to running and Advance Options.  If you have any
+questions about these option, contact Seagate technical support for
+assistance.
+
+-Marg Drive Preferences (mode page) change
+Note: Use -i INQUIRY option to display the supported & current
+settings.
+
+This option gives you the ability to change several drive settings
+that control the operation of the drive.
+
+Performance Mode (PM)
+        -Mpmon/off desktop/server PM bit
+           On (Desktop Mode), PM indicates that the number of cache
+           segments is fixed to the value set in Caching Page.  Off
+           (Server Mode), PM indicates that the drive will optimize
+           the number of segments depending on the command activity
+           observed by the drive.  Not all SCSI drives support this
+           feature.
+
+Write Cache Enable (WCE)
+        -Mwceon/off  set/clear WCE bit
+           On, SCSI Write command may return as soon as data has been
+           received from host.  Off, SCSI Write command may not return
+           status until data has been written to media.
+
+Read Cache Disable (RCD)
+        -Mrcdon/off  set/clear RCD bit
+           On, SCSI Read command must access the media.  Data cannot
+           come from the cache.  Off, SCSI Read command may access the
+           cache or the media.
+
+Just In Time (JIT)
+        -Mjitdefault set all JIT bits, factory default
+        -Mjit1on set only JIT bit 1, clears any others
+        -Mjit2on set only JIT bit 2, clears any others
+           JIT (Just In Time) bits allow you to enable and disable
+           certain seek speeds.  Slow, has the quietest audio
+           operation with a reduction in performance.  This can also
+           reduce power consumption (from seek activity).  Medium,
+           allows all seek speeds and selects the quietest speed that
+           doesn't hurt performance.  Fast, has the loudest audio
+           operation but enhances performance speed.  Not all SCSI
+           drives support this feature.
+
+Automatic Write Reallocation Enable (AWRE)
+        -Mawreon/off  enable/disable AWRE bit
+           On, drive automatically relocates bad blocks detected
+           during write operations.  Off, drive creates Check
+           Condition status with sense key of Medium Error if bad
+           blocks are detected during write operations.
+
+Automatic Read Reallocation Enable (ARRE)
+        -Marreon/off  enable/disable ARRE bit
+           On, drive automatically relocates bad blocks detected
+           during read operations.  Off, drive creates Check condition
+           status with sense key of Medium Error if bad blocks are
+           detected during read operations.
+
+Disable Exception Control (DExcpt, SMART logging)
+        -Mdexon/off  disable/enable DExcpt bit
+           Sets operating mode of Self-Monitoring Analysis and
+           Reporting Technology (SMART).  On, disables monitoring of
+           the SMART failure prediction thresholds.  Off, enables
+           monitoring of the SMART data for exceeded thresholds
+
+Disable Loop Master (DLM, fibre channel only)
+        -Mdlmon/off  disable/enable DLM bit
+           On, target does not become loop master.  Off, target must
+           wait to receive an Address or Port Discovery ELS.
+
+Disable Target Oriented Loop Initialization  (DTOLI, fibre channel
+only)
+        -Mdtolion/off  disable/enable DTOLI bit
+           On, target does not originate the initializing LIP
+           following insertion into the loop.  Off, target originates
+           the initializing LIP.
+
+Number of Cache Segments
+        -Mcache#  set # cache segments
+           Allows the user to set the number of cache segments to the
+           factory default or to a user specified number of cache
+           segments.
+
+           ex: st -Mcache8 /dev/sga set # of cache segments on
+           /dev/sga to 8
+
+-------------------------------------------------------------
+-F  default low-level SCSI format
+
+WARNING: Data loss will occur with this option.  Formatting ensures
+that the medium is formatted so all of the user-addressable data
+blocks can be accessed.  There is no guarantee that the medium has or
+has not been altered.  In addition, the medium may be certified and
+control structures may be created for the management of the medium and
+defects.
+
+It is possible to format the system boot drive.  Do not make the
+mistake of formatting the wrong drive!  Be completely sure of what you
+are doing before using the format command.
+
+DATA ON THE SELECTED DEVICE WILL BE IRRETRIEVABLY LOST DURING
+FORMATTING.
+
+-------------------------------------------------------------
+-d file  firmware download
+
+This option allows you to select the downloaded firmware file from
+your local disc drive and then upgrade the firmware on the currently
+selected drive.
+
+Firmware files for Seagate drives are only available from Seagate.
+Seagate does not make firmware files available to the public.  In rare
+cases, in the course of troubleshooting a specific drive problem,
+Seagate technical support may offer different firmware as a solution.
+
+DO NOT power down the server or the drive during this upgrade process.
+If drive power is lost during a firmware upgrade, the drive will be
+destroyed. Wait until all drive / LED activity has ceased before
+powering off the drive. The upgrade process should not take more than
+3 minutes per drive.
+
+ex: st -d fwfile.sea /dev/sga  download firmware file fwfile.sea into
+/dev/sga
+
+-------------------------------------------------------------
+-C ### capacity change
+
+The drive's number of logical blocks (sectors, therefore capacity) may
+be lowered for specific situations - such as matching mirrored drives.
+The capacity can be set to a specific size smaller than maximum. Since
+the numbering is zero based, 100 sectors would be entered as 99.  Use
+the max argument to set the drive to factory maximum.
+
+CAUTION: Data may be lost with this function.
+
+ex: -C 1234567890 set high blocks to 1234567890 (zero based)
+ex: -C max change capacity to factory maximum
+
+-------------------------------------------------------------
+-B ### sector (block) size change followed by a format
+
+In almost all situations, sectors will be 512 bytes per sector.  Some
+operating systems allow the use of non-512 byte sectors.  Not all
+Seagate drives support non-512 byte formats.  The number of logical
+block after format is a function of the block size.  A sector size of
+1024 bytes will result in half as many logical blocks.  The total
+capacity of the drive is still remain approximately the same.
+
+WARNING: Data loss will occur with this option.  Formatting ensures
+that the medium is formatted so all of the user-addressable data
+blocks can be accessed.  There is no guarantee that the medium has or
+has not been altered.  In addition, the medium may be certified and
+control structures may be created for the management of the medium and
+defects.
+
+It is possible to format the system boot drive.  Do not make the
+mistake of formatting the wrong drive!  Be completely sure of what you
+are doing before using the sector (block) size change followed by a
+format command.
+
+DATA ON THE SELECTED DEVICE WILL BE IRRETRIEVABLY LOST DURING
+FORMATTING.
+
+ex: -B 1024 change to 1024 bytes/sector
+
+=====================================================================
+
+5. Troubleshooting
+------------------
+"bash: st254: command not found"
+don't forget the add the ./ to the command: ./st254
+
+Several FAQs for SCSI disc drive troubleshooting are available at
+http://www.seagate.com/support/kb/disc/index_faq.html
+
+If no drives are listed then confirm the SCSI/Fibre Channel host
+adapter is configured and check that your hard drive is SCSI or Fibre
+Channel. (ATA is not supported at this time.)
+
+If your drive is still not displayed check that your SCSI cable is
+tightly connected to the drive. Also try another power connector to
+the drive (power down the system first).
+
+If the drive is completely unresponsive, it will not be seen by the
+computer.  Most SCSI host adapters post some information to the screen
+during the boot process.  The information lists the drives that are
+connected to the adapter(and operational.  If the drive you want to
+test is not seen by the adapter, then the operating system and
+software will not see the drive, either.
+
+If the drive is listed several times confirm that the drive is not
+sharing the same SCSI ID as another device. Most host adapters use ID
+7 by default.
+
+=====================================================================
+
+6. SeaTools Diagnostic v2.54 KNOWN LIMITATIONS
+--------------------------------------------------------
+SeaTools relies on the SG driver for communication to the SCSI
+devices.  The particular SCSI Send Diagnostic command which issues the
+Drive Self Test (DST) is supported in Linux kernel versions after 2.4.
+In the transition from earlier versions to 2.4, the SG driver, itself,
+was updated from 2xxx to 3xxx.
+
+If SeaTools is run on a down level system, SeaTools will see the 2xxx
+SG driver and automatically switch to "generic" tests.  These tests
+are intended to follow a test sequence which is similar to DST.
+
+=====================================================================
+
+7. SeaTools Enterprise Edition for Linux command line Revision History
+----------------------------------------------------------------------
+    v2.54      30-May-2001    Initial public release
+
+Latest versions are found at http://seatools.seagate.com
+
+=====================================================================
+
+8. USER LICENSE AGREEMENT
+
+Right to Use License Agreement
+
+This RIGHT TO USE LICENSE is an agreement made between Peripheral Test
+Instruments, LLC (hereinafter PTI) and you, the enduser (hereinafter
+"LICENSEE"):  This license agreement is for proprietary software,
+which is a part of the SeaTools Enterprise provided by Seagate
+Technology LLC (such PTI proprietary software is hereinafter referred
+to as the "LICENSED PRODUCT"); BY INSTALLING OR OTHERWISE UTILIZING
+THE SEATOOLS ENTERPRISE WHICH INCLUDES THE LICENSED PRODUCT YOU ARE
+AGREEING TO BE BOUND BY THE TERMS OF THIS AGREEMENT. THE LICENSED
+PRODUCT IS LICENSED AND NOT SOLD. IF YOU DO NOT AGREE TO THE TERMS OF
+THIS AGREEMENT, YOU SHOULD EXIT THIS PAGE AND, IF YOU RECEIVED A CD
+CONTAINING THE SOFTWARE, RETURN THE SOFTWARE AND ACCOMPANYING
+DOCUMENTATION TO SEAGATE TECHNOLOGY LLC.
+
+
+LICENSE AND TERM
+PTI and any applicable sublicensors grant to the LICENSEE a non-
+exclusive, non-transferable license to use the LICENSED PRODUCT as
+part of the SeaTools Enterprise in machine readable, object code form
+only, and related documentation (collectively referred to as the
+"Software") in connection with the SeaTools Enterprise provided by
+Seagate Technology LLC.  The license granted hereby is further subject
+to the terms and conditions of the license granted by Seagate
+Technology LLC for the use of the SeaTools Enterprise. Any attempted
+sublicense, assignment, rental, sale or other transfer of the Software
+or the rights or obligations of this Agreement without the prior
+written consent of PTI shall be void.  Unauthorized copying, reverse
+engineering, decompiling, disassembling, making modifications,
+adaptations or derivative works based on the Software are prohibited.
+Title to the Software is not transferred to Seagate Technology LLC or
+LICENSEE by this license. Ownership and title to the Software,
+including any copy of the LICENSED PRODUCT, and the related
+documentation, are retained by PTI. PTI may terminate this license
+agreement upon the breach by LICENSEE of any term hereof. Upon such
+termination by PTI, LICENSEE agrees to return to Seagate Technology
+LLC the SeaTools Enterprise which includes the LICENSED PRODUCT and
+including all related documentation, and all copies and portions
+thereof.  LICENSEE shall have the right to copy or transfer the
+LICENSED PRODUCT as part of the SeaTools Enterprise and further
+subject to the terms and conditions any license for the use of the
+SeaTools Enterprise. LICENSEE agrees to include the PTI copyright
+notice on all copies of the LICENSED PRODUCT.
+
+SOFTWARE LIMITATIONS
+PTI does not warrant that the Software will be free from error or will
+meet your specific requirements. You assume complete responsibility
+for decisions made or actions taken based on information obtained
+using the Software. Any statements made concerning the utility of the
+Software are not to be construed as unexpressed or implied warranties.
+THE LICENSEE SHALL HAVE THE SOLE RESPONSIBILITY FOR ADEQUATE
+PROTECTION AND BACKUP OF ITS DATA USED IN CONNECTION WITH THE LICENSED
+PRODUCT. IN NO EVENT WILL PTI NOR ANY SUBLICENSOR BE LIABLE FOR: I)
+SPECIAL, INDIRECT, OR CONSEQUENTIAL DAMAGE; II) ANY DAMAGES WHATSOEVER
+RESULTING FORM LOSS OF USE, DATA, OR PROFITS, RERUN TIME, INACCURATE
+INPUT OR WORK DELAYS, OR ANY DIRECT PROPERTY DAMAGE ARISING OUT OF OR
+IN CONNECTION WITH THIS AGREEMENT OR THE USE OR PERFORMANCE OF THE
+LICENSED PRODUCT, WHETHER IN ACTION, IN CONTRACT, OR TORT INCLUDING
+NEGLIGENCE.
+
+LIMITED WARRANTY AND DAMAGES DISCLAIMER SUBJECT TO THE CONDITIONS AND
+LIMITATIONS ON LIABILITY STATED HEREIN, PTI WARRANTS FOR A PERIOD OF
+NINETY (90) DAYS FROM THE DELIVERY OF THE FIRST COPY OF EACH TYPE OF
+THE SOFTWARE, AS SO DELIVERED, WILL MATERIALLY CONFORM TO PTI'S THEN
+CURRENT DOCUMENTATION FOR SUCH SOFTWARE. THIS WARRANTY COVERS ONLY
+PROBLEMS REPORTED TO PTI DURING THE WARRANTY PERIOD.  ANY LIABILITY OF
+PTI WITH RESPECT TO THE SOFTWARE OR THE PERFORMANCE THEREOF UNDER ANY
+WARRANTY, NEGLIGENCE, STRICT LIABILITY OR OTHER THEORY WILL BE LIMITED
+EXCLUSIVELY TO PRODUCT REPLACEMENT. EXCEPT FOR THE FOREGOING, THE
+SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND INCLUDING
+WITHOUT LIMITATION, ANY WARRANTY OF FITNESS OR MERCHANTABILITY OR
+FITNESS FOR A PARTICULAR PURPOSE. FURTHER, PTI DOES NOT WARRANT,
+GUARANTEE, OR MAKE ANY REPRESENTATIONS REGARDING THE USE, OR THE
+RESULTS OF THE USE, OF THE SOFTWARE IN TERMS OF CORRECTNESS, ACCURACY,
+RELIABILITY, OR OTHERWISE. THE LICENSEE UNDERSTANDS THAT PTI IS NOT
+RESPONSIBLE FOR AND WILL HAVE NO LIABILITY FOR HARDWARE, SOFTWARE, OR
+OTHER ITEMS OR ANY SERVICES PROVIDED BY ANY PERSONS OTHER THAN PTI.
+PTI SHALL HAVE NO LIABILITY FOR DELAYS OR FAILURES BEYOND ITS
+REASONABLE CONTROL. PTI SHALL NOT BE RESPONSIBLE OR LIABLE WITH
+RESPECT TO ANY SUBJECT MATTER OF THIS RIGHT TO USE LICENSE AGREEMENT
+OR THE AGREEMENT OF WHICH IT IS A PART OR ANY ATTACHMENT, PRODUCT
+ORDER, SCHEDULE OR TERMS OR CONDITIONS RELATED THERETO, OR FOR THE
+SEATOOLS ENTERPRISE UNDER ANY CONTRACT, NEGLIGENCE, STRICT LIABILITY
+OR OTHER THEORY: A) FOR LOSS OR INACCURACY OF DATA OR, COST OF
+PROCUREMENT OF SUBSTITUTE GOODS, SERVICES OR TECHNOLOGY, B) FOR ANY
+INDIRECT INCIDENTAL OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT
+LIMITED TO LOSS OF REVENUES AND LOSS OF PROFITS; OR C) FOR ANY MATTER
+BEYOND ITS REASONABLE CONTROL. THIS AGREEMENT SHALL BE CONSTRUED,
+INTERPRETED AND GOVERNED BY THE LAWS OF THE UNITED STATES AND THE
+STATE OF COLORADO GOVERNING INTELLECTUAL PROPERTY RIGHTS. NO RIGHT,
+LICENSE, OR INTEREST TO THE TRADEMARK "PERIPHERAL TEST INSTRUMENTS" IS
+GRANTED HEREUNDER, AND NO SUCH RIGHT, LICENSE OR INTEREST WILL BE
+ASSERTED BY LICENSEE WITH RESPECT TO SUCH TRADEMARK. SHOULD ANY TERM
+OF THIS LICENSE AGREEMENT BE DECLARED VOID OR UNENFORCEABLE BY ANY
+COURT OF COMPETENT JURISDICTION, SUCH DECLARATION SHALL HAVE NO EFFECT
+ON THE REMAINING TERMS THEREOF. THE FAILURE OF EITHER PARTY TO ENFORCE
+ANY RIGHTS GRANTED HEREUNDER OR TO TAKE ACTION AGAINST THE OTHER PARTY
+IN THE EVENT OF ANY BREACH HEREUNDER SHALL NOT BE DEEMED A WAIVER BY
+THAT PARTY AS TO SUBSEQUENT ENFORCEMENT OR FIGHTS OR SUBSEQUENT
+ACTIONS IN THE EVENT OF FUTURE BREACHES. THE LICENSE FEE(S) PAID BY
+LICENSEE ARE PAID IN CONSIDERATION OF THE LICENSE GRANTED UNDER THIS
+RIGHT TO USE LICENSE AGREEMENT. THIS AGREEMENT SUPERSEDES ALL PRIOR
+AGREEMENTS, PROPOSALS, AND REPRESENTATIONS BETWEEN YOU AND PTI
+REGARDING: 1) THE PTI LICENSED PRODUCT CONTAINED AS PART OF THE
+SEATOOLS ENTERPRISE; 2) EARLIER RELEASES OF THIS LICENSED PRODUCT AND;
+3) ALL ACCOMPANYING RELATED DOCUMENTATION
+
+=====================================================================
+
+9. Data Recovery Information
+----------------------------
+If you cannot access the data on the drive and need data recovery
+services, data recovery service providers may be located on the
+Internet using major search engines or by referencing your local
+classified telephone directory.
+
+Seagate does not perform any data recovery services, nor does
+Seagate endorse or warrant the services of any specific data
+recovery company. Nevertheless, one independent data recovery
+service provider is Ontrack Data International, Inc. with offices in
+the following locations:
+
+    USA      (Tel 1-800-872-2599 or +1-952-937-5161)
+    England  (Tel +44 (0) 1372 741999
+    Germany  (Tel +49 (0) 7031/644-150)
+    France   (Tel +33 (0)1 49 19 22 63)
+    Japan    (0120-413-374 or +81 (0) 429-32-6365)
+
+    Call toll free in Europe at 00 800 10 12 13 14
+
+    Ontrack’s Internet web site is www.ontrack.com.
+
+This information is provided solely for your information only.
+=====================================================================
+
+10. Seagate Technology Support Services
+    _ _ _
+   / / (_)
+  _\ \ \
+ (_)_/_/
+
+Online Services
+---------------
+
+Internet
+www.seagate.com for information about Seagate products and services.
+Worldwide support is available 24 hours daily by e-mail for your disc
+or tape questions.
+
+Presales Support:
+Disc: www.seagate.com/support/email/email_presales.html
+      or DiscPresales@Seagate.com.
+
+Technical Support:
+Disc: www.seagate.com/support/email/email_disc_support.html
+      or DiscSupport@Seagate.com.
+
+Reseller Marketplace - Reseller Marketplace is the storage industry's
+first collaborative, e- commerce marketplace offering resellers the
+fastest, most efficient online purchasing process for Seagate storage
+solutions. The Reseller Marketplace at marketplace.seagate.com, an
+exclusive service for US resellers participating in the Seagate
+Partner Program (SPP), is designed to streamline the purchasing
+process of Seagate solutions and provide unprecedented value to
+Seagate's resellers through real-time pricing and availability, fast
+and easy comparison shopping, and seamless integration with key
+distributors for a one-stop shopping experience.
+
+For support, questions and comments:
+reseller.seagate.com/benefits/T1.html or 1-877-271-3285 (toll-free)
+9 A.M. to 7 P.M. (eastern time) Monday through Friday.
+
+Automated Services
+------------------
+
+SeaFONE(r) (1-800-SEAGATE) is Seagate's toll-free number
+(1-800-732-4283) to access our automated self-help services. Using a
+touch-tone phone, you can find answers to service phone numbers,
+commonly asked questions, troubleshooting tips and specifications for
+disc drives and tape drives 24 hours daily. International callers can
+reach this service by dialing +1-405-936-1234.
+
+SeaFAX(r) is Seagate's automated FAX delivery system. Using a touch-
+tone phone, you can obtain technical support information by return FAX
+24 hours daily. This service is available worldwide.
+
+Presales Support
+----------------
+
+Our Presales Support staff can help you determine which Seagate
+products are best suited for your specific application or computer
+system.
+
+Technical Support
+----------------
+
+If you need help installing your drive, consult your dealer. Dealers
+are familiar with their unique system configurations and can help you
+with system conflicts and other technical issues. If you need
+additional help, you can talk to a Seagate technical support
+specialist. Before calling, note your system configuration and drive
+model number (ST####).
+
+SeaTDD(tm) (+1-405-936-1687) is a telecommunications device for the
+deaf (TDD). You can send questions or comments 24 hours daily and
+exchange messages with a technical support specialist from 8:00 A.M.
+to 11:45 A.M. and 1:00 P.M. to 6:00 P.M. (central time) Monday through
+Friday.
+
+Customer Service (CSO)
+---------------------
+
+Warranty Service - Seagate offers worldwide customer support for
+Seagate drives. Seagate direct OEM, Distribution and System Integrator
+customers should contact their Seagate service center representative
+for warranty information. Other customers should contact their place
+of purchase.
+
+Authorized Service Centers - If you live outside the US, you can
+contact an Authorized Service Center for service.
+
+_____________________________________________________________________
+
+USA/Canada/Latin America Support Services
+-----------------------------------------
+
+Presales Support
+Call Center     Toll-free           Direct dial       FAX
+Disc:           1-877-271-3285      +1-405-936-1210   +1-405-936-1683
+Tape:           1-800-626-6637      +1-714-641-2500   +1-714-641-2410
+
+Technical Support (SeaFONE)
+1-800-SEAGATE or +1-405-936-1234 (for specific product phone number)
+FAX:  Disc: +1-405-936-1685; Tape: +1-405-936-1683
+
+SeaFAX          1-800-SEAGATE
+SeaTDD          +1-405-936-1687
+
+Warranty Service
+Call Center     Toll-free           Direct dial       FAX / Internet
+USA             1-800-468-3472      +1-405-936-1456   +1-405-936-1462
+Mexico and      -                   +1-405-936-1456   +1-405-936-1464
+Latin America
+Canada
+    Memofix*    1-800-636-6349      +1-905-660-4936   +1-905-660-4951
+                                                      www.memofix.com
+    Adtech*     1-800-624-9857      +1-905-812-8099   +1-905-812-7807
+                                                      www.adtech1.com
+Brazil
+    MA Centro de    -               +55-21-509-7267   +55-21-507-6672
+    Servicos*                          e-mail: sgt_cso@gbl.com.br
+
+* Authorized Service Centers
+
+_____________________________________________________________________
+
+European Support Services
+-------------------------
+
+For European customer support, dial the toll-free number for your
+specific country for presales support, technical support, SeaFAX and
+warranty service.
+
+If your country is not listed here, dial our European call center at
++31-20-316-7222 from 8:30 A.M. to 5:00 P.M. (European central time)
+Monday through Friday. The European call center is located in
+Amsterdam, The Netherlands.
+
+Call Center
+Austria         0 800-20 12 90
+Belgium         0 800-74 876
+Denmark         80 88 12 66
+France          0 800-90 90 52
+Germany         0 800-182 6831
+Ireland         1 800-55 21 22
+Italy           800-790695
+Netherlands     0 800-732 4283
+Norway          800-113 91
+Poland          00 800-311 12 38
+Spain           900-98 31 24
+Sweden          0 207 90 073
+Switzerland     0 800-83 84 11
+Turkey          00 800-31 92 91 40
+United Kingdom  0 800-783 5177
+
+Fax Services-All European Countries
+Presales/Technical Support/     +31-20-653-3513
+Warranty Service
+
+_____________________________________________________________________
+
+Africa/Middle East Support Services
+-----------------------------------
+
+For presales, technical support, warranty service and FAX services in
+Africa and the Middle East, dial our European call center at
++31-20-316-7222 from 8:30 A.M. to 5:00 P.M. (European central time)
+Monday through Friday, or send a FAX to +31-20-653-3513. The European
+call center is located in Amsterdam, The Netherlands.
+
+
+Asia/Pacific Support Services
+
+For Asia/Pacific presales and technical support, dial the toll-free
+number for your specific country. The Asia/Pacific toll-free numbers
+are available from 6:00 A.M. to 10:45 A.M. and 12:00 P.M. to 6:00 P.M.
+(Australian eastern time) Monday through Friday.  If your country is
+not listed here, direct dial one of our technical support locations.
+
+Call Center     Toll-free           Direct dial       FAX
+Australia       1800-14-7201        -                 -
+China           -                   -                 +86-10-6871-4316
+Hong Kong       800-90-0474         -                 +852-2368 7173
+Indonesia       001-803-1-003-2165  -                 -
+Japan           -                   -                 +81-3-5462-2979
+Malaysia        1-800-80-2335       -                 -
+New Zealand     0800-443988         -                 -
+Singapore       800-1101-150        +65-488-7584      +65-488-7528
+Taiwan          -                   +886-2-2514-2237  +886-2-2715-2923
+Thailand        001-800-11-0032165  -                 -
+
+Warranty Service
+Call Center     Toll-free           Direct dial       FAX
+Asia/Pacific    -                   +65-485-3595      +65-488-7503
+Australia       1800-12-9277        -                 -
+Japan           -                   +81-3-5462-2904   +81-3-5462-2979
+
+
+Contact Information Rev 6.3, 30-May-2001
+
+=====================================================================
+
+11. Product Return Procedure
+----------------------------
+
+Service by Seagate
+------------------
+A. Seagate Disc or Tape Drive Return Procedure
+B. Shipping and Handling Information - Packaging Instructions
+C. Seagate Approved Packaging
+D. Limited Warranty
+E. Service Warranty Terms
+
+
+A. Seagate Disc or Tape Drive Return Procedure
+----------------------------------------------
+Seagate offers comprehensive worldwide customer support for all
+Seagate disc and tape drives both online and through our regional
+Seagate Customer Service Centers and Authorized Service Providers
+(see "Seagate Technology Support Services" section, above). Drive
+return procedures can vary by geographical location and are subject
+to current International Trade Regulations.
+
+1. Before you return a disc or tape drive for warranty service,
+   verify whether a replacement drive is necessary to solve the
+   problem you are experiencing. If so, contact your place of
+   purchase; if they have an exchange policy, it may be your most
+   convenient solution.
+
+2. Read the appropriate Seagate Warranty Statement for new or
+   replacement products (see "Service Warranty Terms" section, below).
+
+3. Know your Seagate product model number and serial number.  Your
+   PRINTME.TXT file has this information.  Otherwise, see the label
+   on the top of the drive.
+
+4. Verify the warranty status of the drive you wish to return. If
+   the product is still under warranty, obtain an RMA (step 5). If
+   the warranty is expired, contact a local service facility, a
+   Seagate Service Center Representative, or an Authorized Service
+   Provider. If Seagate records indicate that the warranty is
+   expired and you believe this is incorrect, contact your place of
+   purchase or a Seagate Service Center Representative.
+
+5. Obtain an RMA. To obtain an RMA online, use the Warranty
+   Validation application at
+   www.seagate.com/support/supporttop.html. It will lead you into
+   the RMA request application. As an alternative, you can email
+   your PRINTME.TXT file to SeaToolsRMA@Seagate.com. To obtain an
+   RMA by phone or fax, contact an Authorized Service Center (see
+   "Seagate Technology Support Services" section above).
+
+6. Obtain a "ship to" address. Service Centers are located
+   throughout the world. The ship to address of the facility nearest
+   you will be included with the RMA.
+
+7. Package and return the drive. IMPROPER PACKAGING WILL VOID THE
+   WARRANTY. Be sure to read the Shipping and Handling Information
+   (below). Your original drive will NOT be returned to you, so be
+   sure to backup any data you wish to keep and return only the bare
+   drive. If you are unable to retrieve needed data, you may want to
+   consider data recovery services.
+
+Once Seagate Technology receives your drive for service, Seagate will
+ship you a replacement drive. You may check the status of your
+replacement drive RMA shipment online or by contacting a Seagate
+Service Center Representative to obtain that information.
+
+
+B. Shipping and Handling Information - Packaging Instructions
+-------------------------------------------------------------
+1. When you return a drive for replacement, all data and software
+   will be lost. The replacement drive will be low-level formatted.
+   If you need the data on the drive and do not have a backup copy,
+   you may want to consider data recovery services before shipping
+   the drive to Seagate for replacement.
+
+2. Remove all accessories or spare parts and return only the bare
+   drive! Accessories include, but are not limited to, side rails,
+   manuals, removable media, cables, mounting brackets, face plates,
+   and controller cards. Accessories will not be returned.
+
+3. Enclose the drive in an anti-static container. If packaging more
+   than one drive, use a separate bag for each drive.
+
+4. Secure the drive in Seagate approved packaging. Use 2-inch thick
+   foam rubber in a corrugated box. Multiple drives in a single box
+   should be packaged with foam rubber between each drive. Do NOT
+   use foam packing pellets, bubble wrap, or newspaper. (See Seagate
+   Approved Packaging section, below.)
+
+5. Write the RMA number on the outside of each box.
+
+6. A shipping address will be given to you along with the RMA
+   number. Ship the drive to the address provided using the carrier
+   of your choice. You should choose a carrier with the ability to
+   trace the shipment. Seagate Technology will not be responsible
+   for shipments for which the carrier cannot provide proof of
+   delivery.
+
+
+C. Seagate Approved Packaging
+-----------------------------
+Shipping a drive in an unapproved container voids the warranty.  Any
+product returned to Seagate must be properly packaged in the
+original box or a Seagate-approved container to prevent physical and
+electrical damage while in transit. FAILURE TO PROPERLY PACKAGE THE
+DRIVE WILL VOID THE WARRANTY.
+
+What is Seagate Approved Packaging?
+
+   We recommend you ship your drive in its original box and packing
+   materials, which you should always keep for storing and shipping
+   purposes. If you do not have your original packaging materials,
+   use 2-inch thick foam rubber in a corrugated box. Multiple drives
+   in a single box should be packaged with foam rubber between each
+   drive. Do NOT use foam packing pellets, bubble wrap, or newspaper.
+
+Where can I get Seagate Approved Packaging?
+
+   Seagate does not separately sell packaging materials. While
+   Seagate does not endorse any one third party vendor, companies
+   that provide packaging materials can be found at:
+
+   Western Industries - For additional information, see
+   https://www.wicokc.com/orderform/seagate.html
+
+   SiongBee - For additional information, see
+   https://www.siongbee.com/sgorder.nsf
+
+
+Disclaimer: All packaging vendors mentioned in this message are
+independent of Seagate Technology, Inc.; Seagate makes no warranty,
+implied or otherwise, regarding the performance or reliability of
+these companies or their products. This information is provided, as
+is, solely for your information. To obtain product specifications
+and warranty information, please contact the respective vendor
+directly.
+
+
+D. Limited Drive Warranty ("Products")
+--------------------------------------
+Beginning on the date of shipment to its direct customer and
+continuing for the published warranty period, Seagate represents
+that the Products are new or, if they contain remanufactured or used
+components, are the equivalent of new in performance and reliability
+and warrants that each Product failing to function properly under
+normal use, due to a defect in materials or workmanship or due to
+nonconformance to the published specifications, will be repaired or
+exchanged, at Seagate's option and expense. Customer should obtain a
+Return Material Authorization ("RMA") number from their point of
+purchase or from Seagate prior to returning the nonconforming
+Product freight prepaid. Seagate will pay for transporting the
+repaired or exchanged Product to Customer. Repaired or exchanged
+Product will be warranted for a period of one (1) year for Disc
+Products and six (6) months for Tape Products from the date of
+shipment by Seagate, or the remainder of the original warranty,
+whichever is the longer. This Limited Warranty extends to Seagate's
+direct customer only and is not assignable or transferable. Seagate
+makes no representation, warranty or guaranty, express or implied
+regarding the Products except its standard form of limited warranty
+("Limited Warranty"). Seagate may in its sole discretion modify its
+Limited Warranty at any time and from time to time.
+
+DRIVE PRODUCT WARRANTY DISCLAIMER
+EXCEPT AS SET FORTH IN WRITING IN THE LIMITED WARRANTY, SEAGATE
+MAKES NO PERFORMANCE REPRESENTATIONS, WARRANTIES, OR GUARANTEES,
+EITHER EXPRESS OR IMPLIED, ORAL OR WRITTEN, WITH RESPECT TO ITS
+PRODUCTS, INCLUDING WITHOUT LIMITATION ANY IMPLIED WARRANTY (A) OF
+MERCHANTABILITY, (B) OF FITNESS FOR A PARTICULAR PURPOSE, OR (C)
+ARISING FROM COURSE OF PERFORMANCE, COURSE OF DEALING, OR USAGE OF
+TRADE.
+
+IN NO EVENT SHALL SEAGATE BE LIABLE FOR COSTS OF PROCUREMENT OF
+SUBSTITUTE GOODS BY ANYONE OR FOR LOSS OF DATA, NOR WILL IT BE
+LIABLE FOR INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL, OR OTHER
+DAMAGES ARISING OUT OF THE PURCHASE, USE OR PERFORMANCE OF THE
+PRODUCT, AND WHETHER OR NOT IT HAS BEEN ADVISED OF THE POSSIBILITY
+OF SUCH DAMAGES. THE FOREGOING ALLOCATION OF RISK IS REFLECTED IN
+THE PRICE OF THE PRODUCT.
+
+
+E. Repair Warranty Terms
+------------------------
+All Seagate repaired disc products are warranted for one year or the
+balance of your original warranty, whichever is greater. All Seagate
+repaired tape products are warranted for six months or the balance
+of your original warranty, whichever is greater. Customer shall be
+responsible for saving or backing up data contained in any Product
+returned to Seagate for in-warranty or out-of-warranty repairs or
+service.
+
+DISCLAIMER: SEAGATE SHALL HAVE NO RESPONSIBILITY FOR DATA AND SHALL
+HAVE NO LIABILITY ARISING OUT OF ANY DAMAGE TO OR LOSS OF DATA WHILE
+THE PRODUCT IS IN SEAGATE'S POSSESSION.
+
+If you require assistance with data recovery, you may obtain
+information about recovery services from the world wide web.
+
+THANK YOU
+
+-=EOF: STHELP.TXT=-
+
+
+
+

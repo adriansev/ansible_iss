@@ -1,0 +1,10 @@
+---
+- name: Sync seagate seatool executable
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/seatools/st"
+    dest: /root/bin/
+    owner: root
+    group: root
+    mode: '0700'
+    force: yes
+

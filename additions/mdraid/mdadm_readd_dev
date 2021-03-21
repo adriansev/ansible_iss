@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 DEV="${1}"
 
@@ -23,8 +23,12 @@ done
 #echo ${ROLE_DEF}
 #echo ${MD_OF_DEV}
 
+[[ ! -e "/dev/${MD_OF_DEV}" ]] && { echo "No such md device: /dev/${MD_OF_DEV}" ; exit 1; }
+[[ ! -e "/dev/${DEV}" ]] && { echo "No such device: /dev/${DEV}" ; exit 1; }
+
 mdadm -vv --fail /dev/${MD_OF_DEV} /dev/${DEV}
 mdadm -vv --re-add /dev/${MD_OF_DEV} /dev/${DEV}
 
+sleep 1
 cat /proc/mdstat
 

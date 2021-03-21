@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+wget https://www.seagate.com/files/www-content/support-content/downloads/seatools/_shared/downloads/seatools_cli.tar
+tar -xvf seatools_cli.tar
+rm -f seatools_cli.tar

@@ -24,6 +24,9 @@ ansible_port=60000
 ##ansible_python_interpreter=/usr/bin/python3
 ansible_ssh_private_key_file=~/.ssh/id_ed25519
 
+[issaf]
+issaf.spacescience.ro
+
 [rocks]
 alien.spacescience.ro
 issaf.spacescience.ro
@@ -52,6 +55,11 @@ fst03.spacescience.ro
 [eos_servers:children]
 eos_mgm
 eos_fst
+
+[storages:children]
+xrd_servers
+eos_fst
+issaf
 
 [umd_ce]
 grid05.spacescience.ro

@@ -1,7 +1,0 @@
-#!/bin/bash
-
-md_dev="md3"
-
-parted -s -a optimal /dev/${md_dev} mklabel gpt
-parted -s -a optimal /dev/${md_dev} mkpart ${md_dev} 0% 100%
-mkfs.ext4 -L ${md_dev} -b 4096 -m 0 -E stride=4,stripe-width=40 /dev/${md_dev}p1

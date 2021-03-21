@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+MD="${1}"
+
+md_devs="$(/usr/bin/find /sys/devices/virtual/block -iwholename "*/md" -exec /usr/bin/dirname '{}' \;)"
+readarray -t md_list <<< "$(for d in ${md_devs}; do /usr/bin/basename ${d}; done)"
+[[ ! "${md_list[@]}" =~ "${MD}" ]] && { echo "md dev >${MD}< not found in the list of local md devices: ${md_list[@]}"; exit 1; }
+
+BLOCK_SIZE="4096"
+CHUNK_SIZE="$(< /sys/devices/virtual/block/${MD}/md/chunk_size)"
+TOTAL_DISKS="$(< /sys/devices/virtual/block/${MD}/md/raid_disks)"
+LEVEL="$(< /sys/devices/virtual/block/${MD}/md/level)"
+
+if [[ "${LEVEL}" == "raid6" ]]; then
+  STRIDE=$(echo "scale=0; ${CHUNK_SIZE}/${BLOCK_SIZE}" | bc -l )
+  DATA_DISKS=$(echo "scale=0; ${TOTAL_DISKS} - 2" | bc -l )
+  STRIPE=$(echo "scale=0; ${DATA_DISKS} * ${STRIDE}" | bc -l )
+  RAID_OPTS="-E stride=${STRIDE},stripe-width=${STRIPE}"
+fi
+
+echo parted -s -a optimal /dev/${MD} mklabel gpt
+echo parted -s -a optimal /dev/${MD} mkpart ${MD} 0% 100%
+echo mkfs.ext4 -L ${MD} -b "${BLOCK_SIZE}" ${RAID_OPTS} "/dev/${MD}p1"
+
+
