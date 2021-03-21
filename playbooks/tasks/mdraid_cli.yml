@@ -1,0 +1,27 @@
+---
+- name: Sync md tools
+  ansible.builtin.copy:
+    dest: /root/bin/
+    src: "{{ playbook_dir }}/../additions/mdraid/{{ item }}"
+    owner: root
+    group: root
+    mode: '0700'
+    force: yes
+  with_items:
+    - mdadm_readd_dev
+    - md_check
+
+
+- name: Sync md format tools
+  ansible.builtin.copy:
+    dest: /root/bin/md_mkformat/
+    src: "{{ playbook_dir }}/../additions/mdraid/md_mkformat/{{ item }}"
+    owner: root
+    group: root
+    mode: '0600'
+    force: yes
+  with_items:
+    - create_md_array
+    - format_md_component
+    - format_mdraid
+

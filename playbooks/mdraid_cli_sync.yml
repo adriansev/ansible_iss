@@ -1,0 +1,4 @@
+---
+- hosts: "{{ target | default('storages') }}"
+  tasks:
+  - include_tasks: tasks/mdraid_cli.yml
