@@ -67,6 +67,7 @@ elif [[ "${1}" == "info" ]] ; then
     /usr/bin/touch ${LOCK}
 
     hdd_list_files="$(ls -1 ${ARC_INFO_PATH}/$(/usr/bin/hostname -s)_Controller??_hdd.txt)"
+    /usr/bin/rm -f "${ARC_INFO_PATH}/disk_*.info"
     for l in ${hdd_list_files}; do
         disk_list_nr="$(awk '!/N\.A\./ {if (NR>2) print $1}' ${l})"
         for hdd_id in ${disk_list_nr}; do
@@ -81,10 +82,11 @@ elif [[ "${1}" == "smart" ]] ; then
     /usr/bin/touch ${LOCK}
 
     hdd_list_files="$(ls -1 ${ARC_INFO_PATH}/$(/usr/bin/hostname -s)_Controller??_hdd.txt)"
+    /usr/bin/rm -f "${ARC_SMART_PATH}/*"
     for l in ${hdd_list_files}; do
         disk_list_nr="$(awk '!/N\.A\./ {if (NR>2) print $1}' ${l})"
         for hdd_id in ${disk_list_nr}; do
-            get_smart_drv ${hdd_id} >> "${ARC_SMART_PATH}/disk_${hdd_id}.smart";
+            get_smart_drv ${hdd_id} > "${ARC_SMART_PATH}/disk_${hdd_id}.smart";
         done
     done
     [[ -f "${LOCK}" ]] && /usr/bin/rm -f "${LOCK}"
