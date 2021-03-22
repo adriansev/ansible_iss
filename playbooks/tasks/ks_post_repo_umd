@@ -1,7 +1,0 @@
-# add UMD4 repository
-rpm --import http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY
-yum -y --skip-broken install http://repository.egi.eu/sw/production/umd/4/centos7/x86_64/updates/umd-release-4.1.3-1.el7.centos.noarch.rpm
-# do not keep unused repos in yum.repos.d
-mkdir -p /root/repos
-mv /etc/yum.repos.d/UMD-4-testing.repo /etc/yum.repos.d/UMD-4-untested.repo /root/repos
-

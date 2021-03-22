@@ -3,14 +3,10 @@
   command: rpm --import http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY
   args:
     warn: no
-- name: UMD4 repo on EL6
-  yum:
-    name: http://repository.egi.eu/sw/production/umd/4/sl6/x86_64/updates/umd-release-4.1.3-1.el6.noarch.rpm
-    state: present
-  when: (ansible_distribution == "CentOS" or ansible_distribution == "Scientific") and (ansible_distribution_major_version == "6")
+
 - name: UMD4 repo on EL7
   yum:
-    name: http://repository.egi.eu/sw/production/umd/4/centos7/x86_64/updates/umd-release-4.1.3-1.el7.centos.noarch.rpm
+    name: http://repository.egi.eu/sw/production/umd/5/centos7/x86_64/base/umd-release-5.0.0-1.el7.centos.noarch.rpm
     state: present
-  when: (ansible_distribution == "CentOS" or ansible_distribution == "Scientific") and (ansible_distribution_major_version == "7")
+  when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '7'
 
