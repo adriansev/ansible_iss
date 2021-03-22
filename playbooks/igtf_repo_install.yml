@@ -1,4 +1,0 @@
----
-- hosts: "{{ target }}"
-  tasks:
-  - include_tasks: tasks/igtf_certs_task.yml

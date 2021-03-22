@@ -1,0 +1,22 @@
+---
+- name: yum utils EL7
+  yum :
+    name: '{{ item }}'
+    state: latest
+    update_cache: True
+  with_items:
+    - yum-utils
+    - yum-plugin-fastestmirror
+    - yum-plugin-priorities
+    - yum-plugin-protectbase
+  when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '7'
+
+- name: yum utils EL8
+  dnf :
+    name: '{{ item }}'
+    state: latest
+    update_cache: True
+  with_items:
+    - dnf-utils
+    - dnf-plugins-core
+  when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '8'

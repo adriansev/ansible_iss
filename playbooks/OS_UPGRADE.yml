@@ -1,0 +1,14 @@
+---
+- hosts: "{{ target }}"
+  tasks:
+  - name: OS upgrade EL7
+    yum:
+      name: '*'
+      state: latest
+    when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '7'
+
+  - name: OS upgrade EL8
+    dnf:
+      name: '*'
+      state: latest
+    when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '8'

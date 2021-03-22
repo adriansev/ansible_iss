@@ -1,5 +1,5 @@
 ---
-- include_tasks: repo_egi_igtf.yml
+- include_tasks: repo_egi_igtf_task.yml
 
 - name: Install certificates
   yum:

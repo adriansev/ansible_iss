@@ -1,0 +1,3 @@
+# add nvidia negativo respository
+yum-config-manager --add-repo=https://negativo17.org/repos/epel-nvidia.repo
+

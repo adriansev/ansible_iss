@@ -1,0 +1,4 @@
+---
+- hosts: "{{ target }}"
+  tasks:
+  - include_tasks: tasks/repo_egi_igtf_task.yml

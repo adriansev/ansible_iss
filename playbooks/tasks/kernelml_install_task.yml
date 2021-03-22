@@ -1,0 +1,10 @@
+---
+- include_tasks: repo_elrepo_task.yml
+
+- name: Install kernel-ml
+  yum:
+    name: [ 'kernel-ml', 'kernel-ml-devel' ]
+    state: latest
+    enablerepo: "elrepo,elrepo-kernel,elrepo-extras"
+  tags: packages
+

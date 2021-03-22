@@ -1,0 +1,3 @@
+# add nvidia negativo respository
+dnf config-manager --add-repo=https://negativo17.org/repos/fedora-nvidia.repo
+

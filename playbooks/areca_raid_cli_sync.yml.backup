@@ -1,0 +1,41 @@
+---
+- hosts: areca_raid
+  tasks:
+  - name: Creates /root/bin
+    file:
+      path: /root/bin
+      state: directory
+      owner: root
+      group: root
+      mode: 0775
+  - name: Get ARECA cli
+    get_url:
+      url: https://monitor.spacescience.ro/ARECA/cli64
+      dest: /root/bin/cli64
+      mode: 0770
+      validate_certs: no
+      owner: root
+      group: root
+      force: yes
+  - name: Get ARECA script for info
+    get_url:
+      url: https://monitor.spacescience.ro/ARECA/get_areca_info
+      dest: /root/bin/get_areca_info
+      mode: 0770
+      validate_certs: no
+      owner: root
+      group: root
+      force: yes
+  - name: Add ARECA crontab for gathering info
+    blockinfile:
+      path: /etc/crontab
+      marker_begin: ARECA_INFO_CRON_BEGIN
+      marker_end: ARECA_INFO_CRON_END
+      block: |
+        0    2 * * * root ARECA_PASS="31415" /root/bin/get_areca_info cfg   &>/dev/null
+        */30 * * * * root /root/bin/get_areca_info smart &>/dev/null
+        0    1 * * * root /root/bin/get_areca_info info &>/dev/null
+        @reboot      root /root/bin/get_areca_info info &>/dev/null
+
+
+
