@@ -1,0 +1,73 @@
+---
+- name: Negativo epel-multimedia
+  yum_repository:
+    name: epel-multimedia
+    description: negativo17 - Multimedia
+    file: /etc/yum.repos.d/epel-multimedia.repo
+    baseurl: https://negativo17.org/repos/multimedia/epel-$releasever/$basearch/
+    gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
+    gpgcheck: yes
+    enabled: yes
+    metadata_expire: 21600
+    skip_if_unavailable: yes
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts['ansible_distribution'] == 'CentOS'
+  tags: repo
+
+- name: Negativo epel-multimedia source
+  yum_repository:
+    name: epel-multimedia-source
+    description: negativo17 - Nvidia - Source
+    file: /etc/yum.repos.d/epel-multimedia.repo
+    baseurl: https://negativo17.org/repos/multimedia/epel-$releasever/SRPMS
+    gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
+    gpgcheck: yes
+    enabled: no
+    metadata_expire: 21600
+    skip_if_unavailable: yes
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts['ansible_distribution'] == 'CentOS'
+  tags: repo
+
+- name: Negativo fedora-multimedia
+  yum_repository:
+    name: fedora-multimedia
+    description: negativo17 - Multimedia
+    file: /etc/yum.repos.d/fedora-multimedia.repo
+    baseurl: https://negativo17.org/repos/multimedia/fedora-$releasever/$basearch/
+    gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
+    gpgcheck: yes
+    enabled: yes
+    metadata_expire: 21600
+    skip_if_unavailable: yes
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts['ansible_distribution'] == 'Fedora'
+  tags: repo
+
+- name: Negativo fedora-multimedia source
+  yum_repository:
+    name: fedora-multimedia-source
+    description: negativo17 - Multimedia - Source
+    file: /etc/yum.repos.d/fedora-multimedia.repo
+    baseurl: https://negativo17.org/repos/nvidia/fedora-$releasever/SRPMS
+    gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
+    gpgcheck: yes
+    enabled: no
+    metadata_expire: 21600
+    skip_if_unavailable: yes
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts['ansible_distribution'] == 'Fedora'
+  tags: repo
+

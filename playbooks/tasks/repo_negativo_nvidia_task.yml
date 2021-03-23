@@ -1,0 +1,73 @@
+---
+- name: Negativo epel-nvidia
+  yum_repository:
+    name: epel-nvidia
+    description: negativo17 - Nvidia
+    file: /etc/yum.repos.d/epel-nvidia.repo
+    baseurl: https://negativo17.org/repos/nvidia/epel-$releasever/$basearch/
+    gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
+    gpgcheck: yes
+    enabled: yes
+    metadata_expire: 21600
+    skip_if_unavailable: yes
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts['ansible_distribution'] == 'CentOS'
+  tags: repo
+
+- name: Negativo epel-nvidia source
+  yum_repository:
+    name: epel-nvidia-source
+    description: negativo17 - Nvidia - Source
+    file: /etc/yum.repos.d/epel-nvidia.repo
+    baseurl: https://negativo17.org/repos/nvidia/epel-$releasever/SRPMS
+    gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
+    gpgcheck: yes
+    enabled: no
+    metadata_expire: 21600
+    skip_if_unavailable: yes
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts['ansible_distribution'] == 'CentOS'
+  tags: repo
+
+- name: Negativo fedora-nvidia
+  yum_repository:
+    name: fedora-nvidia
+    description: negativo17 - Nvidia
+    file: /etc/yum.repos.d/fedora-nvidia.repo
+    baseurl: https://negativo17.org/repos/nvidia/fedora-$releasever/$basearch/
+    gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
+    gpgcheck: yes
+    enabled: yes
+    metadata_expire: 21600
+    skip_if_unavailable: yes
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts['ansible_distribution'] == 'Fedora'
+  tags: repo
+
+- name: Negativo fedora-nvidia source
+  yum_repository:
+    name: fedora-nvidia-source
+    description: negativo17 - Nvidia - Source
+    file: /etc/yum.repos.d/fedora-nvidia.repo
+    baseurl: https://negativo17.org/repos/nvidia/fedora-$releasever/SRPMS
+    gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
+    gpgcheck: yes
+    enabled: no
+    metadata_expire: 21600
+    skip_if_unavailable: yes
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts['ansible_distribution'] == 'Fedora'
+  tags: repo
+
