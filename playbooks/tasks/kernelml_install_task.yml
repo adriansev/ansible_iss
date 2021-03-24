@@ -6,5 +6,6 @@
     name: [ 'kernel-ml', 'kernel-ml-devel' ]
     state: latest
     enablerepo: "elrepo,elrepo-kernel,elrepo-extras"
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
   tags: packages
 

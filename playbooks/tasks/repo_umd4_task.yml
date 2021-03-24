@@ -8,5 +8,6 @@
   yum:
     name: http://repository.egi.eu/sw/production/umd/5/centos7/x86_64/base/umd-release-5.0.0-1.el7.centos.noarch.rpm
     state: present
-  when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '7'
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+
 
