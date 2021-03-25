@@ -1,5 +1,5 @@
 ---
-- include_tasks: yum-utils_task.yml
+- include_tasks: pkg_yum-utils_task.yml
 
 - name: Enable EPEL Repository on CentOS 8
   dnf:

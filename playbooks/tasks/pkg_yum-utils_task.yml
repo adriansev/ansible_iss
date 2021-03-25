@@ -8,8 +8,15 @@
 
 - name: yum utils EL8
   dnf :
-    name: [ 'dnf-utils', 'dnf-plugins-core' ]
+    name: [ 'yum', 'yum-utils', 'dnf-utils', 'dnf-plugins-core' ]
     state: latest
     update_cache: True
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '8'
+
+- name: yum utils Fedora
+  dnf :
+    name: [ 'yum', 'dnf-utils', 'dnf-plugins-core' ]
+    state: latest
+    update_cache: True
+  when: ansible_facts[ 'distribution' ] == 'Fedora'
 

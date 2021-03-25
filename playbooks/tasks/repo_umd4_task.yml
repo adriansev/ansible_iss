@@ -1,8 +1,11 @@
 ---
+- include_tasks: pkg_yum-utils_task.yml
+
 - name: UMD key import
   command: rpm --import http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY
   args:
     warn: no
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
 
 - name: UMD4 repo on EL7
   yum:

@@ -3,9 +3,7 @@
 
 - name: Install CVMFS packages
   yum:
-    name:
-      - cvmfs
-      - cvmfs-config-default
+    name: [ 'cvmfs', 'cvmfs-config-default' ]
     state: latest
     enablerepo: "cernvm,cernvm-config"
   tags: packages

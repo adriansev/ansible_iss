@@ -1,0 +1,22 @@
+---
+- name: Install hardware monitoring tools on hardware machines (not vms) - EL7
+  yum :
+    name: [ 'ganglia', 'ganglia-gmond' ]
+    state: latest
+    update_cache: True
+    when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+
+- name: Install hardware monitoring tools on hardware machines (not vms) - EL8
+  dnf :
+    name: [ 'ganglia', 'ganglia-gmond' ]
+    state: latest
+    update_cache: True
+    when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '8'
+
+- name: Install hardware monitoring tools on hardware machines (not vms) - Fedora
+  dnf :
+    name: [ 'ganglia', 'ganglia-gmond' ]
+    state: latest
+    update_cache: True
+    when: ansible_facts[ 'distribution' ] == 'Fedora'
+

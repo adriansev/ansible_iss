@@ -1,4 +1,4 @@
 ---
 - hosts: "{{ target }}"
   tasks:
-  - include_tasks: tasks/yum-utils_task.yml
+  - include_tasks: tasks/pkg_yum-utils_task.yml
