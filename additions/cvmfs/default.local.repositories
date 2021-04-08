@@ -1,3 +1,0 @@
-
-# CVMFS_REPOSITORIES='geant4.cern.ch,cernatschool.egi.eu,clicdp.cern.ch'
-CVMFS_REPOSITORIES='cvmfs-config.cern.ch,alice.cern.ch,alice-ocdb.cern.ch,auger.egi.eu,dirac.egi.eu,lhcb.cern.ch,sft.cern.ch,grid.cern.ch'

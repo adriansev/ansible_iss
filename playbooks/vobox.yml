@@ -1,5 +1,7 @@
 ---
 - hosts: "{{ target | default('vobox') }}"
+  vars:
+    cvmfs_cache_base: "/home/cvmfs/cache"
   tasks:
   - include_tasks: tasks/pkg_yum-utils_task.yml
   - include_tasks: tasks/pkg_hwmon_task.yml

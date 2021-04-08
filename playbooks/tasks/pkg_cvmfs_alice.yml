@@ -1,19 +1,17 @@
 ---
 - include_tasks: pkg_cvmfs.yml
 
+- name: create cvmfs cache
+  file: path="{{ cvmfs_cache_base }}" state=directory group=cvmfs owner=cvmfs mode='0700'
+
+- name: create cvmfs cache
+  file: path="{{ cvmfs_cache_base }}/.." state=directory group=cvmfs owner=cvmfs mode='0700'
+
 - name: Set cvmfs cache
   blockinfile:
     path: /etc/cvmfs/default.local
     marker: "#{mark} ANSIBLE MANAGED BLOCK"
     marker_begin: "CVMFS CACHE BEGIN"
     marker_end: "CVMFS CACHE END"
-    block: "CVMFS_CACHE_BASE='/scratch/cvmfs/cache'"
-
-- name: Set cvmfs ALICE repositories
-  blockinfile:
-    path: /etc/cvmfs/default.local
-    marker: "#{mark} ANSIBLE MANAGED BLOCK"
-    marker_begin: "CVMFS REPOSITORIES BEGIN"
-    marker_end: "CVMFS REPOSITORIES END"
-    block: "CVMFS_REPOSITORIES='cvmfs-config.cern.ch,alice.cern.ch,alice-ocdb.cern.ch,sft.cern.ch,grid.cern.ch'"
+    block: "CVMFS_CACHE_BASE='{{ cvmfs_cache_base }}'"
 
