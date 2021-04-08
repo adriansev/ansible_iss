@@ -9,3 +9,10 @@
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
   tags: packages
 
+- name: Set grub default to 0
+  lineinfile: path="/etc/default/grub" regexp='GRUB_DEFAULT="(.*)"' line='GRUB_DEFAULT=0'
+  when: cgroup_status.stdout == "0"
+
+- name: Re-create grub conf
+  shell: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+

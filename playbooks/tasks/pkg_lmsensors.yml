@@ -1,0 +1,16 @@
+---
+- name: Install lm_sensors
+  yum:
+    name: lm_sensors
+    state: latest
+  tags: packages
+
+- name: Configure lm_sensors
+  ansible.builtin.shell: /usr/sbin/sensors-detect --auto
+
+- name: Enable and start
+  ansible.builtin.systemd:
+    name: lm_sensors
+    state: started
+    enabled: yes
+

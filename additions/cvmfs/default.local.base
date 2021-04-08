@@ -1,0 +1,13 @@
+CVMFS_NFILES='65535'
+#CVMFS_DEBUGLOG='/tmp/cvmfs.log'
+
+CVMFS_MAX_IPADDR_PER_PROXY='1'
+CVMFS_IPFAMILY_PREFER='4'
+
+# local cache = 40 GiB
+CVMFS_QUOTA_LIMIT='40960'
+
+CVMFS_FOLLOW_REDIRECTS='yes'
+CVMFS_HTTP_PROXY='auto;DIRECT'
+CVMFS_PAC_URLS="http://grid-wpad/wpad.dat;http://cernvm-wpad.cern.ch/wpad.dat;http://cernvm-wpad.fnal.gov/wpad.dat"
+

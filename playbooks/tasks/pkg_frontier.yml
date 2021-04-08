@@ -1,0 +1,41 @@
+---
+- include_tasks: repo_frontier_task.yml
+
+- name: create etc/squid
+  file: path="/etc/squid/" state=directory
+- name: Create squidconf
+  copy:
+    dest: "/etc/squid/squidconf"
+    force: yes
+    mode: 0644
+    content: |
+      export FRONTIER_USER=frontier
+      export FRONTIER_GROUP=frontier
+      export SETSQUIDAFFINITY=true
+      export SQUID_CLEAN_CACHE_ON_START=false
+
+- name: Install Frontier packages
+  yum:
+    name: frontier-squid
+    state: latest
+    enablerepo: "cern-frontier"
+  tags: packages
+
+- name: create etc/squid
+  file: path="{{ items }}" state=directory
+  owner: frontier
+  group: frontier
+  with_items:
+    - /home/frontier_logs/
+    - /home/frontier_cache/
+
+- name: frontier squid customizations
+  copy:
+    src: "{{ playbook_dir }}/../additions/frontier/customize.sh.vobox"
+    dest: /etc/squid/customize.sh
+    backup: yes
+    owner: frontier
+    group: frontier
+    mode: '0644'
+    force: yes
+

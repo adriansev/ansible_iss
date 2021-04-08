@@ -7,3 +7,13 @@
     state: latest
     enablerepo: "cernvm,cernvm-config"
   tags: packages
+
+- name: add cvmfs.default
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/cvmfs/default.local.base"
+    dest: /etc/cvmfs/default.local
+    owner: root
+    group: root
+    mode: '0644'
+    force: yes
+

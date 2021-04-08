@@ -1,6 +1,7 @@
-  - name: gather facts from switch
-    comware_5_2:
-      gather_facts=true
-      host={{ switch_host }}
-      username={{ switch_user }}
-      password={{ switch_password }}
+---
+- name: gather facts from switch
+  comware_5_2:
+    gather_facts=true
+    host={{ switch_host }}
+    username={{ switch_user }}
+    password={{ switch_password }}
