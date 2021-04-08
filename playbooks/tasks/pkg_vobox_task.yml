@@ -1,0 +1,10 @@
+---
+- include_tasks: pkg_yum-utils_task.yml
+
+- name: Install vobox packages
+  yum:
+    name: [ 'HEP_OSlibs', 'wlcg-vobox', 'wlcg-voms-alice', 'wlcg-voms-dteam', 'wlcg-voms-ops' ]
+    state: latest
+    enablerepo: "epel,wlcg,UMD-4-base,UMD-4-updates"
+  tags: packages
+

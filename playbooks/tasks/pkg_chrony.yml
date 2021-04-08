@@ -1,0 +1,28 @@
+---
+- name: Install chrony
+  yum:
+    name: chrony
+    state: latest
+    tags: packages
+
+- name: Chrony configuration
+  copy:
+    src: "{{ playbook_dir }}/../additions/chrony/chrony.conf.client"
+    dest: /etc/chrony.conf
+    backup: yes
+    force: yes
+
+- name: timedatectl 1
+  ansible.builtin.command: /usr/bin/timedatectl set-local-rtc 0
+- name: timedatectl 2
+  ansible.builtin.command: /usr/bin/timedatectl set-timezone Europe/Bucharest
+
+- name: Enable and start chronyd
+  ansible.builtin.systemd:
+    name: chronyd
+    state: restarted
+    enabled: yes
+
+- name: timedatectl 3
+  ansible.builtin.command: /usr/bin/timedatectl set-ntp 1
+

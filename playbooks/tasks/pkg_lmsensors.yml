@@ -11,6 +11,6 @@
 - name: Enable and start
   ansible.builtin.systemd:
     name: lm_sensors
-    state: started
+    state: restarted
     enabled: yes
 
