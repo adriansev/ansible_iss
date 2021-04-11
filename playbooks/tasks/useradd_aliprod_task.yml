@@ -1,0 +1,21 @@
+---
+- name: load aliprod hash var
+  include_vars: "{{ playbook_dir }}/../vault/aliprod_hash_pass.yml"
+
+- name: Add aliprod user
+  ansible.builtin.user:
+    name: aliprod
+    comment: default ALICE GRID user
+    groups: wheel
+    append: true
+    password: '{{ aliprod_hash }}'
+    update_password: on_create
+
+- name: set limits for aliprod user
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/limits.d/99-aliprod_limits.conf"
+    dest: /etc/security/limits.d/
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
