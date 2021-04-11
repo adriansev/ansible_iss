@@ -6,11 +6,11 @@
   tags: packages
 
 - name: Configure lm_sensors
-  ansible.builtin.shell: /usr/sbin/sensors-detect --auto
+  ansible.builtin.command: /usr/sbin/sensors-detect --auto
 
 - name: Enable and start
   ansible.builtin.systemd:
     name: lm_sensors
     state: restarted
-    enabled: yes
+    enabled: true
 

@@ -1,0 +1,6 @@
+skip_list:
+  - '403'
+  - package-latest
+  - brackets
+  - empty-lines
+  - line-length

@@ -6,10 +6,10 @@
     file: /etc/yum.repos.d/epel-nvidia.repo
     baseurl: https://negativo17.org/repos/nvidia/epel-$releasever/$basearch/
     gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
-    gpgcheck: yes
-    enabled: yes
+    gpgcheck: true
+    enabled: true
     metadata_expire: 21600
-    skip_if_unavailable: yes
+    skip_if_unavailable: true
     state: present
     owner: root
     group: root
@@ -24,10 +24,10 @@
     file: /etc/yum.repos.d/epel-nvidia.repo
     baseurl: https://negativo17.org/repos/nvidia/epel-$releasever/SRPMS
     gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
-    gpgcheck: yes
-    enabled: no
+    gpgcheck: true
+    enabled: false
     metadata_expire: 21600
-    skip_if_unavailable: yes
+    skip_if_unavailable: true
     state: present
     owner: root
     group: root
@@ -42,10 +42,10 @@
     file: /etc/yum.repos.d/fedora-nvidia.repo
     baseurl: https://negativo17.org/repos/nvidia/fedora-$releasever/$basearch/
     gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
-    gpgcheck: yes
-    enabled: yes
+    gpgcheck: true
+    enabled: true
     metadata_expire: 21600
-    skip_if_unavailable: yes
+    skip_if_unavailable: true
     state: present
     owner: root
     group: root
@@ -60,10 +60,10 @@
     file: /etc/yum.repos.d/fedora-nvidia.repo
     baseurl: https://negativo17.org/repos/nvidia/fedora-$releasever/SRPMS
     gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
-    gpgcheck: yes
-    enabled: no
+    gpgcheck: true
+    enabled: false
     metadata_expire: 21600
-    skip_if_unavailable: yes
+    skip_if_unavailable: true
     state: present
     owner: root
     group: root

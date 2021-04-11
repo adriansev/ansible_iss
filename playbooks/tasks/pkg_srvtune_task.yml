@@ -1,14 +1,14 @@
 ---
 - name: Install hardware monitoring tools on hardware machines (not vms) - Centos
   yum:
-    name: [ 'dmidecode', 'dmraid', 'dmraid-events', 'edac-utils', 'linux-firmware', 'lldpd', 'lm_sensors', 'lshw', 'mdadm', 'pciutils', 'smartmontools' ]
+    name: [ 'numad', 'numactl', 'tuned', 'tuned-utils', 'powertop' ]
     state: latest
     update_cache: true
   when: ansible_facts[ 'distribution' ] == 'CentOS'
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - Fedora
   dnf:
-    name: [ 'dmidecode', 'dmraid', 'dmraid-events', 'edac-utils', 'linux-firmware', 'lldpd', 'lm_sensors', 'lshw', 'mdadm', 'pciutils', 'smartmontools' ]
+    name: [ 'numad', 'numactl', 'tuned', 'tuned-utils', 'powertop' ]
     state: latest
     update_cache: true
   when: ansible_facts[ 'distribution' ] == 'Fedora'

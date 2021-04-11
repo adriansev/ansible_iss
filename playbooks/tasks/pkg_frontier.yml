@@ -1,12 +1,20 @@
 ---
 - include_tasks: repo_frontier_task.yml
 
-- name: create etc/squid
-  file: path="/etc/squid/" state=directory
+- name: create squid dirs
+  file:
+    path: "{{ items }}"
+    state: directory
+    mode: 0644
+  with_items:
+    - /etc/squid
+    - /home/frontier_logs/
+    - /home/frontier_cache/
+
 - name: Create squidconf
   copy:
     dest: "/etc/squid/squidconf"
-    force: yes
+    force: true
     mode: 0644
     content: |
       export FRONTIER_USER=frontier
@@ -21,21 +29,25 @@
     enablerepo: "cern-frontier"
   tags: packages
 
-- name: create etc/squid
-  file: path="{{ items }}" state=directory
-  owner: frontier
-  group: frontier
-  with_items:
-    - /home/frontier_logs/
-    - /home/frontier_cache/
-
 - name: frontier squid customizations
   copy:
     src: "{{ playbook_dir }}/../additions/frontier/customize.sh.vobox"
     dest: /etc/squid/customize.sh
-    backup: yes
+    backup: true
     owner: frontier
     group: frontier
     mode: '0644'
-    force: yes
+    force: true
+
+- name: proper ownership
+  file:
+    path: "{{ items }}"
+    owner: frontier
+    group: frontier
+    state: directory
+    recurse: true
+  with_items:
+    - /etc/squid
+    - /home/frontier_logs/
+    - /home/frontier_cache/
 

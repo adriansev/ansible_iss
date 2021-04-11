@@ -6,8 +6,8 @@
     file: /etc/yum.repos.d/EGI-trustanchors.repo
     baseurl: http://repository.egi.eu/sw/production/cas/1/current/
     gpgkey: http://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-3
-    gpgcheck: yes
-    enabled: yes
+    gpgcheck: true
+    enabled: true
     state: present
     owner: root
     group: root

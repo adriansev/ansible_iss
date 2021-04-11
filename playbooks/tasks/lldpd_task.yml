@@ -1,15 +1,25 @@
 ---
-- name: Enable epel
-  command: yum-config-manager --enable epel
-
-- name: Install lldpd
+- name: Install lldpd EL
   yum:
     name: lldpd
     state: latest
+    update_cache: true
+    enablerepo: "epel"
+  when: ansible_facts[ 'distribution' ] == 'CentOS'
+
+- name: Install lldpd Fedora
+  dnf:
+    name: lldpd
+    state: latest
+    update_cache: true
+  when: ansible_facts[ 'distribution' ] == 'Fedora'
 
 - name: Ansible create file with content example
   copy:
     dest: "/etc/lldpd.d/lldpd.conf"
+    mode: 0644
+    owner: root
+    group: root
     content: |
       configure lldp portidsubtype ifname
       update
@@ -18,4 +28,5 @@
   service:
     name: lldpd
     state: restarted
+    enabled: true
 

@@ -6,11 +6,10 @@
     owner: root
     group: root
     mode: '0700'
-    force: yes
+    force: true
   with_items:
     - mdadm_readd_dev
     - md_check
-
 
 - name: Sync md format tools
   ansible.builtin.copy:
@@ -19,7 +18,7 @@
     owner: root
     group: root
     mode: '0600'
-    force: yes
+    force: true
   with_items:
     - create_md_array
     - format_md_component

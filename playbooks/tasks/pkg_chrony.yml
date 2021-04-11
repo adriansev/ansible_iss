@@ -9,8 +9,11 @@
   copy:
     src: "{{ playbook_dir }}/../additions/chrony/chrony.conf.client"
     dest: /etc/chrony.conf
-    backup: yes
-    force: yes
+    mode: 0644
+    owner: root
+    group: root
+    backup: true
+    force: true
 
 - name: timedatectl 1
   ansible.builtin.command: /usr/bin/timedatectl set-local-rtc 0
@@ -21,7 +24,7 @@
   ansible.builtin.systemd:
     name: chronyd
     state: restarted
-    enabled: yes
+    enabled: true
 
 - name: timedatectl 3
   ansible.builtin.command: /usr/bin/timedatectl set-ntp 1

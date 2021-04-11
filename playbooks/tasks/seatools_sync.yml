@@ -6,5 +6,5 @@
     owner: root
     group: root
     mode: '0700'
-    force: yes
+    force: true
 

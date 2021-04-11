@@ -2,7 +2,7 @@
 - include_tasks: repo_elrepo_task.yml
 
 - name: Install kernel-ml
-  yum:
+  ansible.builtin.yum:
     name: [ 'kernel-ml', 'kernel-ml-devel' ]
     state: latest
     enablerepo: "elrepo,elrepo-kernel,elrepo-extras"
@@ -10,9 +10,8 @@
   tags: packages
 
 - name: Set grub default to 0
-  lineinfile: path="/etc/default/grub" regexp='GRUB_DEFAULT="(.*)"' line='GRUB_DEFAULT=0'
-  when: cgroup_status.stdout == "0"
+  ansible.builtin.lineinfile: path="/etc/default/grub" regexp='GRUB_DEFAULT="(.*)"' line='GRUB_DEFAULT=0'
 
 - name: Re-create grub conf
-  shell: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+  ansible.builtin.command: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
 
