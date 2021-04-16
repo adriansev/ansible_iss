@@ -5,7 +5,7 @@
   file:
     path: "{{ item }}"
     state: directory
-    mode: 0644
+    mode: 0755
   with_items:
     - /etc/squid
     - /home/frontier_logs/
@@ -36,7 +36,7 @@
     backup: true
     owner: frontier
     group: frontier
-    mode: '0644'
+    mode: '0755'
     force: true
 
 - name: proper ownership
