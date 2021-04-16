@@ -3,15 +3,16 @@
   vars:
     cvmfs_cache_base: "/home/cvmfs/cache"
   tasks:
-  - include_tasks: tasks/pkg_yum-utils_task.yml
-  - include_tasks: tasks/pkg_hwmon_task.yml
-  - include_tasks: tasks/pkg_lmsensors.yml
-  - include_tasks: tasks/pkg_chrony.yml
-  - include_tasks: tasks/pkg_gmond_task.yml
-  - include_tasks: tasks/pkg_kernelml_install_task.yml
-  - include_tasks: tasks/pkg_egicerts.yml
-  - include_tasks: tasks/repo_umd4_task.yml
-  - include_tasks: tasks/repo_wlcg_task.yml
-  - include_tasks: tasks/pkg_cvmfs_alice.yml
-  - include_tasks: tasks/pkg_frontier.yml
-  - include_tasks: tasks/pkg_vobox_task.yml
+    - include_tasks: tasks/pkg_yum-utils_task.yml
+    - include_tasks: tasks/pkg_hwmon_task.yml
+    - include_tasks: tasks/pkg_lmsensors.yml
+    - include_tasks: tasks/pkg_chrony.yml
+    - include_tasks: tasks/pkg_gmond_task.yml
+    - include_tasks: tasks/pkg_kernelml_install_task.yml
+#    - include_tasks: tasks/pkg_egicerts.yml
+    - include_tasks: tasks/repo_umd4_task.yml
+    - include_tasks: tasks/repo_wlcg_task.yml
+    - include_tasks: tasks/pkg_cvmfs_alice.yml
+    - include_tasks: tasks/pkg_frontier.yml
+    - include_tasks: tasks/pkg_vobox_task.yml
+

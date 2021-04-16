@@ -3,7 +3,7 @@
 
 - name: create squid dirs
   file:
-    path: "{{ items }}"
+    path: "{{ item }}"
     state: directory
     mode: 0644
   with_items:
@@ -41,7 +41,7 @@
 
 - name: proper ownership
   file:
-    path: "{{ items }}"
+    path: "{{ item }}"
     owner: frontier
     group: frontier
     state: directory
