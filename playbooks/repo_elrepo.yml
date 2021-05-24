@@ -1,0 +1,6 @@
+---
+- hosts: "{{ target }}"
+  tasks:
+  - include_tasks: tasks/repo_elrepo_task.yml
+
+

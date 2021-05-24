@@ -1,0 +1,5 @@
+---
+- hosts: "{{ target | default('all') }}"
+  tasks:
+  - include_tasks: tasks/ipv6_no_autoconf_task.yml
+

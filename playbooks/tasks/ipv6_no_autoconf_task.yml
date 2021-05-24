@@ -1,0 +1,12 @@
+---
+- name: copy sysctl conf
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/sysctl.d/99-ip6-no-autoconf.conf"
+    dest: /etc/sysctl.d/
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+
+- name: reload sysctl parameters
+  ansible.builtin.command: /usr/sbin/sysctl --system
