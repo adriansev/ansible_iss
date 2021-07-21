@@ -2,7 +2,7 @@
 - include_tasks: pkg_yum-utils_task.yml
 
 - name: Install vobox requirements
-  yum:
+  ansible.builtin.yum:
     name: [ 'HEP_OSlibs', 'wlcg-voms-alice', 'wlcg-voms-dteam', 'wlcg-voms-ops' ]
     state: latest
     enablerepo: "epel,wlcg"
@@ -10,7 +10,7 @@
   tags: packages
 
 - name: Install vobox packages
-  yum:
+  ansible.builtin.yum:
     name: [ 'wlcg-vobox' ]
     state: latest
     enablerepo: "wlcg,UMD-4-base,UMD-4-updates"

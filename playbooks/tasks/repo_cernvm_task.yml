@@ -1,6 +1,6 @@
 ---
 - name: Install CVMFS repository
-  yum:
+  ansible.builtin.yum:
     name: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
     state: present
   tags: repo

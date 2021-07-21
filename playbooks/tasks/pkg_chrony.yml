@@ -1,6 +1,6 @@
 ---
 - name: Install chrony
-  yum:
+  ansible.builtin.yum:
     name: chrony
     state: latest
   tags: packages

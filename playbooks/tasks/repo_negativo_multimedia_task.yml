@@ -1,6 +1,6 @@
 ---
 - name: Negativo epel-multimedia
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: epel-multimedia
     description: negativo17 - Multimedia
     file: /etc/yum.repos.d/epel-multimedia.repo
@@ -18,7 +18,7 @@
   tags: repo
 
 - name: Negativo epel-multimedia source
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: epel-multimedia-source
     description: negativo17 - Nvidia - Source
     file: /etc/yum.repos.d/epel-multimedia.repo
@@ -36,7 +36,7 @@
   tags: repo
 
 - name: Negativo fedora-multimedia
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: fedora-multimedia
     description: negativo17 - Multimedia
     file: /etc/yum.repos.d/fedora-multimedia.repo
@@ -54,7 +54,7 @@
   tags: repo
 
 - name: Negativo fedora-multimedia source
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: fedora-multimedia-source
     description: negativo17 - Multimedia - Source
     file: /etc/yum.repos.d/fedora-multimedia.repo

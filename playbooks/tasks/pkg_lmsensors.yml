@@ -1,6 +1,6 @@
 ---
 - name: Install lm_sensors
-  yum:
+  ansible.builtin.yum:
     name: lm_sensors
     state: latest
   tags: packages

@@ -2,13 +2,13 @@
 - include_tasks: pkg_yum-utils_task.yml
 
 - name: UMD key import
-  command: rpm --import http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY
+  ansible.builtin.command: rpm --import http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY
   args:
     warn: false
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
 
 - name: UMD4 repo on EL7
-  yum:
+  ansible.builtin.yum:
     name: http://repository.egi.eu/sw/production/umd/4/centos7/x86_64/updates/umd-release-4.1.3-1.el7.centos.noarch.rpm
     state: present
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'

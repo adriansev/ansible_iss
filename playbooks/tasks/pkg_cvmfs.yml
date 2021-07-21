@@ -2,12 +2,12 @@
 - include_tasks: repo_cernvm_task.yml
 
 - name: Install autofs
-  yum:
+  ansible.builtin.yum:
     name: [ 'autofs' ]
     state: latest
 
 - name: Install CVMFS packages
-  yum:
+  ansible.builtin.yum:
     name: [ 'cvmfs', 'cvmfs-config-default' ]
     state: latest
     enablerepo: "cernvm,cernvm-config"

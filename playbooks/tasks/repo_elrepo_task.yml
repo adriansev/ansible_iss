@@ -2,7 +2,7 @@
 - include_tasks: pkg_yum-utils_task.yml
 
 - name: Enable EPEL Repository on CentOS 7
-  yum:
+  ansible.builtin.yum:
     name: https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm
     state: latest
     update_cache: true
@@ -10,7 +10,7 @@
   tags: repo
 
 - name: Enable EPEL Repository on CentOS 8
-  dnf:
+  ansible.builtin.dnf:
     name: https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
     state: latest
     update_cache: true

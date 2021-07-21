@@ -2,7 +2,7 @@
 - include_tasks: repo_epel_task.yml
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - Centos
-  yum:
+  ansible.builtin.yum:
     name: [ 'dmidecode', 'dmraid', 'dmraid-events', 'edac-utils', 'linux-firmware', 'lldpd', 'lm_sensors', 'lshw', 'mdadm', 'pciutils', 'smartmontools' ]
     state: latest
     update_cache: true
@@ -10,7 +10,7 @@
   when: ansible_facts[ 'distribution' ] == 'CentOS'
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - Fedora
-  dnf:
+  ansible.builtin.dnf:
     name: [ 'dmidecode', 'dmraid', 'dmraid-events', 'edac-utils', 'linux-firmware', 'lldpd', 'lm_sensors', 'lshw', 'mdadm', 'pciutils', 'smartmontools' ]
     state: latest
     update_cache: true

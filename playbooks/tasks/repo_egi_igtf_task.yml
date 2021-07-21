@@ -1,6 +1,6 @@
 ---
 - name: EGI IGTF repo install
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: EGI-trustanchors
     description: EGI-trustanchors
     file: EGI-trustanchors

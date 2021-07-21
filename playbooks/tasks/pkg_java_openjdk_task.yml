@@ -1,6 +1,6 @@
 ---
 - name: Install Java openjdk 11
-  yum:
+  ansible.builtin.yum:
     name: [ 'java-11-openjdk.x86_64', 'java-11-openjdk-headless.x86_64', 'icedtea-web.x86_64' ]
     state: latest
     update_cache: true

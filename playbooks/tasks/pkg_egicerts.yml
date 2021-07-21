@@ -2,7 +2,7 @@
 - include_tasks: repo_egi_igtf_task.yml
 
 - name: Install CVMFS packages
-  yum:
+  ansible.builtin.yum:
     name: [ 'ca-policy-egi-core', 'ca-policy-lcg.noarch' ]
     state: latest
     enablerepo: "EGI-trustanchors"
