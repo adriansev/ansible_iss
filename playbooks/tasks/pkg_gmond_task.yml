@@ -1,7 +1,7 @@
 ---
 - name: Install hardware monitoring tools on hardware machines (not vms) - EL7
   ansible.builtin.yum:
-    name: [ 'ganglia', 'ganglia-gmond' ]
+    name: [ 'ganglia', 'ganglia-gmond', 'python2-ganglia-gmond' ]
     state: latest
     update_cache: true
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
