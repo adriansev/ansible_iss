@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+ETHTOOL="/usr/sbin/ethtool"
+eth_list=$(/usr/bin/find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n' | /usr/bin/sort)
+
+for ETH in ${eth_list}; do
+  HAS_FW_LLDP=$(${ETHTOOL} --show-priv-flags ${ETH} | grep disable-fw-lldp)
+  [[ -n "${HAS_FW_LLDP}" ]] && ${ETHTOOL} --set-priv-flags ${ETH} disable-fw-lldp on
+done
+
