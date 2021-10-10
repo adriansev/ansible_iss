@@ -8,7 +8,7 @@ paostation2
 ansible_connection=ssh
 ansible_user=root
 ansible_port=60000
-##ansible_python_interpreter=/usr/bin/python3
+ansible_python_interpreter=/usr/bin/python3
 ansible_ssh_private_key_file=~/.ssh/id_ed25519
 
 ############################################################
@@ -16,10 +16,10 @@ ansible_ssh_private_key_file=~/.ssh/id_ed25519
 ############################################################
 
 [sev]
-sev.spacescience.ro ansible_python_interpreter=/usr/bin/python3
+sev.spacescience.ro
 
 [r3bsuit]
-r3bsuit.spacescience.ro  ansible_python_interpreter=/usr/bin/python3
+r3bsuit.spacescience.ro
 
 [monitor]
 monitor.spacescience.ro
@@ -46,7 +46,7 @@ mgm.spacescience.ro
 grid05.spacescience.ro
 
 [grid04]
-grid04.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
+grid04.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python
 
 [seau]
 seau.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
@@ -119,6 +119,7 @@ storage10.spacescience.ro
 
 
 [wn_umd:vars]
+ansible_python_interpreter=/usr/bin/python
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
@@ -127,12 +128,14 @@ ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@grid05.spacescienc
 [wn_umd]
 
 [wn_alien:vars]
+ansible_python_interpreter=/usr/bin/python
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@alien.spacescience.ro:60000'
 
 [wn_alien]
+
 
 [wn_issaf:vars]
 ansible_connection=ssh
