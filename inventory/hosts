@@ -8,7 +8,7 @@ paostation2
 ansible_connection=ssh
 ansible_user=root
 ansible_port=60000
-ansible_python_interpreter=/usr/bin/python3
+ansible_python_interpreter=/usr/bin/python2
 ansible_ssh_private_key_file=~/.ssh/id_ed25519
 
 ############################################################
@@ -17,6 +17,9 @@ ansible_ssh_private_key_file=~/.ssh/id_ed25519
 
 [sev]
 sev.spacescience.ro
+
+[sev:vars]
+ansible_python_interpreter=/usr/bin/python3
 
 [r3bsuit]
 r3bsuit.spacescience.ro
@@ -65,6 +68,10 @@ vobox.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
 paowall
 paostation1
 paostation2
+
+[paoremote:vars]
+ansible_python_interpreter=/usr/bin/python3
+
 
 [rocks_servers]
 alien.spacescience.ro
