@@ -1,0 +1,23 @@
+---
+- hosts: "{{ target | default('all') }}"
+  tasks:
+
+  - name: Get facts
+    ansible.builtin.setup:
+      gather_subset:
+      - 'all'
+      - '!facter'
+      - '!ohai'
+
+
+  - name: Gather extended facts
+    deltabg.extended_facts.extended_facts:
+      gather_subset:
+      - '!Icinga2FactCollector'
+      - '!DockerFactCollector'
+
+  # Print extended facts
+  #- name: Debug
+  #  debug:
+  #    var: ansible_facts
+
