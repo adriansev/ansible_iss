@@ -2,6 +2,9 @@
 - hosts: "{{ target | default('all') }}"
   tasks:
 
+  - name: Update smartctl db from master
+    ansible.builtin.command: /usr/sbin/update-smart-drivedb -u github --trunk --no-verify
+
   - name: Get facts
     ansible.builtin.setup:
       gather_subset:
