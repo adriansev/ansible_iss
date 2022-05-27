@@ -6,3 +6,5 @@ facts/**
 additions/seatools/st
 backup/**
 collections/**
+.ansible_galaxy
+
