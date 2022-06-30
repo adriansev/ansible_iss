@@ -79,7 +79,10 @@ issaf.spacescience.ro
 grid05.spacescience.ro
 
 [xrd_servers]
-storage[02:07].spacescience.ro
+storage03.spacescience.ro
+storage04.spacescience.ro
+storage05.spacescience.ro
+storage07.spacescience.ro
 storage09.spacescience.ro
 storage10.spacescience.ro
 
@@ -91,6 +94,9 @@ xrd_servers
 fst01.spacescience.ro
 fst02.spacescience.ro
 fst03.spacescience.ro
+# fst04.spacescience.ro
+fst05.spacescience.ro
+fst06.spacescience.ro
 
 [eos_cluster:children]
 mgm
@@ -109,12 +115,18 @@ vobox
 
 [areca_raid]
 seau.spacescience.ro
-storage[02:07].spacescience.ro
+storage03.spacescience.ro
+storage04.spacescience.ro
+storage05.spacescience.ro
+storage07.spacescience.ro
 
 [lsi]
 fst01.spacescience.ro
 fst02.spacescience.ro
 fst03.spacescience.ro
+# fst04.spacescience.ro
+fst05.spacescience.ro
+fst06.spacescience.ro
 
 [mdraid]
 alien.spacescience.ro
@@ -123,10 +135,15 @@ mgm.spacescience.ro
 fst01.spacescience.ro
 fst02.spacescience.ro
 fst03.spacescience.ro
-storage[02:07].spacescience.ro
+# fst04.spacescience.ro
+fst05.spacescience.ro
+fst06.spacescience.ro
+storage03.spacescience.ro
+storage04.spacescience.ro
+storage05.spacescience.ro
+storage07.spacescience.ro
 storage09.spacescience.ro
 storage10.spacescience.ro
-
 
 [wn_umd:vars]
 ansible_python_interpreter=/usr/bin/python
