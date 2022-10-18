@@ -1,0 +1,48 @@
+---
+- include_tasks: repo_epel_task.yml
+
+- name: Install hardware management and monitoring tools - CENTOS
+  ansible.builtin.yum:
+    name:
+      - coreutils
+      - util-linux
+      - procps-ng
+      - sysstat
+      - lm_sensors
+      - dmidecode
+      - pciutils
+      - lshw
+      - hwloc
+      - hwloc-plugins
+      - numactl
+      - libcgroup-tools
+      - libcgroup
+      - smartmontools
+    state: latest
+    update_cache: true
+    enablerepo: "epel"
+  when: ansible_facts[ 'distribution' ] == 'CentOS'
+  tags: packages
+
+- name: Install hardware management and monitoring tools - Fedora
+  ansible.builtin.yum:
+    name:
+      - coreutils
+      - util-linux
+      - procps-ng
+      - sysstat
+      - lm_sensors
+      - dmidecode
+      - pciutils
+      - lshw
+      - hwloc
+      - hwloc-plugins
+      - numactl
+      - libcgroup-tools
+      - libcgroup
+      - smartmontools
+    state: latest
+    update_cache: true
+  when: ansible_facts[ 'distribution' ] == 'Fedora'
+  tags: packages
+

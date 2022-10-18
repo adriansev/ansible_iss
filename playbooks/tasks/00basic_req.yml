@@ -1,0 +1,22 @@
+---
+- name: Install python3 packages
+  ansible.builtin.yum:
+    name:
+      - python3
+      - python3-setuptools
+      - python3-pip
+      - python3-wheel
+      - python3-devel
+      - python3-virtualenv
+    state: latest
+  tags: packages
+
+- name: Install from pip the jc module
+  ansible.builtin.pip:
+    executable: pip3
+    name:
+      - jc
+    extra_args: --user
+    state: latest
+
+
