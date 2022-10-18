@@ -1,8 +1,41 @@
 # Ex 1: Ungrouped hosts, specify before any group headers.
 
+paoshift.spacescience.ro
+auger01.spacescience.ro
 paowall
 paostation1
 paostation2
+
+sev.spacescience.ro
+monitor.spacescience.ro
+issaf.spacescience.ro
+
+r3bsuit.spacescience.ro
+luxe.spacescience.ro
+
+alien.spacescience.ro
+
+rd.spacescience.ro
+storage03.spacescience.ro
+storage04.spacescience.ro
+storage05.spacescience.ro
+storage07.spacescience.ro
+storage09.spacescience.ro
+storage10.spacescience.ro
+
+mgm.spacescience.ro
+fst01.spacescience.ro
+fst02.spacescience.ro
+fst03.spacescience.ro
+fst04.spacescience.ro
+fst05.spacescience.ro
+fst06.spacescience.ro
+fst07.spacescience.ro
+
+grid05.spacescience.ro
+grid04.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python
+seau.spacescience.ro   ansible_ssh_private_key_file=~/.ssh/id_rsa
+vobox.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
 
 [all:vars]
 ansible_connection=ssh
@@ -10,55 +43,6 @@ ansible_user=root
 ansible_port=60000
 ansible_python_interpreter=/usr/bin/env python3
 ansible_ssh_private_key_file=~/.ssh/id_ed25519
-
-############################################################
-## Let's create shortcuts for all FQDN public ip servers
-############################################################
-
-[sev]
-sev.spacescience.ro
-
-[sev:vars]
-ansible_python_interpreter=/usr/bin/python3
-
-[r3bsuit]
-r3bsuit.spacescience.ro
-
-[luxe]
-luxe.spacescience.ro
-
-[monitor]
-monitor.spacescience.ro
-
-[paoshift]
-paoshift.spacescience.ro
-
-[auger01]
-auger01.spacescience.ro
-
-[issaf]
-issaf.spacescience.ro
-
-[alien]
-alien.spacescience.ro
-
-[rd]
-rd.spacescience.ro
-
-[mgm]
-mgm.spacescience.ro
-
-[grid05]
-grid05.spacescience.ro
-
-[grid04]
-grid04.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python
-
-[seau]
-seau.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
-
-[vobox]
-vobox.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
 
 ############################################################
 ## Define functional groups
@@ -71,7 +55,6 @@ paostation2
 
 [paoremote:vars]
 ansible_python_interpreter=/usr/bin/python3
-
 
 [rocks_servers]
 alien.spacescience.ro
@@ -97,6 +80,7 @@ fst03.spacescience.ro
 fst04.spacescience.ro
 fst05.spacescience.ro
 fst06.spacescience.ro
+fst07.spacescience.ro
 
 [eos_cluster:children]
 mgm
@@ -146,7 +130,7 @@ storage09.spacescience.ro
 storage10.spacescience.ro
 
 [wn_umd:vars]
-ansible_python_interpreter=/usr/bin/python
+ansible_python_interpreter=/usr/bin/python3
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
@@ -155,7 +139,7 @@ ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@grid05.spacescienc
 [wn_umd]
 
 [wn_alien:vars]
-ansible_python_interpreter=/usr/bin/python
+ansible_python_interpreter=/usr/bin/python3
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
@@ -163,14 +147,17 @@ ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@alien.spacescience
 
 [wn_alien]
 
-
 [wn_issaf:vars]
+ansible_python_interpreter=/usr/bin/python3
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000'
 
 [wn_issaf]
+
+
+
 
 #[switch_dell:vars]
 #ansible_user=admin
