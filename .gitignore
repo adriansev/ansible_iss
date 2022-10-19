@@ -7,4 +7,6 @@ additions/seatools/st
 backup/**
 collections/**
 .ansible_galaxy
+host_logs
+galaxy_cache
 
