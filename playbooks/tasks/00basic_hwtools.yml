@@ -21,11 +21,20 @@
     state: latest
     update_cache: true
     enablerepo: "epel"
-  when: ansible_facts[ 'distribution' ] == 'CentOS'
+  when: ansible_facts['distribution'] == 'CentOS'
+  tags: packages
+
+- name: Install hardware management and monitoring tools - CENTOS
+  ansible.builtin.yum:
+    name:
+      - ipmitool
+    state: latest
+    enablerepo: "epel"
+  when: ansible_facts['ansible_ipmi'] is defined and ansible_facts['ansible_ipmi']
   tags: packages
 
 - name: Install hardware management and monitoring tools - Fedora
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name:
       - coreutils
       - util-linux

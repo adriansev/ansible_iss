@@ -69,8 +69,11 @@ storage07.spacescience.ro
 storage09.spacescience.ro
 storage10.spacescience.ro
 
+[xrd_rd]
+rd.spacescience.ro
+
 [xrd_cluster:children]
-rd
+xrd_rd
 xrd_servers
 
 [eos_fst]
@@ -82,20 +85,19 @@ fst05.spacescience.ro
 fst06.spacescience.ro
 fst07.spacescience.ro
 
+[eos_mgm]
+mgm.spacescience.ro
+
 [eos_cluster:children]
-mgm
+eos_mgm
 eos_fst
 
-[storages:children]
-xrd_servers
-eos_fst
-issaf
 
-[emi_servers:children]
-grid05
-grid04
-seau
-vobox
+[emi_servers]
+grid05.spacescience.ro
+grid04.spacescience.ro
+seau.spacescience.ro
+vobox.spacescience.ro
 
 [areca_raid]
 seau.spacescience.ro
@@ -111,6 +113,7 @@ fst03.spacescience.ro
 fst04.spacescience.ro
 fst05.spacescience.ro
 fst06.spacescience.ro
+fst07.spacescience.ro
 
 [mdraid]
 alien.spacescience.ro

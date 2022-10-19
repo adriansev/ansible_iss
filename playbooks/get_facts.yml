@@ -11,6 +11,7 @@
 
   - name: Get facts
     ansible.builtin.setup:
+      gather_timeout: 30
       gather_subset:
       - 'all'
       - '!facter'
@@ -20,6 +21,7 @@
     deltabg.extended_facts.extended_facts:
       gather_subset:
       - 'all'
+      - '!MysqlFactCollector'
       - '!Icinga2FactCollector'
       - '!DockerFactCollector'
 

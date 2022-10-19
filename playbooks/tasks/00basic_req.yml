@@ -9,6 +9,7 @@
       - python3-devel
       - python3-virtualenv
     state: latest
+    update_cache: true
   tags: packages
 
 - name: Install from pip the jc module
