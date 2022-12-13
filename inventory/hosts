@@ -31,6 +31,8 @@ fst04.spacescience.ro
 fst05.spacescience.ro
 fst06.spacescience.ro
 fst07.spacescience.ro
+fst08.spacescience.ro
+fst09.spacescience.ro
 
 grid05.spacescience.ro
 grid04.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python
@@ -84,6 +86,8 @@ fst04.spacescience.ro
 fst05.spacescience.ro
 fst06.spacescience.ro
 fst07.spacescience.ro
+fst08.spacescience.ro
+fst09.spacescience.ro
 
 [eos_mgm]
 mgm.spacescience.ro

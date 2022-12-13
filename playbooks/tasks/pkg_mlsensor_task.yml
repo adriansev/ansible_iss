@@ -1,0 +1,11 @@
+---
+- include_tasks: repo_wlcg_task.yml
+
+- name: Install mlsensor
+  ansible.builtin.yum:
+    name: [ 'mlsensor' ]
+    state: latest
+    enablerepo: "epel,wlcg"
+    disablerepo: "UMD*"
+  tags: packages
+

@@ -1,0 +1,24 @@
+server 10.10.10.120 iburst prefer
+server 10.10.10.254 iburst
+pool 0.ro.pool.ntp.org iburst
+
+stratumweight 0.01
+driftfile /var/lib/chrony/drift
+rtconutc
+rtcsync
+
+# allow clock step at every update if the difference is > 0.1s
+makestep 0.1 -1
+
+# operate strictly in a client-only mode
+port 0
+
+# disable chronyc access from the Internet
+cmdport 0
+
+keyfile /etc/chrony.keys
+
+noclientlog
+logchange 2
+logdir /var/log/chrony
+

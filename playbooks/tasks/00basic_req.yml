@@ -2,15 +2,39 @@
 - name: Install python3 packages
   ansible.builtin.yum:
     name:
+      - gcc
       - python3
       - python3-setuptools
       - python3-pip
       - python3-wheel
       - python3-devel
-      - python3-virtualenv
     state: latest
     update_cache: true
   tags: packages
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+
+- name: Install python3 packages
+  ansible.builtin.dnf:
+    name:
+      - gcc
+      - python3
+      - python3-setuptools
+      - python3-pip
+      - python3-wheel
+      - python3-devel
+    state: latest
+    update_cache: true
+  tags: packages
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
+
+- name: Install python3-virtualenv
+  ansible.builtin.yum:
+    name:
+      - python3-virtualenv
+    state: latest
+    update_cache: false
+  tags: packages
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
 
 - name: Install from pip the jc module
   ansible.builtin.pip:

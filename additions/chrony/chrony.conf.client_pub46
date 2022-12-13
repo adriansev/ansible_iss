@@ -1,5 +1,5 @@
 server 46.243.114.227 iburst prefer
-server 85.120.46.1 iburst
+server 46.243.114.254 iburst
 pool 0.ro.pool.ntp.org iburst
 
 stratumweight 0.01

@@ -1,0 +1,61 @@
+---
+- name: EOS repo install EL7
+  ansible.builtin.yum_repository:
+    name: eos-diopside
+    description: EOS 5.0 Version
+    file: eos
+    baseurl: https://storage-ci.web.cern.ch/storage-ci/eos/diopside/tag/testing/el-7/x86_64/
+    gpgcheck: false
+    enabled: true
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+  tags: repo
+
+- name: EOS dependencies repo install EL7
+  ansible.builtin.yum_repository:
+    name: eos-diopside-dep
+    description: EOS 5.0 Dependencies
+    file: eos
+    baseurl: https://storage-ci.web.cern.ch/storage-ci/eos/diopside-depend/el-7/x86_64/
+    gpgcheck: false
+    enabled: true
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+  tags: repo
+
+- name: EOS repo install EL9 - Alma
+  ansible.builtin.yum_repository:
+    name: eos-diopside
+    description: EOS 5.0 Version
+    file: eos
+    baseurl: https://storage-ci.web.cern.ch/storage-ci/eos/diopside/tag/testing/el-9s/x86_64/
+    gpgcheck: false
+    enabled: true
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
+  tags: repo
+
+- name: EOS dependencies repo install EL9 - Alma
+  ansible.builtin.yum_repository:
+    name: eos-diopside-dep
+    description: EOS 5.0 Dependencies
+    file: eos
+    baseurl: https://storage-ci.web.cern.ch/storage-ci/eos/diopside-depend/el-9s/x86_64/
+    gpgcheck: false
+    enabled: true
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
+  tags: repo
+

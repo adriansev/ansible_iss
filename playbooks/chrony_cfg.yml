@@ -1,0 +1,4 @@
+---
+- hosts: "{{ target }}"
+  tasks:
+  - include_tasks: tasks/pkg_chrony_task.yml
