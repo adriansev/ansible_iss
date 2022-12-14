@@ -5,12 +5,12 @@
     state: latest
   tags: packages
 
-- debug:
-    msg: |
-      ansible_all_ipv4_addresses: {{ ansible_all_ipv4_addresses }}
-      _network_reduced: "{{ ansible_all_ipv4_addresses | ansible.utils.reduce_on_network('85.120.46.0/24') }}"
-      _result_lenght: "{{ ansible_all_ipv4_addresses | ansible.utils.reduce_on_network('85.120.46.0/24') | length }}"
-      _result_value: "{{ ( ansible_all_ipv4_addresses | ansible.utils.reduce_on_network('85.120.46.0/24') | length | int ) > 0 }}"
+# - debug:
+#     msg: |
+#       ansible_all_ipv4_addresses: {{ ansible_all_ipv4_addresses }}
+#       _network_reduced: "{{ ansible_all_ipv4_addresses | ansible.utils.reduce_on_network('85.120.46.0/24') }}"
+#       _result_lenght: "{{ ansible_all_ipv4_addresses | ansible.utils.reduce_on_network('85.120.46.0/24') | length }}"
+#       _result_value: "{{ ( ansible_all_ipv4_addresses | ansible.utils.reduce_on_network('85.120.46.0/24') | length | int ) > 0 }}"
 
 - name: Chrony configuration 85
   ansible.builtin.copy:
@@ -23,7 +23,7 @@
     force: true
   register: chrony_is_configured
   when:
-    - ( ( ansible_facts['ansible_all_ipv4_addresses'] | ansible.utils.reduce_on_network( '85.120.46.0/24' ) | length | int ) > 0 )
+    - (  ansible_all_ipv4_addresses | ansible.utils.reduce_on_network( '85.120.46.0/24' ) | length | int ) > 0
 
 - name: Chrony configuration 46
   ansible.builtin.copy:
@@ -36,8 +36,8 @@
     force: true
   register: chrony_is_configured
   when:
-    - chrony_is_configured.skipped
-    - ( ansible_facts['ansible_all_ipv4_addresses'] | ansible.utils.reduce_on_network( '46.243.114.128/25' ) | length | int ) > 0
+    - chrony_is_configured is skipped
+    - ( ansible_all_ipv4_addresses | ansible.utils.reduce_on_network( '46.243.114.128/25' ) | length | int ) > 0
 
 - name: Chrony configuration 10
   ansible.builtin.copy:
@@ -50,8 +50,8 @@
     force: true
   register: chrony_is_configured
   when:
-    - chrony_is_configured.skipped
-    - ( ansible_facts['ansible_all_ipv4_addresses'] | ansible.utils.reduce_on_network( '10.10.8.0/22' ) | length | int ) > 0
+    - chrony_is_configured is skipped
+    - ( ansible_all_ipv4_addresses | ansible.utils.reduce_on_network( '10.10.8.0/22' ) | length | int ) > 0
 
 - name: Chrony configuration 172
   ansible.builtin.copy:
@@ -64,14 +64,8 @@
     force: true
   register: chrony_is_configured
   when:
-    - chrony_is_configured.skipped
-    - ( ansible_facts['ansible_all_ipv4_addresses'] | ansible.utils.reduce_on_network( '172.20.0.0/24' ) | length | int ) > 0
-
-- name: timedatectl 1
-  ansible.builtin.command: /usr/bin/timedatectl set-local-rtc 0
-
-- name: timedatectl 2
-  ansible.builtin.command: /usr/bin/timedatectl set-timezone Europe/Bucharest
+    - chrony_is_configured is skipped
+    - ( ansible_all_ipv4_addresses | ansible.utils.reduce_on_network( '172.20.0.0/24' ) | length | int ) > 0
 
 - name: Enable and start chronyd
   ansible.builtin.systemd:
@@ -79,6 +73,10 @@
     state: restarted
     enabled: true
 
-- name: timedatectl 3
-  ansible.builtin.command: /usr/bin/timedatectl set-ntp 1
-
+- name: Configure time system
+  ansible.builtin.command: "{{ item }}"
+  with_items:
+    - /usr/bin/timedatectl set-local-rtc 0
+    - /usr/bin/timedatectl set-timezone Europe/Bucharest
+    - /usr/bin/timedatectl set-ntp 1
+  changed_when: true
