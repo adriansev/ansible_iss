@@ -1,0 +1,19 @@
+---
+- include_tasks: repo_eos_task.yml
+
+- name: Install EOS packages EL7
+  ansible.builtin.yum:
+    name: [ 'eos-server', 'eos-client', 'eos-fuse', 'eos-xrootd', 'jemalloc' ]
+    state: latest
+    enablerepo: "eos-diopside, eos-diopside-dep"
+  tags: packages
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
+
+- name: Install EOS packages higher than 7
+  ansible.builtin.dnf:
+    name: [ 'eos-server', 'eos-client', 'eos-fuse', 'eos-xrootd', 'jemalloc' ]
+    state: latest
+    enablerepo: "eos-diopside, eos-diopside-dep"
+  tags: packages
+  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ( ansible_facts['distribution_major_version'] | int  > 7 ) ) or ansible_facts['distribution'] == 'Fedora'
+

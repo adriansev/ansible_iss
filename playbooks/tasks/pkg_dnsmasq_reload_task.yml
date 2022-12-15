@@ -1,0 +1,13 @@
+---
+- name: Reload dnsmasq
+  ansible.builtin.service:
+    name: dnsmasq
+    state: restarted
+  register: dnsmasq_restarted
+  when: (dnsmasq_conf is succeeded) and (resolv_conf is succeeded)
+
+- name: Reload NetworkManager
+  ansible.builtin.service:
+    name: NetworkManager
+    state: reloaded
+  when: dnsmasq_restarted is succeeded

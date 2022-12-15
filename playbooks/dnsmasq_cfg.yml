@@ -1,0 +1,11 @@
+---
+- hosts: "{{ target }}"
+  gather_facts: False
+  pre_tasks:
+    - name: Configure DNS related services
+      ansible.builtin.include_tasks: tasks/pkg_dnsmasq_conf_task.yml
+
+  post_tasks:
+    - name: Restart DNS related services
+      ansible.builtin.include_tasks: tasks/pkg_dnsmasq_reload_task.yml
+

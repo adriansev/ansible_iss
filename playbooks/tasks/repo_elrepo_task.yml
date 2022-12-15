@@ -9,11 +9,11 @@
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
   tags: repo
 
-- name: Enable EPEL Repository on CentOS 8
+- name: Enable EPEL Repository on EL 9
   ansible.builtin.dnf:
-    name: https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
+    name: https://www.elrepo.org/elrepo-release-9.el9.elrepo.noarch.rpm
     state: latest
     update_cache: true
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '8'
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
   tags: repo
 

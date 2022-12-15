@@ -1,5 +1,6 @@
 ---
 - hosts: "{{ target | default('seau') }}"
+  gather_facts: False
   tasks:
     - include_tasks: tasks/pkg_yum-utils_task.yml
     - include_tasks: tasks/pkg_hwmon_task.yml

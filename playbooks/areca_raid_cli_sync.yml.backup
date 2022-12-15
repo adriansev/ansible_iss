@@ -1,5 +1,6 @@
 ---
 - hosts: areca_raid
+  gather_facts: False
   tasks:
   - name: Creates /root/bin
     file:

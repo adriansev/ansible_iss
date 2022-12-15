@@ -2,5 +2,5 @@
 - hosts: "{{ target }}"
   gather_facts: False
   tasks:
-  - include_tasks: tasks/lldpd_task.yml
+  - include_tasks: tasks/pkg_eos_task.yml
 

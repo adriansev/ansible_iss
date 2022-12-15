@@ -25,7 +25,6 @@
         - '!MysqlFactCollector'
         - '!Icinga2FactCollector'
         - '!DockerFactCollector'
-    #debugger: always
 
   # Print extended facts
   #- name: Debug

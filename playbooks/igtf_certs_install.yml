@@ -1,4 +1,5 @@
 ---
 - hosts: "{{ target }}"
+  gather_facts: False
   tasks:
-  - include_tasks: tasks/igtf_certs_task.yml
+  - include_tasks: tasks/igtf_install_task.yml

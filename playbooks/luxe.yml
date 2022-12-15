@@ -1,5 +1,6 @@
 ---
 - hosts: "{{ target | default('luxe') }}"
+  gather_facts: False
   vars:
     cvmfs_cache_base: "/home/cvmfs/cache"
   tasks:

@@ -1,0 +1,24 @@
+---
+- ansible.builtin.import_tasks: repo_egi_igtf_task.yml
+
+- name: Install certificates EL7
+  ansible.builtin.yum:
+    name:
+      - ca-policy-egi-core
+      - ca-policy-egi-cam
+      - ca-policy-lcg
+    state: latest
+    enablerepo: "EGI-trustanchors"
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
+  tags: packages
+
+- name: Install certificates on newer distros
+  ansible.builtin.dnf:
+    name:
+      - ca-policy-egi-core
+      - ca-policy-egi-cam
+      - ca-policy-lcg
+    state: latest
+    enablerepo: "EGI-trustanchors"
+  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ( ansible_facts['distribution_major_version'] | int  > 7 ) ) or ansible_facts['distribution'] == 'Fedora'
+  tags: packages

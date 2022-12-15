@@ -1,0 +1,16 @@
+---
+- hosts: "{{ target }}"
+  gather_facts: False
+
+- name: Do IGTF certificate install
+  ansible.builtin.import_playbook: igtf_certs_install.yml
+
+- name: Do chrony setup
+  ansible.builtin.import_playbook: chrony_cfg.yml
+
+- name: Do dnsmasq setup
+  ansible.builtin.import_playbook: dnsmasq_cfg.yml
+
+- name: Install EOS rpms
+  ansible.builtin.import_playbook: eos_pkg_install.yml
+
