@@ -1,18 +1,18 @@
 ---
-- name: Install lldpd EL7
-  ansible.builtin.yum:
+- name: Install lldpd EL
+  yum:
     name: lldpd
     state: latest
     update_cache: true
     enablerepo: "epel"
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+  when: ansible_facts[ 'distribution' ] == 'CentOS'
 
 - name: Install lldpd Fedora
-  ansible.builtin.dnf:
+  dnf:
     name: lldpd
     state: latest
     update_cache: true
-  when: ( ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9' ) or ansible_facts[ 'distribution' ] == 'Fedora'
+  when: ansible_facts[ 'distribution' ] == 'Fedora'
 
 - name: Ansible create file with content example
   copy:
@@ -23,4 +23,10 @@
     content: |
       configure lldp portidsubtype ifname
       update
+
+- name: Restart network service for interface eth0
+  service:
+    name: lldpd
+    state: restarted
+    enabled: true
 

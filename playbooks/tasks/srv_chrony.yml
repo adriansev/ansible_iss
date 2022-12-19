@@ -1,0 +1,16 @@
+---
+- name: Enable and start chronyd
+  ansible.builtin.systemd:
+    name: chronyd
+    state: restarted
+    enabled: true
+  register: chrony_restarted
+
+- name: Configure time system
+  ansible.builtin.command: "{{ item }}"
+  with_items:
+    - /usr/bin/timedatectl set-local-rtc 0
+    - /usr/bin/timedatectl set-timezone Europe/Bucharest
+    - /usr/bin/timedatectl set-ntp 1
+  when: chrony_restarted is succeeded
+  changed_when: true

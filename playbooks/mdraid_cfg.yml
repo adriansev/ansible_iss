@@ -1,0 +1,15 @@
+---
+- hosts: "{{ target | default('storages') }}"
+  gather_facts: False
+  vars:
+    is_enabled: "yes"
+    check_type: "check"
+    check_devs: "\"\""
+    repair_devs: "\"\""
+    skip_devs: "\"\""
+    max_concurrent: ""
+    raid_check_time_cron: "0 0 1 * *"
+    raid_check_time_systemd: "*-*-01 00:00:00"
+  tasks:
+  - include_tasks: tasks/mdraid_conf_task.yml
+

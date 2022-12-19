@@ -67,16 +67,3 @@
     - chrony_is_configured is skipped
     - ( ansible_all_ipv4_addresses | ansible.utils.reduce_on_network( '172.20.0.0/24' ) | length | int ) > 0
 
-- name: Enable and start chronyd
-  ansible.builtin.systemd:
-    name: chronyd
-    state: restarted
-    enabled: true
-
-- name: Configure time system
-  ansible.builtin.command: "{{ item }}"
-  with_items:
-    - /usr/bin/timedatectl set-local-rtc 0
-    - /usr/bin/timedatectl set-timezone Europe/Bucharest
-    - /usr/bin/timedatectl set-ntp 1
-  changed_when: true

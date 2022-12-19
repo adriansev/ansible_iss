@@ -5,7 +5,7 @@
     - name: Configure DNS related services
       ansible.builtin.include_tasks: tasks/pkg_dnsmasq_conf_task.yml
 
-  post_tasks:
+  tasks:
     - name: Restart DNS related services
-      ansible.builtin.include_tasks: tasks/pkg_dnsmasq_reload_task.yml
+      ansible.builtin.include_tasks: tasks/srv_dnsmasq.yml
 

@@ -1,0 +1,33 @@
+---
+- name: Install hardware management and monitoring tools - CENTOS
+  ansible.builtin.yum:
+    name:
+      - smartmontools
+    state: latest
+    update_cache: true
+    enablerepo: "epel"
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
+  tags: packages
+
+- name: Install hardware management and monitoring tools - Fedora
+  ansible.builtin.dnf:
+    name:
+      - smartmontools
+    state: latest
+    update_cache: true
+  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
+  tags: packages
+
+- name: Smartd config
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/smartctl/smartd.conf"
+    dest: /etc/smartmontools/smartd.conf
+    mode: 0644
+    owner: root
+    group: root
+    backup: true
+    force: true
+
+- name: Update /usr/share/smartmontools/drivedb.h
+  ansible.builtin.command: /usr/sbin/update-smart-drivedb -u github --trunk --no-verify
+

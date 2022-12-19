@@ -6,17 +6,10 @@
     update_cache: true
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
 
-- name: Install hardware monitoring tools on hardware machines (not vms) - EL8
+- name: Install hardware monitoring tools on hardware machines (not vms) - EL9
   ansible.builtin.dnf:
     name: [ 'ganglia', 'ganglia-gmond' ]
     state: latest
     update_cache: true
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '8'
-
-- name: Install hardware monitoring tools on hardware machines (not vms) - Fedora
-  ansible.builtin.dnf:
-    name: [ 'ganglia', 'ganglia-gmond' ]
-    state: latest
-    update_cache: true
-  when: ansible_facts[ 'distribution' ] == 'Fedora'
+  when: ( ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9' ) or ansible_facts[ 'distribution' ] == 'Fedora'
 

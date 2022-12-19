@@ -1,6 +1,8 @@
 ---
 - hosts: "{{ target }}"
   gather_facts: False
-  tasks:
+  pre_tasks:
   - include_tasks: tasks/lldpd_task.yml
+  tasks:
+  - include_tasks: tasks/srv_lldpd.yml
 

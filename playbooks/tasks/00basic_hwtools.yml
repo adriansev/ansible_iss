@@ -52,6 +52,6 @@
       - smartmontools
     state: latest
     update_cache: true
-  when: ansible_facts[ 'distribution' ] == 'Fedora'
+  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
   tags: packages
 

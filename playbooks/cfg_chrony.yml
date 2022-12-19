@@ -1,5 +1,7 @@
 ---
 - hosts: "{{ target }}"
   gather_facts: False
-  tasks:
+  pre_tasks:
   - include_tasks: tasks/pkg_chrony_task.yml
+  tasks:
+  - include_tasks: tasks/srv_chrony.yml

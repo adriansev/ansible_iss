@@ -3,6 +3,7 @@
   ansible.builtin.service:
     name: dnsmasq
     state: restarted
+    enabled: true
   register: dnsmasq_restarted
   when: (dnsmasq_conf is succeeded) and (resolv_conf is succeeded)
 
@@ -10,4 +11,5 @@
   ansible.builtin.service:
     name: NetworkManager
     state: reloaded
+    enabled: true
   when: dnsmasq_restarted is succeeded
