@@ -1,0 +1,32 @@
+---
+- include_tasks: repo_epel_task.yml
+
+- name: Install hardware management and monitoring tools - CENTOS
+  ansible.builtin.yum:
+    name:
+      - lshw
+      - hwloc
+      - hwloc-plugins
+      - numactl
+      - numad
+      - libcgroup-tools
+      - libcgroup
+    state: latest
+    update_cache: true
+    enablerepo: "epel"
+  when: ansible_facts['distribution'] == 'CentOS'
+  tags: packages
+
+- name: Install hardware management and monitoring tools - Fedora
+  ansible.builtin.dnf:
+    name:
+      - lshw
+      - hwloc
+      - numactl
+      - numad
+      - numatop
+    state: latest
+    update_cache: true
+  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
+  tags: packages
+

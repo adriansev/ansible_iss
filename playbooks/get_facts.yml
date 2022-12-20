@@ -1,14 +1,14 @@
 ---
 - hosts: "{{ target | default('all') }}"
-  tasks:
 
+  pre_tasks:
   - include_tasks: tasks/00basic_req.yml
 
+  tasks:
   - include_tasks: tasks/00basic_hwtools.yml
+  - include_tasks: tasks/smartd_cfg_task.yml
 
-  - name: Update smartctl db from master
-    ansible.builtin.command: /usr/sbin/update-smart-drivedb -u github --trunk --no-verify
-
+  post_tasks:
   - name: Get facts
     ansible.builtin.setup:
       gather_timeout: 30

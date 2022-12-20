@@ -35,9 +35,12 @@ fst08.spacescience.ro
 fst09.spacescience.ro
 
 grid05.spacescience.ro
-grid04.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python
-seau.spacescience.ro   ansible_ssh_private_key_file=~/.ssh/id_rsa
-vobox.spacescience.ro  ansible_ssh_private_key_file=~/.ssh/id_rsa
+vobox.spacescience.ro
+seau.spacescience.ro
+seau2.spacescience.ro
+
+## grid04 EL6 - too old python for ansible to work
+##grid04.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python ansible_ssh_common_args='-o "PubkeyAcceptedKeyTypes=+ssh-rsa" -o "HostkeyAlgorithms=+ssh-rsa" -o "PubkeyAcceptedKeyTypes=+ssh-rsa"'
 
 [all:vars]
 ansible_connection=ssh
@@ -50,13 +53,13 @@ ansible_ssh_private_key_file=~/.ssh/id_ed25519
 ## Define functional groups
 ############################################################
 
+[paoremote:vars]
+##ansible_python_interpreter=/usr/bin/python3
+
 [paoremote]
 paowall
 paostation1
 paostation2
-
-[paoremote:vars]
-ansible_python_interpreter=/usr/bin/python3
 
 [rocks_servers]
 alien.spacescience.ro
@@ -99,7 +102,7 @@ eos_fst
 
 [emi_servers]
 grid05.spacescience.ro
-grid04.spacescience.ro
+##grid04.spacescience.ro
 seau.spacescience.ro
 vobox.spacescience.ro
 
@@ -118,6 +121,8 @@ fst04.spacescience.ro
 fst05.spacescience.ro
 fst06.spacescience.ro
 fst07.spacescience.ro
+fst08.spacescience.ro
+fst09.spacescience.ro
 
 [mdraid]
 alien.spacescience.ro
@@ -137,7 +142,7 @@ storage09.spacescience.ro
 storage10.spacescience.ro
 
 [wn_umd:vars]
-ansible_python_interpreter=/usr/bin/python3
+##ansible_python_interpreter=/usr/bin/python3
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
@@ -146,7 +151,7 @@ ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@grid05.spacescienc
 [wn_umd]
 
 [wn_alien:vars]
-ansible_python_interpreter=/usr/bin/python3
+#ansible_python_interpreter=/usr/bin/python3
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
@@ -155,7 +160,7 @@ ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@alien.spacescience
 [wn_alien]
 
 [wn_issaf:vars]
-ansible_python_interpreter=/usr/bin/python3
+##ansible_python_interpreter=/usr/bin/python3
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
