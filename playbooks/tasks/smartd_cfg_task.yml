@@ -28,6 +28,20 @@
     backup: true
     force: true
 
+- name: Smartd customize systemd unit
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/smartd.service.d/override.conf
+    content: |
+        [Service]
+        TimeoutStartSec=900
+        Restart=on-failure
+        RestartSec=30
+    mode: 0644
+    owner: root
+    group: root
+    backup: false
+    force: true
+
 - name: Update /usr/share/smartmontools/drivedb.h
   ansible.builtin.command: /usr/sbin/update-smart-drivedb -u github --trunk --no-verify
 
