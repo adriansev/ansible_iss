@@ -1,0 +1,5 @@
+---
+- hosts: "{{ target }}"
+  gather_facts: False
+  tasks:
+  - include_tasks: tasks/mdraid_idle_task.yml
