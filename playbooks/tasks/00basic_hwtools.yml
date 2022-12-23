@@ -57,3 +57,10 @@
     - ansible_facts['ansible_ipmi'] is defined and ansible_facts['ansible_ipmi']
   tags: packages
 
+- name: Install from pip the jc module
+  ansible.builtin.pip:
+    executable: pip3
+    name:
+      - jc==1.22.1
+    extra_args: --user
+    state: present
