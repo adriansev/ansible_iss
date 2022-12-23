@@ -102,9 +102,11 @@ eos_fst
 
 [emi_servers]
 grid05.spacescience.ro
-##grid04.spacescience.ro
 seau.spacescience.ro
+seau2.spacescience.ro
+##grid04.spacescience.ro
 vobox.spacescience.ro
+
 
 [areca_raid]
 seau.spacescience.ro
@@ -123,8 +125,10 @@ fst06.spacescience.ro
 fst07.spacescience.ro
 fst08.spacescience.ro
 fst09.spacescience.ro
+seau2.spacescience.ro
 
 [mdraid]
+seau2.spacescience.ro
 alien.spacescience.ro
 issaf.spacescience.ro
 mgm.spacescience.ro
