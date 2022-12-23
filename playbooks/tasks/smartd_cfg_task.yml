@@ -28,6 +28,11 @@
     backup: true
     force: true
 
+- name: Smartd create customization path
+  ansible.builtin.file:
+    path: /etc/systemd/system/smartd.service.d/
+    state: directory
+
 - name: Smartd customize systemd unit
   ansible.builtin.copy:
     dest: /etc/systemd/system/smartd.service.d/override.conf
