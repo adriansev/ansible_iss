@@ -1,4 +1,8 @@
 ---
+- include_tasks: repo_epel_task.yml
+
+- include_tasks: repo_elrepo_task.yml
+
 - name: Bootstrap ansible requirements on host EL7
   ansible.builtin.raw: yum install -y python3 python3-devel python3-setuptools python3-pip python3-wheel python3-virtualenv gcc
   tags: packages

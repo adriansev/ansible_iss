@@ -2,11 +2,12 @@
 - name: Enable EPEL Repository on EL9
   ansible.builtin.dnf:
     name: epel-release
-    state: latest
+    state: present
   when: ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9'
 
 - name: Enable EPEL Repository on CentOS 7
   ansible.builtin.yum:
     name: epel-release
-    state: latest
+    state: present
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+

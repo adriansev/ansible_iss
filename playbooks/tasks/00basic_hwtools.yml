@@ -1,6 +1,4 @@
 ---
-- include_tasks: repo_epel_task.yml
-
 - name: Install hardware management and monitoring tools - CENTOS
   ansible.builtin.yum:
     name:
