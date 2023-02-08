@@ -1,0 +1,7 @@
+# FAIL2BAN
+-A INPUT -m set --match-set f2b-sshd src -j DROP
+
+# BLACKLISTING
+-A INPUT -m set --match-set blacklist_ip src -j DROP
+-A INPUT -m set --match-set blacklist_net src -j DROP
+
