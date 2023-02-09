@@ -7,5 +7,13 @@
     state: latest
     enablerepo: "epel,wlcg"
     disablerepo: "UMD*"
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+  tags: packages
+
+- name: Install mlsensor
+  ansible.builtin.dnf:
+    name: [ 'http://linuxsoft.cern.ch/wlcg/centos7/x86_64/mlsensor-1.2.6-1.el7.noarch.rpm' ]
+    state: present
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
   tags: packages
 
