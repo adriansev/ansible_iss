@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+echo "$(basename ${0} .tune_eth) - START"
+
+## settng of maximum ring size
+RING_INFO=$(${ETHTOOL} -g ${1})
+eval $(echo "${RING_INFO}" | ${GREP} -A4 'Pre-set maximum' | ${TAIL} -n +2 | ${AWK} '{gsub(" |\t", "", $0); gsub(":", "=", $0); print;}') #'
+
+ARGS=""
+[[ "RX" != "n/a" ]] && ARGS="rx ${RX}"
+[[ "RXMini" != "n/a" ]] && ARGS="${ARGS} rx-mini ${RXMini}"
+[[ "RXJumbo" != "n/a" ]] && ARGS="${ARGS} rx-jumbo ${RXJumbo}"
+[[ "TX" != "n/a" ]] && ARGS="${ARGS} tx ${TX}"
+
+${ETHTOOL} -G ${1} ${ARGS} &> /dev/null
+
+echo "$(basename ${0} .tune_eth) - END"
+

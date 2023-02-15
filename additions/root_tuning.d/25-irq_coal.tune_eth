@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+echo "$(basename ${0} .tune_eth) - START"
+
+# enable adaptive coalescing; TODO detect the support for it
+${ETHTOOL} -C ${1} adaptive-rx on adaptive-tx on
+
+echo "$(basename ${0} .tune_eth) - END"
+

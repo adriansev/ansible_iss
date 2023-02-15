@@ -1,0 +1,17 @@
+---
+- name: Clean up current sysctld
+  ansible.builtin.command:
+    cmd: find /etc/sysctl.d -type f -delete
+  args:
+    chdir: /etc/sysctl.d
+
+- name: Copy generic sysctl settings
+  ansible.builtin.copy:
+    owner: root
+    group: root
+    mode: '664'
+    dest: /etc/sysctl.d/
+    src: "{{ sysctl_item }}"
+  loop_control:
+    loop_var: sysctl_item
+  loop: "{{ sysctl_list }}"

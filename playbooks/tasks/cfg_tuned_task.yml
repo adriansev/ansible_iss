@@ -1,0 +1,14 @@
+---
+- include_tasks: pkg_tuned_task.yml
+
+- name: tuned role
+  vars:
+    daemon: true
+    reapply_sysctl: true
+    use_recommended_profile: false
+    enable_recommend: false
+    dynamic_tuning: false
+
+  include_role:
+    name: linux-system-roles.tuned
+

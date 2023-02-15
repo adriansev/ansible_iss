@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# first let's check if there are priv flags
+PRIV_FLAGS=$(${ETHTOOL} --show-priv-flags ${1} 2> /dev/null || exit 0)
+
+echo "$(basename ${0} .tune_eth) - START"
+
+# disable NIC lldp
+HAS_FW_LLDP=$(echo "${PRIV_FLAGS}" | ${GREP} disable-fw-lldp )
+[[ -n "${HAS_FW_LLDP}" ]] && ${ETHTOOL} --set-priv-flags ${1} disable-fw-lldp on
+
+echo "$(basename ${0} .tune_eth) - END"
+

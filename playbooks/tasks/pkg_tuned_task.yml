@@ -3,15 +3,15 @@
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - Centos
   ansible.builtin.yum:
-    name: [ 'edac-utils', 'linux-firmware', 'mdadm' ]
+    name: [ 'tuned', 'tuned-utils' ]
     state: latest
     update_cache: true
     enablerepo: "epel"
-  when: ansible_facts[ 'distribution' ] == 'CentOS'
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - Fedora
   ansible.builtin.dnf:
-    name: [ 'edac-utils', 'linux-firmware', 'mdadm' ]
+    name: [ 'tuned', 'tuned-utils' ]
     state: latest
     update_cache: true
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'

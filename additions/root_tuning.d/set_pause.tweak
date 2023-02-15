@@ -1,9 +1,0 @@
-#!/usr/bin/bash
-
-ETHTOOL="/usr/sbin/ethtool"
-eth_list=$(/usr/bin/find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n' | /usr/bin/sort)
-
-for ETH in ${eth_list}; do
-      ${ETHTOOL} -a ${ETH} && ${ETHTOOL} -A ${ETH} autoneg on rx on tx on
-done
-

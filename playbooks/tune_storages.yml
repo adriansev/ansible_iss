@@ -1,0 +1,37 @@
+---
+- hosts: "{{ target }}"
+  gather_facts: False
+
+  vars:
+    profile: throughput-performance
+
+  tasks:
+    - include_tasks: tasks/cfg_tuned_task.yml
+    - include_tasks: tasks/cfg_tuning_infra.yml
+
+    - include_tasks: tasks/tune_sysctl_task.yml
+      vars:
+        sysctl_list:
+          - "{{ playbook_dir }}/../additions/sysctl.d/70-mtu.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/72-packet_tuning.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/80-network_buffers_25GB.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/82-ipv4.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/82-ipv6.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/82-netcore.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/84-fs.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/84-kernel.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/90-raid_speed.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/99-delayacct.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/99-memory.conf"
+
+    - include_tasks: tasks/tune_scripts_task.yml
+      vars:
+        tuning_list:
+          - "{{ playbook_dir }}/../additions/root_tuning.d/00-blockdev.tune"
+          - "{{ playbook_dir }}/../additions/root_tuning.d/00-nm_mtu.tune_eth"
+          - "{{ playbook_dir }}/../additions/root_tuning.d/01-mtu_txq.tune_eth"
+          - "{{ playbook_dir }}/../additions/root_tuning.d/05-fq_shape.tune_eth"
+          - "{{ playbook_dir }}/../additions/root_tuning.d/20-ring.tune_eth"
+          - "{{ playbook_dir }}/../additions/root_tuning.d/25-channels.tune_eth"
+          - "{{ playbook_dir }}/../additions/root_tuning.d/10-nic_lldp_off.tune_eth"
+

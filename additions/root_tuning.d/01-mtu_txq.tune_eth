@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+echo "$(basename ${0} .tune_eth) - START"
+
+# Set mtu and txqueuelen
+${IP} link set "${1}" mtu 9000 txqueuelen 3072;
+
+echo "$(basename ${0} .tune_eth) - END"
+

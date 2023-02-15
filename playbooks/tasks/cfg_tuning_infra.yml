@@ -1,0 +1,24 @@
+---
+- name: Copy tuning appling script
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/root_bin/apply_tuning"
+    dest: /root/bin/
+    owner: root
+    group: root
+    mode: '0700'
+    force: true
+
+- name: Install cron for tuning script
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/root_bin/tuning.cron"
+    dest: /etc/cron.d/tuning
+    owner: root
+    group: root
+    mode: '0700'
+    force: true
+
+
+- name: Create location for individual tuning scripts
+  ansible.builtin.file:
+    path: /root/tuning.d
+    state: directory

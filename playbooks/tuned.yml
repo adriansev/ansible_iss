@@ -1,0 +1,10 @@
+---
+- hosts: "{{ target }}"
+  gather_facts: False
+
+  vars:
+    profile: throughput-performance
+
+  tasks:
+  - include_tasks: tasks/cfg_tuned_task.yml
+

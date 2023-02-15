@@ -1,0 +1,18 @@
+---
+- name: Clean up current tunes
+  ansible.builtin.command:
+    cmd: find /root/tuning.d -type f -delete
+  args:
+    chdir: /root/tuning.d
+
+- name: Copy tuning scripts
+  ansible.builtin.copy:
+    owner: root
+    group: root
+    mode: '700'
+    dest: /root/tuning.d/
+    src: "{{ tuning_item }}"
+  loop_control:
+    loop_var: tuning_item
+  loop: "{{ tuning_list }}"
+

@@ -1,0 +1,65 @@
+#!/usr/bin/bash
+
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/factors-affecting-i-o-and-file-system-performance_monitoring-and-managing-system-status-and-performance#generic-block-device-tuning-parameters_factors-affecting-i-o-and-file-system-performance
+
+echo "$(basename ${0} .tune) - START"
+
+while IFS= read -r LINE; do
+    eval "${LINE}"
+    DEVPATH="/sys/block/${NAME}"
+    SCSI_DEV_NAME=$(basename $(realpath ${DEVPATH}/device))
+    SCSI_DEVPATH="/sys/bus/scsi/devices/${SCSI_DEV_NAME}/block/${NAME}"
+
+    # set scheduler
+    SCHED="mq-deadline"
+    [[ "${ROTA}" == "1" ]] && SCHED="bfq"
+    [[ -z "${WWN}" ]] && [[ "${VENDOR}" == "Areca"* ]] && IS_ARECA="1"
+
+    if [[ -n "${IS_ARECA}" ]]; then
+        SCHED="mq-deadline"
+        # for hardware raid disable the hint to scheduler that medium is rotational
+        echo 0   > ${DEVPATH}/queue/rotational
+        echo 128 > ${DEVPATH}/device/queue_depth
+    fi
+
+    is_available=$(grep ${SCHED} ${DEVPATH}/queue/scheduler)
+    if [[ -z "${is_available}" ]]; then
+        modprobe ${SCHED}
+        mod_name=$(modinfo ${SCHED} | awk -F":[[:space:]]*" '/^name/ {print $2}')
+        is_present=$(lsmod | grep ${mod_name})
+        [[ -z "${is_present}" ]] && { echo "scheduler module ${SCHED} could not be loaded for ${DEVPATH}"; continue; }
+    fi
+
+    echo ${SCHED} > ${DEVPATH}/queue/scheduler
+
+    # This controls how many requests may be allocated in the block layer for read or write requests.
+    [[ "${SCHED}" != "none" ]] && echo 1024 > ${DEVPATH}/queue/nr_requests
+
+    # Maximum number of kilobytes to read-ahead for filesystems on this block device.
+    echo 4096 > ${DEVPATH}/queue/read_ahead_kb
+
+    # This is the maximum number of kilobytes that the block layer will allow for a filesystem request
+    cat ${DEVPATH}/queue/max_hw_sectors_kb > ${DEVPATH}/queue/max_sectors_kb
+
+done < <(/usr/bin/lsblk -dnP -o NAME,SCHED,RA,ROTA,TRAN,WWN,VENDOR,UUID,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,RQ-SIZE | sed 's/MIN-IO/MINIO/g; s/OPT-IO/OPTIO/g; s/PHY-SEC/PHYSEC/g; s/LOG-SEC/LOGSEC/g; s/RQ-SIZE/RQSIZE/g;')
+
+## Parse md devices
+if [[ -d /sys/devices/virtual/block ]]; then
+for mdev in $(ls -1 /sys/devices/virtual/block); do
+    MDPATH="/sys/devices/virtual/block/${mdev}"
+    # echo 0 > ${MDPATH}/queue/rotational
+    # echo 4096 > ${MDPATH}/queue/read_ahead_kb
+    # echo 1024 > ${MDPATH}/queue/nr_requests
+
+    # parse md components
+    for md_comp in $(ls -1 ${MDPATH}/slaves/); do
+        eval "$(< ${MDPATH}/slaves/${md_comp}/uevent)"
+        # get the name of the parent device
+        DISK_NAME=$(basename $(lsblk -snpio KNAME /dev/${DEVNAME} | tail -1))
+
+    done
+done
+fi
+
+echo "$(basename ${0} .tune) - END"
+

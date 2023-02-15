@@ -6,17 +6,10 @@
     update_cache: true
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
 
-- name: yum utils EL8
-  ansible.builtin.dnf:
-    name: [ 'yum', 'yum-utils', 'dnf-utils', 'dnf-plugins-core' ]
-    state: latest
-    update_cache: true
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '8'
-
 - name: yum utils Fedora
   ansible.builtin.dnf:
     name: [ 'yum', 'dnf-utils', 'dnf-plugins-core' ]
     state: latest
     update_cache: true
-  when: ansible_facts[ 'distribution' ] == 'Fedora'
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
 

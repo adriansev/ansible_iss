@@ -11,6 +11,12 @@
       - pciutils
       - lshw
       - smartmontools
+      - cronie
+      - crontabs
+      - cronie-anacron
+      - iproute
+      - ipset
+      - ipset-service
     state: present
     update_cache: false
     enablerepo: "epel"
@@ -28,6 +34,13 @@
       - dmidecode
       - pciutils
       - smartmontools
+      - cronie
+      - crontabs
+      - cronie-anacron
+      - iproute
+      - iproute-tc
+      - ipset
+      - ipset-service
     state: present
     update_cache: false
   when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
@@ -62,3 +75,10 @@
       - jc==1.22.1
     extra_args: --user
     state: present
+
+- name: Enable and start cron
+  ansible.builtin.systemd:
+    name: crond
+    state: restarted
+    enabled: true
+

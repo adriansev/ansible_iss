@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo "$(basename ${0} .tune_eth) - START"
+
+# https://fasterdata.es.net/host-tuning/linux/packet-pacing/
+# enable pacing and shaping: for 10 gbit, this would shape 4 flow, for 25 gbit -> 10 flows
+# 2.5 Gbit = 298.023 MiB
+${TC} qdisc add dev ${1} root fq maxrate 2.5gbit 2> /dev/null
+
+echo "$(basename ${0} .tune_eth) - END"
+

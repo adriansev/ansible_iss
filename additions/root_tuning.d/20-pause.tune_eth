@@ -1,0 +1,2 @@
+# enable pausing of frames
+${ETHTOOL} -a ${1} && ${ETHTOOL} -A ${1} autoneg on rx on tx on
