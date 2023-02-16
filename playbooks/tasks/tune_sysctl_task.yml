@@ -15,3 +15,7 @@
   loop_control:
     loop_var: sysctl_item
   loop: "{{ sysctl_list }}"
+
+- name: Re-apply sysctl parameters
+  ansible.builtin.command: /usr/sbin/sysctl --system
+

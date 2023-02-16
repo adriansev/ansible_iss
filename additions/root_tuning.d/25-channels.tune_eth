@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
 
+CHANNELS_INFO=$( ${ETHTOOL} -l ${1} 2>/dev/null || { echo "Channels not supported for ${1}"; exit 0; } )
+
 echo "$(basename ${0} .tune_eth) - START"
 
 ## settng of maximum number of channels
-CHANNELS_INFO=$( ${ETHTOOL} -l ${1} || { echo "Channels not supported"; exit 1; } )
 ETH_MAX_CHANNELS=$( echo "${CHANNELS_INFO}" | ${GREP} -A 4 Pre-set | ${TAIL} -n +2 | ${SED} 's/:/=\"/;s/ /_/; s/\t//g;s/ //g; s/$/\"/g' )
-[[ -z "${ETH_MAX_CHANNELS}" ]] && { echo "Channels presets info emtpy!"; exit 1; }
-eval "${ETH_MAX_CHANNELS}"
-${ETHTOOL} -L ${1} rx 0 tx 0 other 0 combined "${Combined}"
+
+if [[ -n "${ETH_MAX_CHANNELS}" ]]; then
+    eval "${ETH_MAX_CHANNELS}"
+    [[ "${RX}" == "n/a" ]] && RX="0"
+    [[ "${TX}" == "n/a" ]] && TX="0"
+    [[ "${Other}" == "n/a" ]] && Other="0"
+    [[ "${Combined}" == "n/a" ]] && Combined="0"
+    ${ETHTOOL} -L ${1} rx 0 tx 0 other ${Other} combined "${Combined}"
+else
+    echo "Channels presets info emtpy for ${1}!";
+fi
 
 echo "$(basename ${0} .tune_eth) - END"
 

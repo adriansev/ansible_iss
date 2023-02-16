@@ -4,6 +4,7 @@
 
 echo "$(basename ${0} .tune) - START"
 
+# Parsing of block devices (not virtual ones)
 while IFS= read -r LINE; do
     eval "${LINE}"
     DEVPATH="/sys/block/${NAME}"
@@ -36,27 +37,77 @@ while IFS= read -r LINE; do
     [[ "${SCHED}" != "none" ]] && echo 1024 > ${DEVPATH}/queue/nr_requests
 
     # Maximum number of kilobytes to read-ahead for filesystems on this block device.
-    echo 4096 > ${DEVPATH}/queue/read_ahead_kb
+    echo 1024 > ${DEVPATH}/queue/read_ahead_kb
 
     # This is the maximum number of kilobytes that the block layer will allow for a filesystem request
     cat ${DEVPATH}/queue/max_hw_sectors_kb > ${DEVPATH}/queue/max_sectors_kb
 
 done < <(/usr/bin/lsblk -dnP -o NAME,SCHED,RA,ROTA,TRAN,WWN,VENDOR,UUID,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,RQ-SIZE | sed 's/MIN-IO/MINIO/g; s/OPT-IO/OPTIO/g; s/PHY-SEC/PHYSEC/g; s/LOG-SEC/LOGSEC/g; s/RQ-SIZE/RQSIZE/g;')
 
+## https://raid.wiki.kernel.org/index.php/A_guide_to_mdadm#Blocks.2C_chunks_and_stripes
+## https://raid.wiki.kernel.org/index.php/Performance#Some_problem_solving_for_benchmarking
+## https://docs.kernel.org/driver-api/md/raid5-cache.html
+## https://drew.invadelabs.com/Mdadm#stripe_cache_size
+## https://www.cyberciti.biz/tips/linux-raid-increase-resync-rebuild-speed.html
+## https://strugglers.net/~andy/blog/2015/08/09/ssds-and-linux-native-command-queuing/
 ## Parse md devices
 if [[ -d /sys/devices/virtual/block ]]; then
 for mdev in $(ls -1 /sys/devices/virtual/block); do
     MDPATH="/sys/devices/virtual/block/${mdev}"
-    # echo 0 > ${MDPATH}/queue/rotational
-    # echo 4096 > ${MDPATH}/queue/read_ahead_kb
+
+    TYPE="$(< ${MDPATH}/md/level)"
+    NR_DISKS="$(< ${MDPATH}/md/raid_disks)"
+    NR_DISKS_DATA="${NR_DISKS}"
+    ROTA="$(< ${MDPATH}/queue/rotational)"
+
+    # sync reported max with the current max sectors
+    cat "${MDPATH}/queue/max_hw_sectors_kb" > "${MDPATH}/queue/max_sectors_kb"
+
+    # Number of requests in the queue !!! CANNOT BE SET ON DEVICES NOT OF TYPE blk-mq
     # echo 1024 > ${MDPATH}/queue/nr_requests
+
+    # Setting for raid1
+    if [[ "${TYPE}" == "raid1" ]]; then
+        echo 1024 > ${MDPATH}/queue/read_ahead_kb
+    fi
+
+    # Settings for raid6
+    if [[ "${TYPE}" == "raid6" ]]; then
+        NR_DISKS_DATA=$(( NR_DISKS - 2 ))
+        BLOCK_SZ="$(< ${MDPATH}/md/stripe_size)"
+        BLOCK_SZ_K=$(echo "scale=0;${BLOCK_SZ}/1024" | bc -l) #"
+
+        # The chunk size is the number of consecutive blocks written to each drive. It's a multiple of the linux 4K block size.
+        CHUNK_SZ="$(< ${MDPATH}/md/chunk_size)"
+        CHUNK_SZ_K=$(echo "scale=0;${CHUNK_SZ}/1024" | bc -l) #"
+        [[ "${CHUNK_SZ_K}" == "0" ]] && CHUNK_SZ_K=16
+
+        # The stripe size is the number of chunks by the number of drives.
+        # The stripe includes parity and/or mirror information so the data stored per stripe is usually less than the size of the stripe
+        STRIPE_K=$(( NR_DISKS * CHUNK_SZ_K ))
+        STRIPE_DATA_K=$(( NR_DISKS_DATA * CHUNK_SZ_K ))
+
+        # size (in pages per device)
+        STRIPE_CACHE_ENTRIES="128"  # cache 512k on each disk
+        echo ${STRIPE_CACHE_ENTRIES} > "${MDPATH}/md/stripe_cache_size"
+
+        stripe_multiplier=4
+        READAHEAD_KB=$(( STRIPE_DATA_K * stripe_multiplier ))
+        echo ${READAHEAD_KB} > ${MDPATH}/queue/read_ahead_kb
+    fi
 
     # parse md components
     for md_comp in $(ls -1 ${MDPATH}/slaves/); do
         eval "$(< ${MDPATH}/slaves/${md_comp}/uevent)"
         # get the name of the parent device
-        DISK_NAME=$(basename $(lsblk -snpio KNAME /dev/${DEVNAME} | tail -1))
+        DISK_NAME=$(basename $(lsblk -snpio KNAME /dev/${DEVNAME} | sort | head -1))
+        DEVPATH="/sys/block/${DISK_NAME}"
 
+        # Disabling NCQ
+        # echo 1 > ${DEVPATH}/device/queue_depth
+
+        # Disable readahead on md components
+        echo 0 > ${DEVPATH}/queue/read_ahead_kb
     done
 done
 fi
