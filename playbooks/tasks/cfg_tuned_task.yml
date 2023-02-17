@@ -1,6 +1,15 @@
 ---
 - include_tasks: pkg_tuned_task.yml
 
+- name: add ISS tuning profile
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/tuned/iss"
+    dest: /etc/tuned/
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+
 - name: tuned role
   vars:
     daemon: true

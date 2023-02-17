@@ -3,7 +3,7 @@
   gather_facts: False
 
   vars:
-    profile: throughput-performance
+    profile: iss
 
   tasks:
     - include_tasks: tasks/cfg_tuned_task.yml
@@ -12,6 +12,7 @@
     - include_tasks: tasks/tune_sysctl_task.yml
       vars:
         sysctl_list:
+          - "{{ playbook_dir }}/../additions/sysctl.d/60-memory.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/70-mtu.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/72-packet_tuning.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/80-network_buffers_25GB.conf"
@@ -22,7 +23,8 @@
           - "{{ playbook_dir }}/../additions/sysctl.d/84-kernel.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/90-raid_speed.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/99-delayacct.conf"
-          - "{{ playbook_dir }}/../additions/sysctl.d/99-memory.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/99-inotify.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/99-security.conf"
 
     - include_tasks: tasks/tune_scripts_task.yml
       vars:
@@ -34,4 +36,24 @@
           - "{{ playbook_dir }}/../additions/root_tuning.d/20-ring.tune_eth"
           - "{{ playbook_dir }}/../additions/root_tuning.d/25-channels.tune_eth"
           - "{{ playbook_dir }}/../additions/root_tuning.d/10-nic_lldp_off.tune_eth"
+
+    - name: Specific tune for alien and issaf
+      ansible.builtin.copy:
+        owner: root
+        group: root
+        mode: '664'
+        force: true
+        dest: /etc/sysctl.d/
+        src: "{{ item }}"
+      with_items:
+        - "{{ playbook_dir }}/../additions/sysctl.d/90-singularity.conf"
+        - "{{ playbook_dir }}/../additions/sysctl.d/90-frontend-forward.conf"
+      when: "'alien' in inventory_hostname_short or 'issaf' in inventory_hostname_short"
+
+    - name: Re-apply sysctl parameters
+      ansible.builtin.command: /usr/sbin/sysctl --system
+
+
+##        - "{{ playbook_dir }}/../additions/sysctl.d/90-frontend-forward6.conf"
+##        - "{{ playbook_dir }}/../additions/sysctl.d/80-network_buffers_1GB.conf"
 

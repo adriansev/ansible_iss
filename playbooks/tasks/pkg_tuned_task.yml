@@ -3,7 +3,7 @@
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - Centos
   ansible.builtin.yum:
-    name: [ 'tuned', 'tuned-utils' ]
+    name: [ 'tuned', 'tuned-utils', 'tuna' ]
     state: latest
     update_cache: true
     enablerepo: "epel"
@@ -11,7 +11,8 @@
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - Fedora
   ansible.builtin.dnf:
-    name: [ 'tuned', 'tuned-utils' ]
+    name: [ 'tuned', 'tuned-utils', 'tuna' ]
     state: latest
     update_cache: true
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
+
