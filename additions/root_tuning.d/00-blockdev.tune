@@ -12,6 +12,7 @@ while IFS= read -r LINE; do
     SCSI_DEVPATH="/sys/bus/scsi/devices/${SCSI_DEV_NAME}/block/${NAME}"
 
     # set scheduler
+    IS_ARECA=""
     SCHED="mq-deadline"
     [[ "${ROTA}" == "1" ]] && SCHED="bfq"
     [[ -z "${WWN}" ]] && [[ "${VENDOR}" == "Areca"* ]] && IS_ARECA="1"
