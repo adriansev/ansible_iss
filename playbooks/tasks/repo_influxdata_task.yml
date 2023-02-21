@@ -1,0 +1,15 @@
+---
+- name: Influxdata repo install
+  ansible.builtin.yum_repository:
+    name: influxdata
+    description: InfluxData Repository - Stable
+    file: influxdata
+    baseurl: https://repos.influxdata.com/stable/$basearch/main
+    gpgkey: https://repos.influxdata.com/influxdata-archive_compat.key
+    gpgcheck: true
+    enabled: true
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  tags: repo
