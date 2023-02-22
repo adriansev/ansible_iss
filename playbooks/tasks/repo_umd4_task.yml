@@ -3,8 +3,6 @@
 
 - name: UMD key import
   ansible.builtin.command: rpm --import http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY
-  args:
-    warn: false
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
 
 - name: UMD4 repo on EL7
