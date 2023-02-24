@@ -27,7 +27,9 @@ TUNING_DIR="/root/tuning.d"
 for TUNE in $(${FIND} ${TUNING_DIR} -name '*.tune' | sort); do ${TUNE}; done
 
 # Apply network (on eth device) tuning
-eth_list=$(${IP} -o -d link show | ${AWK} -F': ' '/state UP/ && !/802.1Q/ {print $2}')
+## eth_list=$(${IP} -o -d link show | ${AWK} -F': ' '/state UP/ && !/802.1Q/ {print $2}')
+eth_list=$(for eth_path in $(find /sys/class/net -type l); do [[ -n $(grep virtual <<< $(realpath ${eth_path})) ]] && continue; [[ $(< ${eth_path}/operstate) == "down" ]] && continue; echo $(basename ${eth_path}); done)
+
 for ETH_TUNE in $(find ${TUNING_DIR} -name '*.tune_eth' | sort); do
     # for each UP and NOT VLAN eth
     for eth in ${eth_list}; do
