@@ -1,0 +1,19 @@
+---
+- hosts: "{{ target }}"
+  gather_facts: False
+
+  vars:
+    # HTTPS CONFIGURATION
+    # telegraf_config_url: "https://sev.spacescience.ro:8086/api/v2/telegrafs/0accc3f90e592000"
+
+    # HTTP CONFIGURATION
+    telegraf_config_url: "http://sev.spacescience.ro:8086/api/v2/telegrafs/0aca48ef3d1f0000"
+
+  tasks:
+
+  # Load telegraf token
+  #- include_vars: "{{ playbook_dir }}/../vault/telegraf_token_https.yml"
+  - include_vars: "{{ playbook_dir }}/../vault/telegraf_token_http.yml"
+
+  - include_tasks: tasks/cfg_telegraf_task.yml
+

@@ -23,6 +23,8 @@
       - iproute
       - ipset
       - ipset-service
+      - ipmitool
+      - nvme-cli
     state: present
     update_cache: false
     enablerepo: "epel"
@@ -47,31 +49,11 @@
       - iproute-tc
       - ipset
       - ipset-service
+      - ipmitool
+      - nvme-cli
     state: present
     update_cache: false
   when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
-  tags: packages
-
-- name: Install ipmitool - EL7
-  ansible.builtin.yum:
-    name:
-      - ipmitool
-    state: present
-    enablerepo: "epel"
-  when:
-    - ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
-    - ansible_facts['ansible_ipmi'] is defined and ansible_facts['ansible_ipmi']
-  tags: packages
-
-- name: Install ipmitool - EL9
-  ansible.builtin.dnf:
-    name:
-      - ipmitool
-    state: present
-    enablerepo: "epel"
-  when:
-    - ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
-    - ansible_facts['ansible_ipmi'] is defined and ansible_facts['ansible_ipmi']
   tags: packages
 
 - name: Install from pip the jc module

@@ -1,0 +1,6 @@
+[Service]
+Environment="INFLUX_TOKEN={{ telegram_token }}"
+User=root
+ExecStart=
+ExecStart=/usr/bin/telegraf --config {{ telegraf_config_url }} -config-directory /etc/telegraf/telegraf.d $TELEGRAF_OPTS
+

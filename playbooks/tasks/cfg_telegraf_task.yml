@@ -1,0 +1,30 @@
+---
+- name: Install telegraf prerequisites
+  ansible.builtin.include_tasks: "{{ telegraf_req }}"
+  loop_control:
+    loop_var: telegraf_req
+  with_items:
+    - 00basic_hwtools.yml
+    - pkg_telegraf_task.yml
+
+- name: Create telegraf systemd unit customisation location
+  ansible.builtin.file:
+    path: /etc/systemd/system/telegraf.service.d/
+    state: directory
+
+- name: Telegraf configuration
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/telegraf/override.conf.j2"
+    dest: /etc/systemd/system/telegraf.service.d/override.conf
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+
+- name: Start and enable telegraf
+  ansible.builtin.systemd:
+    name: telegraf
+    state: restarted
+    daemon_reload: true
+    enabled: true
+
