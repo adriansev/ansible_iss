@@ -17,6 +17,7 @@
       - pciutils
       - lshw
       - smartmontools
+      - hddtemp
       - cronie
       - crontabs
       - cronie-anacron
@@ -42,6 +43,7 @@
       - dmidecode
       - pciutils
       - smartmontools
+      - hddtemp
       - cronie
       - crontabs
       - cronie-anacron
