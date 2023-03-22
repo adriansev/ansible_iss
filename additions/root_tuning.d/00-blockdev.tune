@@ -89,8 +89,11 @@ for mdev in $(ls -1 /sys/devices/virtual/block); do
         STRIPE_DATA_K=$(( NR_DISKS_DATA * CHUNK_SZ_K ))
 
         # size (in pages per device)
-        STRIPE_CACHE_ENTRIES="128"  # cache 512k on each disk
+        STRIPE_CACHE_ENTRIES="8192"
         echo ${STRIPE_CACHE_ENTRIES} > "${MDPATH}/md/stripe_cache_size"
+
+        THRD_COUNT=4
+        echo ${THRD_COUNT} > "${MDPATH}/md/group_thread_cnt"
 
         stripe_multiplier=4
         READAHEAD_KB=$(( STRIPE_DATA_K * stripe_multiplier ))
