@@ -3,7 +3,6 @@
 vault/*
 roles/**
 facts/**
-additions/seatools/st
 backup/**
 collections/**
 .ansible_galaxy
@@ -11,5 +10,4 @@ host_logs
 galaxy_cache
 ansible_collections
 inventory.json
-
 
