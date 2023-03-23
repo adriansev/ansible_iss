@@ -25,9 +25,10 @@
         - '!MysqlFactCollector'
         - '!Icinga2FactCollector'
         - '!DockerFactCollector'
+  #  register: extd_facts
 
   # Print extended facts
   #- name: Debug
   #  debug:
-  #    var: ansible_facts
+  #    var: extd_facts.stdout
 

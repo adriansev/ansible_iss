@@ -17,5 +17,5 @@
   loop: "{{ tuning_list }}"
 
 - name: Apply tuning scripts
-  ansible.builtin.command: /root/bin/apply_tuning
+  ansible.builtin.script: /root/bin/apply_tuning
 

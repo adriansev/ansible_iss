@@ -89,14 +89,9 @@ eos_fst
 grid05.spacescience.ro
 seau.spacescience.ro
 seau2.spacescience.ro
-##grid04.spacescience.ro
-##vobox.spacescience.ro
-
 
 [areca_raid]
 seau.spacescience.ro
-storage03.spacescience.ro
-storage04.spacescience.ro
 storage05.spacescience.ro
 storage07.spacescience.ro
 
@@ -113,22 +108,6 @@ fst09.spacescience.ro
 fst10.spacescience.ro
 ##fst11.spacescience.ro
 seau2.spacescience.ro
-
-[mdraid]
-seau2.spacescience.ro
-alien.spacescience.ro
-issaf.spacescience.ro
-mgm.spacescience.ro
-fst01.spacescience.ro
-fst02.spacescience.ro
-fst03.spacescience.ro
-fst04.spacescience.ro
-fst05.spacescience.ro
-fst06.spacescience.ro
-storage03.spacescience.ro
-storage04.spacescience.ro
-storage05.spacescience.ro
-storage07.spacescience.ro
 storage09.spacescience.ro
 storage10.spacescience.ro
 
