@@ -13,6 +13,7 @@
     - md_readd_dev
     - md_rm_dev
     - md_check
+    - md_health
     - iostat_md
 
 - name: Sync md format tools
