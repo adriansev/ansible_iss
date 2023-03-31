@@ -2,23 +2,29 @@
 - name: Sync md tools
   ansible.builtin.copy:
     dest: /root/bin/
-    src: "{{ playbook_dir }}/../additions/mdraid/{{ item }}"
+    src: "{{ playbook_dir }}/../additions/mdraid/{{ mdadm_scripts }}"
     owner: root
     group: root
     mode: '0700'
     force: true
+  loop_control:
+    loop_var: mdadm_scripts
   with_items:
-    - mdadm_readd_dev
+    - md_readd_dev
+    - md_rm_dev
     - md_check
+    - iostat_md
 
 - name: Sync md format tools
   ansible.builtin.copy:
     dest: /root/bin/md_mkformat/
-    src: "{{ playbook_dir }}/../additions/mdraid/md_mkformat/{{ item }}"
+    src: "{{ playbook_dir }}/../additions/mdraid/md_mkformat/{{ md_format_scripts }}"
     owner: root
     group: root
     mode: '0600'
     force: true
+  loop_control:
+    loop_var: md_format_scripts
   with_items:
     - create_md_array
     - format_md_component

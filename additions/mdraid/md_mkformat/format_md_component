@@ -4,11 +4,17 @@ DISK="${1}"
 MD="${2}"
 DISK="$(echo ${1} | sed 's#/dev/##' )"
 
-[[ -z "${DISK}" ]] && { echo "1st arg (dev disk) missing"; exit 1; }
-[[ -z "${MD}" ]] && { echo "3nd arg (index of md device) missing; it will be the name of the gpt partition"; exit 1; }
+help () {
+echo "${0} DISK_DEV MD_DEV
+MD_DEV: MD_DEV of which the partition will be part of
+"
+}
+
+[[ -z "${DISK}" ]] && { echo "1st arg (dev disk) missing"; help; exit 1; }
+[[ -z "${MD}" ]] && { echo "2nd arg (md device name) missing;"; help; exit 1; }
 
 parted -s -a optimal "/dev/${DISK}" mklabel gpt
-parted -s -a optimal "/dev/${DISK}" mkpart "md${MD}" 0% 100%
+parted -s -a optimal "/dev/${DISK}" mkpart "${MD}" 0% 100%
 mdadm --zero-superblock "/dev/${DISK}1" 2>/dev/null
 parted "/dev/${DISK}" print free
 

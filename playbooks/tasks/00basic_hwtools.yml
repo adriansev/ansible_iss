@@ -62,9 +62,9 @@
   ansible.builtin.pip:
     executable: pip3
     name:
-      - jc==1.22.1
+      - jc
     extra_args: --user
-    state: present
+    state: latest
 
 - name: Enable and start cron
   ansible.builtin.systemd:
@@ -72,3 +72,14 @@
     state: restarted
     enabled: true
 
+- name: Smartd customize systemd unit
+  ansible.builtin.copy:
+    dest: /etc/profile.d/add_user_paths.sh
+    content: |
+        pathmunge $HOME/bin
+        pathmunge $HOME/.local/bin
+    mode: 0644
+    owner: root
+    group: root
+    backup: false
+    force: true
