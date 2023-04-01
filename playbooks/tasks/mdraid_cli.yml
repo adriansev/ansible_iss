@@ -15,6 +15,7 @@
     - md_check
     - md_health
     - iostat_md
+    - list_storage
 
 - name: Sync md format tools
   ansible.builtin.copy:
