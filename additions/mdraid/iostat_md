@@ -1,1 +1,37 @@
-/home/adrian/bin/iostat_md
+#!/usr/bin/env bash
+
+LOCK="/tmp/iostat_md.lock"
+
+exec {FD}>${LOCK} || exit 1
+/usr/bin/flock -n ${FD} || exit 1
+trap 'rm -f ${LOCK}' EXIT
+
+ARG="${1}"
+shift
+
+export S_COLORS="never"
+
+md_list="$(ls /sys/devices/virtual/block)"
+[[ -z "${md_list}" ]] && { echo "No virtual block devices found"; exit; }
+
+do_md_iostat () {
+    md_dev_list=$(ls "/sys/block/${1}/slaves")
+    [[ -z "${md_dev_list}" ]] && { echo "no devices found for RAID block dev: ${1}"; return 1; }
+
+    DEV_LIST=""
+    for dev in ${md_dev_list}; do
+        DEV_LIST="${DEV_LIST} /dev/${dev}"
+    done
+
+    echo "MD: ${md}"
+    iostat -dmxy ${DEV_LIST} 2 1
+    echo
+}
+
+if [[ -n "${ARG}" ]]; then
+    [[ "${md_list}" == *"${ARG}"* ]] && do_md_iostat "${ARG}"
+else
+    for md in ${md_list}; do
+        do_md_iostat ${md}
+    done
+fi
