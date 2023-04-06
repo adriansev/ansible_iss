@@ -2,9 +2,6 @@
 - hosts: "{{ target | default('all') }}"
   gather_facts: False
 
-  #pre_tasks:
-  #- include_tasks: tasks/00basic_req.yml
-
   tasks:
   - ansible.builtin.include_tasks:
       file: "{{ task_item }}"
@@ -14,4 +11,7 @@
       - "tasks/00basic_hwtools.yml"
       - "tasks/smartd_cfg_task.yml"
       - "tasks/00server_tools.yml"
+
+- name: Configure mdraid check
+  ansible.builtin.import_playbook: mdraid_cfg.yml
 

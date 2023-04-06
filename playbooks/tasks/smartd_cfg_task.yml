@@ -47,6 +47,28 @@
     backup: false
     force: true
 
+- name: Smartd loggind directory
+  ansible.builtin.file:
+    path: /var/log/smartd/
+    state: directory
+
+- name: Smartd customize smartmontools default config
+  ansible.builtin.copy:
+    dest: /etc/sysconfig/smartmontools
+    content: |
+        smartd_opts="-q never -i 3600 -s /var/log/smartd/ -A /var/log/smartd/"
+    mode: 0644
+    owner: root
+    group: root
+    backup: true
+    force: true
+
 - name: Update /usr/share/smartmontools/drivedb.h
   ansible.builtin.command: /usr/sbin/update-smart-drivedb -u github --trunk --no-verify
 
+- name: Restart smartd
+  ansible.builtin.systemd:
+    name: smartd.service
+    state: started
+    daemon_reload: true
+    enabled: true

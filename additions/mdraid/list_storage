@@ -4,7 +4,6 @@ import sys
 import os
 from typing import NamedTuple
 from typing import Union
-from rich.pretty import pprint
 
 
 class DEV_INFO(NamedTuple):
@@ -242,7 +241,6 @@ for dev in list_sas_slots():
 
     if enclosure_change and enclosure_change != dev.enc: print()
     enclosure_change = dev.enc
-    #pprint(dev)
     msg = f'{dev.enc}/{dev.slot}'
     msg = f'{msg}   {dev.dev_id}   {dev.dev}  {dev.sg}  {dev.wwn}  {dev.scsi if dev.scsi else dev.ata}' if dev.dev else f'{msg} ----->>> EMPTY'
     if enable_status:
