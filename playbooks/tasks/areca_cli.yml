@@ -1,7 +1,7 @@
 ---
 - name: Sync ARECA cli executable
   ansible.builtin.copy:
-    src: "{{ playbook_dir }}/../additions/ARECA/cli64"
+    src: "{{ playbook_dir }}/../additions/ARECA/arecacli"
     dest: /root/bin/
     owner: root
     group: root
@@ -19,8 +19,8 @@
 
 - name: Sync cron definition
   ansible.builtin.copy:
-    src: "{{ playbook_dir }}/../additions/ARECA/areca"
-    dest: /etc/cron.d/
+    src: "{{ playbook_dir }}/../additions/ARECA/areca.cron"
+    dest: /etc/cron.d/areca
     owner: root
     group: root
     mode: '0644'
