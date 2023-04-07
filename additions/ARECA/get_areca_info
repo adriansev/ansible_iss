@@ -5,7 +5,7 @@
 SCRIPT=$(/usr/bin/readlink -f ${0})
 ARC_PATH=$(/usr/bin/dirname ${SCRIPT})
 
-CLI="${ARC_PATH}/cli64"
+CLI="${ARC_PATH}/arecacli"
 
 get_smart_drv () { timeout --kill-after=10 15 ${CLI} disk smart drv="${1}" | tail -n +4 | head -n -2; }
 get_disk_info () { timeout --kill-after=10 15 ${CLI} disk info drv="${1}" | tail -n +3 | head -n -2; }
