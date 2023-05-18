@@ -10,13 +10,12 @@
 
 - name: Install cron for tuning script
   ansible.builtin.copy:
-    src: "{{ playbook_dir }}/../additions/root_bin/tuning.cron"
+    src: "{{ playbook_dir }}/../additions/cron.d/tuning.cron"
     dest: /etc/cron.d/tuning
     owner: root
     group: root
-    mode: '0700'
+    mode: '0644'
     force: true
-
 
 - name: Create location for individual tuning scripts
   ansible.builtin.file:
