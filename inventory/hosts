@@ -33,7 +33,7 @@ fst08.spacescience.ro
 fst09.spacescience.ro
 fst10.spacescience.ro
 fst11.spacescience.ro
-#fst12.spacescience.ro
+fst12.spacescience.ro
 
 grid05.spacescience.ro
 seau.spacescience.ro
@@ -93,7 +93,6 @@ seau2.spacescience.ro
 [areca_raid]
 seau.spacescience.ro
 storage05.spacescience.ro
-storage07.spacescience.ro
 
 [lsi]
 fst01.spacescience.ro
@@ -107,7 +106,7 @@ fst08.spacescience.ro
 fst09.spacescience.ro
 fst10.spacescience.ro
 fst11.spacescience.ro
-#fst12.spacescience.ro
+fst12.spacescience.ro
 seau2.spacescience.ro
 storage09.spacescience.ro
 storage10.spacescience.ro
