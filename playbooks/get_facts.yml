@@ -1,8 +1,8 @@
 ---
 - hosts: "{{ target | default('all') }}"
 
-  pre_tasks:
-  - include_tasks: tasks/00basic_req.yml
+  # pre_tasks:
+  # - include_tasks: tasks/00basic_req.yml
 
   tasks:
   - include_tasks: tasks/00basic_hwtools.yml
