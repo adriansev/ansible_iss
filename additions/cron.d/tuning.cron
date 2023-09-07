@@ -1,0 +1,6 @@
+SHELL=/usr/bin/bash
+PATH=/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+MAILTO=root
+@reboot     root /root/bin/apply_tuning &> /dev/null
+0 */6 * * * root /root/bin/apply_tuning &> /dev/null
+

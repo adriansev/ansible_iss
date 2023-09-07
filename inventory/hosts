@@ -16,11 +16,6 @@ luxe.spacescience.ro
 
 alien.spacescience.ro
 
-rd.spacescience.ro
-storage05.spacescience.ro
-storage09.spacescience.ro
-storage10.spacescience.ro
-
 mgm.spacescience.ro
 fst01.spacescience.ro
 fst02.spacescience.ro
@@ -34,9 +29,11 @@ fst09.spacescience.ro
 fst10.spacescience.ro
 fst11.spacescience.ro
 fst12.spacescience.ro
+fst13.spacescience.ro
+fst14.spacescience.ro
+fst15.spacescience.ro
 
 grid05.spacescience.ro
-seau.spacescience.ro
 seau2.spacescience.ro
 
 ## grid04 EL6 - too old python for ansible to work
@@ -66,15 +63,6 @@ alien.spacescience.ro
 issaf.spacescience.ro
 grid05.spacescience.ro
 
-[xrd_servers]
-
-[xrd_rd]
-rd.spacescience.ro
-
-[xrd_cluster:children]
-xrd_rd
-xrd_servers
-
 [eos_fst]
 
 [eos_mgm]
@@ -84,15 +72,12 @@ mgm.spacescience.ro
 eos_mgm
 eos_fst
 
-
 [emi_servers]
 grid05.spacescience.ro
-seau.spacescience.ro
 seau2.spacescience.ro
 
 [areca_raid]
-seau.spacescience.ro
-storage05.spacescience.ro
+fst15.spacescience.ro
 
 [lsi]
 fst01.spacescience.ro
@@ -108,8 +93,6 @@ fst10.spacescience.ro
 fst11.spacescience.ro
 fst12.spacescience.ro
 seau2.spacescience.ro
-storage09.spacescience.ro
-storage10.spacescience.ro
 
 [wn_umd:vars]
 ##ansible_python_interpreter=/usr/bin/python3
@@ -137,8 +120,6 @@ ansible_port=22
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000'
 
 [wn_issaf]
-
-
 
 
 #[switch_dell:vars]
