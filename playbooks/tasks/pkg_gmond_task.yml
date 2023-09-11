@@ -13,3 +13,20 @@
     update_cache: false
   when: ( ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9' ) or ansible_facts[ 'distribution' ] == 'Fedora'
 
+- name: Gmond customize systemd unit
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/gmond.service.d
+    src: "{{ playbook_dir }}/../additions/gmond_conf/gmond.service.d/override.conf"
+    mode: 0644
+    owner: root
+    group: root
+    backup: false
+    force: true
+
+- name: Restart gmond
+  ansible.builtin.systemd:
+    name: gmond.service
+    state: started
+    daemon_reload: true
+    enabled: true
+
