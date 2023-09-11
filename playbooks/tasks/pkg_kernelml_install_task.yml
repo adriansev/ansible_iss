@@ -3,16 +3,30 @@
 
 - name: Install kernel-ml
   ansible.builtin.yum:
-    name: [ 'kernel-ml', 'kernel-ml-devel' ]
-    state: latest
+    name:
+      - kernel-ml.x86_64
+      - kernel-ml-devel.x86_64
+      - kernel-ml-tools.x86_64
+      - kernel-ml-tools-libs.x86_64
+      - kernel-ml-tools-libs-devel.x86_64
+    state: present
     enablerepo: "elrepo,elrepo-kernel,elrepo-extras"
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
   tags: packages
 
 - name: Install kernel-ml EL9
   ansible.builtin.dnf:
-    name: [ 'kernel-ml', 'kernel-ml-devel' ]
-    state: latest
+    name:
+      - kernel-ml.x86_64
+      - kernel-ml-devel.x86_64
+      - kernel-ml-core.x86_64
+      - kernel-ml-devel-matched.x86_64
+      - kernel-ml-modules.x86_64
+      - kernel-ml-modules-extra.x86_64
+      - kernel-ml-tools.x86_64
+      - kernel-ml-tools-libs.x86_64
+      - kernel-ml-tools-libs-devel.x86_64
+    state: present
     enablerepo: "elrepo,elrepo-kernel,elrepo-extras"
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
   tags: packages

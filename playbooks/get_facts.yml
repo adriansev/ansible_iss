@@ -5,8 +5,8 @@
   # - include_tasks: tasks/00basic_req.yml
 
   tasks:
-  - include_tasks: tasks/00basic_hwtools.yml
-  - include_tasks: tasks/smartd_cfg_task.yml
+  - include_tasks: tasks/00basic_tools.yml
+  - include_tasks: tasks/00basic_tools_hw.yml
 
   post_tasks:
   - name: Get facts

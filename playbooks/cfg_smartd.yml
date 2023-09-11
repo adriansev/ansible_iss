@@ -1,8 +1,6 @@
 ---
 - hosts: "{{ target }}"
   gather_facts: False
-  pre_tasks:
-  - include_tasks: tasks/smartd_cfg_task.yml
   tasks:
-  - include_tasks: tasks/srv_smartd.yml
+  - include_tasks: tasks/cfg_smartd_task.yml
 

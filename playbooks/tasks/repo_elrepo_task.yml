@@ -5,7 +5,7 @@
   ansible.builtin.yum:
     name: elrepo-release.noarch
     state: present
-    update_cache: true
+    update_cache: false
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
   tags: repo
 
@@ -13,7 +13,23 @@
   ansible.builtin.dnf:
     name: elrepo-release.noarch
     state: present
-    update_cache: true
+    update_cache: false
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
   tags: repo
+
+- name: Enable permanently elrepo-kernel
+  community.general.ini_file:
+    path: /etc/yum.repos.d/elrepo.repo
+    section: elrepo-kernel
+    option: enabled
+    value: 1
+  when: ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux'
+
+- name: Enable permanently elrepo-extras
+  community.general.ini_file:
+    path: /etc/yum.repos.d/elrepo.repo
+    section: elrepo-extras
+    option: enabled
+    value: 1
+  when: ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux'
 
