@@ -4,8 +4,8 @@
     name: EGI-trustanchors
     description: EGI-trustanchors
     file: EGI-trustanchors
-    baseurl: http://repository.egi.eu/sw/production/cas/1/current/
-    gpgkey: http://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-3
+    baseurl: https://repository.egi.eu/sw/production/cas/1/current/
+    gpgkey: https://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-4
     gpgcheck: true
     enabled: true
     state: present
