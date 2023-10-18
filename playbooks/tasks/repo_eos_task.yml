@@ -34,7 +34,7 @@
     name: eos-diopside
     description: EOS 5.0 Version
     file: eos
-    baseurl: https://storage-ci.web.cern.ch/storage-ci/eos/diopside/tag/testing/el-9s/x86_64/
+    baseurl: https://storage-ci.web.cern.ch/storage-ci/eos/diopside/tag/testing/el-9/x86_64/
     gpgcheck: false
     enabled: true
     state: present
@@ -49,7 +49,7 @@
     name: eos-diopside-dep
     description: EOS 5.0 Dependencies
     file: eos
-    baseurl: https://storage-ci.web.cern.ch/storage-ci/eos/diopside-depend/el-9s/x86_64/
+    baseurl: https://storage-ci.web.cern.ch/storage-ci/eos/diopside-depend/el-9/x86_64/
     gpgcheck: false
     enabled: true
     state: present
