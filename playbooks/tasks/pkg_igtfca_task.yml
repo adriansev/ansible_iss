@@ -5,7 +5,6 @@
   ansible.builtin.yum:
     name:
       - ca-policy-egi-core
-      - ca-policy-egi-cam
       - ca-policy-lcg
     state: latest
     enablerepo: "EGI-trustanchors"
@@ -16,7 +15,6 @@
   ansible.builtin.dnf:
     name:
       - ca-policy-egi-core
-      - ca-policy-egi-cam
       - ca-policy-lcg
     state: latest
     enablerepo: "EGI-trustanchors"
