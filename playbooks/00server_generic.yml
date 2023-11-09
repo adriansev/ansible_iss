@@ -1,0 +1,33 @@
+---
+- hosts: "{{ target | default('all') }}"
+  gather_facts: False
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/00basic_tools.yml"
+      - "tasks/00basic_tools_hw.yml"
+      - "tasks/00storage_tools.yml"
+      - "tasks/pkg_kernelml_install_task.yml"
+      - "tasks/cfg_smartd_task.yml"
+      - "tasks/cfg_lmsensors.yml"
+      - "tasks/pkg_gmond_task.yml"
+
+- name: Do chrony setup
+  ansible.builtin.import_playbook: cfg_chrony.yml
+
+- name: Do dnsmasq setup
+  ansible.builtin.import_playbook: cfg_dnsmasq.yml
+
+- name: Do lldp setup
+  ansible.builtin.import_playbook: cfg_lldpd.yml
+
+- name: Configure mdraid check
+  ansible.builtin.import_playbook: mdraid_cfg.yml
+
+- name: Sync mdraid cli tools
+  ansible.builtin.import_playbook: mdraid_cli_sync.yml
+

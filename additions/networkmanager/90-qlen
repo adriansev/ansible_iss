@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+export LC_ALL=C
+[[ "${2}" == "up" ]] && /usr/sbin/ip link set "${1}" mtu 9000 txqueuelen 20000
+

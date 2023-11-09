@@ -1,0 +1,40 @@
+---
+- name: Install hardware monitoring tools on hardware machines (not vms) - Centos
+  ansible.builtin.yum:
+    name: [ 'ddpt', 'ledmon', 'lsscsi', 'sasutils', 'sdparm', 'sg3_utils', 'smp_utils' ]
+    state: present
+    update_cache: false
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+
+- name: Install hardware monitoring tools on hardware machines (not vms) - EL9
+  ansible.builtin.dnf:
+    name: [ 'ledmon', 'lsscsi', 'sasutils', 'sdparm', 'sg3_utils', 'smp_utils' ]
+    state: present
+    update_cache: false
+  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
+
+- name: Sync tools for system management
+  ansible.builtin.copy:
+    dest: /root/bin/
+    src: "{{ playbook_dir }}/../additions/{{ item }}"
+    owner: root
+    group: root
+    mode: '0700'
+    force: true
+  with_items:
+    - broadcom_net/bnxtnvm
+    - broadcom_sas/lsigetlinux.sh
+    - broadcom_sas/sas2ircu
+    - broadcom_sas/sas3flash
+    - broadcom_sas/sas3ircu
+    - broadcom_sas/storcli
+    - broadcom_sas/storcliconf.ini
+
+- name: Install from pip the jc module
+  ansible.builtin.pip:
+    executable: pip3
+    name:
+      - sasutils
+    extra_args: --user
+    state: latest
+

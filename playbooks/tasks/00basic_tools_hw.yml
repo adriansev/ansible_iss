@@ -1,0 +1,34 @@
+---
+- name: Install hardware management and monitoring tools - EL7
+  ansible.builtin.yum:
+    name:
+      - lm_sensors
+      - dmidecode
+      - pciutils
+      - lshw
+      - smartmontools
+      - hddtemp
+      - ipmitool
+      - nvme-cli
+    state: present
+    update_cache: false
+    enablerepo: "epel"
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
+  tags: packages
+
+- name: Install hardware management and monitoring tools - EL9
+  ansible.builtin.dnf:
+    name:
+      - lm_sensors
+      - dmidecode
+      - pciutils
+      - lshw
+      - smartmontools
+      - hddtemp
+      - ipmitool
+      - nvme-cli
+    state: present
+    update_cache: false
+  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
+  tags: packages
+

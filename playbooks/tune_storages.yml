@@ -15,7 +15,6 @@
           - "{{ playbook_dir }}/../additions/sysctl.d/60-memory.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/70-mtu.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/72-packet_tuning.conf"
-          - "{{ playbook_dir }}/../additions/sysctl.d/80-network_buffers_25GB.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/82-ipv4.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/82-ipv6.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/82-netcore.conf"
@@ -25,6 +24,9 @@
           - "{{ playbook_dir }}/../additions/sysctl.d/99-delayacct.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/99-inotify.conf"
           - "{{ playbook_dir }}/../additions/sysctl.d/99-security.conf"
+          - "{{ playbook_dir }}/../additions/sysctl.d/80-network_buffers_25GB.conf"
+
+##        - "{{ playbook_dir }}/../additions/sysctl.d/80-network_buffers_1GB.conf"
 
     - include_tasks: tasks/tune_scripts_task.yml
       vars:
@@ -37,11 +39,22 @@
           - "{{ playbook_dir }}/../additions/root_tuning.d/25-channels.tune_eth"
           - "{{ playbook_dir }}/../additions/root_tuning.d/10-nic_lldp_off.tune_eth"
 
+    - name: NetworkManager dispatcher set txqueuelen
+      ansible.builtin.copy:
+        owner: root
+        group: root
+        mode: '755'
+        force: true
+        dest: /etc/NetworkManager/dispatcher.d/
+        src: "{{ item }}"
+      with_items:
+        - "{{ playbook_dir }}/../additions/networkmanager/90-qlen"
+
     - name: Specific tune for alien and issaf
       ansible.builtin.copy:
         owner: root
         group: root
-        mode: '664'
+        mode: '644'
         force: true
         dest: /etc/sysctl.d/
         src: "{{ item }}"
@@ -53,7 +66,5 @@
     - name: Re-apply sysctl parameters
       ansible.builtin.command: /usr/sbin/sysctl --system
 
-
 ##        - "{{ playbook_dir }}/../additions/sysctl.d/90-frontend-forward6.conf"
-##        - "{{ playbook_dir }}/../additions/sysctl.d/80-network_buffers_1GB.conf"
 

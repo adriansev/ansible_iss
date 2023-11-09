@@ -1,0 +1,21 @@
+---
+- hosts: "{{ target }}"
+  gather_facts: False
+  tasks:
+  - name: OS upgrade EL7
+    ansible.builtin.yum:
+      name: '*'
+      state: latest
+      disablerepo: "eos*"
+    when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
+
+  - name: OS upgrade dnf based distros
+    ansible.builtin.dnf:
+      name: '*'
+      state: latest
+      disablerepo: "eos*"
+    when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
+
+  - name: Re-create grub conf
+    ansible.builtin.command: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+
