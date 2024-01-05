@@ -8,7 +8,6 @@ paostation2
 
 sev.spacescience.ro
 monitor.spacescience.ro
-monitor2.spacescience.ro
 issaf.spacescience.ro
 
 r3bsuit.spacescience.ro
@@ -92,7 +91,10 @@ fst09.spacescience.ro
 fst10.spacescience.ro
 fst11.spacescience.ro
 fst12.spacescience.ro
+fst13.spacescience.ro
+fst14.spacescience.ro
 seau2.spacescience.ro
+issaf.spacescience.ro
 
 [wn_umd:vars]
 ##ansible_python_interpreter=/usr/bin/python3
@@ -121,6 +123,10 @@ ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@issaf.spacescience
 
 [wn_issaf]
 
+
+[rocks_nodes:children]
+wn_alien
+wn_issaf
 
 #[switch_dell:vars]
 #ansible_user=admin

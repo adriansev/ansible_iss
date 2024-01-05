@@ -1,3 +1,8 @@
 [wn_issaf]
 issaf-0-0 ansible_host=10.99.99.254
 issaf-0-1 ansible_host=10.99.99.253
+issaf-0-2 ansible_host=10.99.99.252
+issaf-0-3 ansible_host=10.99.99.251
+issaf-0-4 ansible_host=10.99.99.250
+issaf-0-5 ansible_host=10.99.99.249
+
