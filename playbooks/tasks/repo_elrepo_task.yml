@@ -7,7 +7,7 @@
     name: elrepo-release.noarch
     state: present
     update_cache: false
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+  when: rocks_node is undefined and ( ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7' )
   tags: repo
 
 - name: Enable ElRepo Repository on EL 9
@@ -15,7 +15,7 @@
     name: elrepo-release.noarch
     state: present
     update_cache: false
-  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
+  when: rocks_node is undefined and ( ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9' )
   tags: repo
 
 - name: Enable permanently elrepo-kernel
