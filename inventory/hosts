@@ -58,9 +58,9 @@ paostation1
 paostation2
 
 [rocks_servers]
-alien.spacescience.ro
-issaf.spacescience.ro
-grid05.spacescience.ro
+alien.spacescience.ro rocks_fe="1"
+issaf.spacescience.ro rocks_fe="1"
+grid05.spacescience.ro rocks_fe="1"
 
 [eos_fst]
 
@@ -102,6 +102,7 @@ ansible_connection=ssh
 ansible_user=root
 ansible_port=22
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@grid05.spacescience.ro:60000'
+rocks_node="1"
 
 [wn_umd]
 
@@ -111,6 +112,7 @@ ansible_connection=ssh
 ansible_user=root
 ansible_port=22
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@alien.spacescience.ro:60000'
+rocks_node="1"
 
 [wn_alien]
 
@@ -120,6 +122,7 @@ ansible_connection=ssh
 ansible_user=root
 ansible_port=22
 ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000'
+rocks_node="1"
 
 [wn_issaf]
 
