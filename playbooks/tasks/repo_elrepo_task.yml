@@ -1,5 +1,6 @@
 ---
-- include_tasks: pkg_yum-utils_task.yml
+- name: Include pkg_yum-utils_task.yml
+  ansible.builtin.include_tasks: pkg_yum-utils_task.yml
 
 - name: Enable ElRepo Repository on CentOS 7
   ansible.builtin.yum:
@@ -23,7 +24,17 @@
     section: elrepo-kernel
     option: enabled
     value: 1
-  when: ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux'
+    mode: '0644'
+  when: rocks_node is undefined and ( ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux' )
+
+- name: Disable permanently elrepo-kernel on rocks nodes
+  community.general.ini_file:
+    path: /etc/yum.repos.d/elrepo.repo
+    section: elrepo-kernel
+    option: enabled
+    value: 0
+    mode: '0644'
+  when: rocks_node is defined and ( ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux' )
 
 - name: Enable permanently elrepo-extras
   community.general.ini_file:
@@ -31,5 +42,15 @@
     section: elrepo-extras
     option: enabled
     value: 1
-  when: ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux'
+    mode: '0644'
+  when: rocks_node is undefined and ( ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux' )
+
+- name: Disable permanently elrepo-extras on rocks nodes
+  community.general.ini_file:
+    path: /etc/yum.repos.d/elrepo.repo
+    section: elrepo-extras
+    option: enabled
+    value: 0
+    mode: '0644'
+  when: rocks_node is defined and ( ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux' )
 
