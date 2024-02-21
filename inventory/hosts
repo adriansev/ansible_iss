@@ -97,31 +97,28 @@ seau2.spacescience.ro
 issaf.spacescience.ro
 
 [wn_umd:vars]
-##ansible_python_interpreter=/usr/bin/python3
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
-ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@grid05.spacescience.ro:60000'
+ansible_ssh_common_args=' -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@grid05.spacescience.ro:60000 '
 rocks_node="1"
 
 [wn_umd]
 
 [wn_alien:vars]
-#ansible_python_interpreter=/usr/bin/python3
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
-ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@alien.spacescience.ro:60000'
+ansible_ssh_common_args=' -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@alien.spacescience.ro:60000 '
 rocks_node="1"
 
 [wn_alien]
 
 [wn_issaf:vars]
-##ansible_python_interpreter=/usr/bin/python3
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
-ansible_ssh_common_args='-o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000'
+ansible_ssh_common_args=' -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000 '
 rocks_node="1"
 
 [wn_issaf]
@@ -130,6 +127,7 @@ rocks_node="1"
 [rocks_nodes:children]
 wn_alien
 wn_issaf
+wn_umd
 
 #[switch_dell:vars]
 #ansible_user=admin

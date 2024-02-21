@@ -54,7 +54,7 @@
 - name: Enable and start cron
   ansible.builtin.systemd:
     name: crond
-    state: restarted
+    state: started
     enabled: true
 
 - name: User HOME/bin path
