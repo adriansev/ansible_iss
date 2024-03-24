@@ -1,9 +1,0 @@
-[Definition]
-actionflush = true
-
-[Init]
-iptables = true
-
-[Init?family=inet6]
-iptables = true
-
