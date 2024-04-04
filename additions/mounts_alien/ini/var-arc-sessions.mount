@@ -1,0 +1,17 @@
+[Unit]
+Description=Mount NFS home
+ConditionHost=!alien.spacescience.ro
+
+[Mount]
+What=172.18.0.1:/export/var_arc/sessions
+Where=/var/arc/sessions
+Type=nfs4
+Options=rw,vers=4.1,retry=2,timeo=20,retrans=5,rsize=131072,wsize=131072,nconnect=16,soft
+
+##MountFlags=shared
+TimeoutSec=30
+LazyUnmount=true
+
+[Install]
+WantedBy=multi-user.target
+

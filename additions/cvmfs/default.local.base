@@ -1,13 +1,25 @@
-CVMFS_NFILES='65535'
-#CVMFS_DEBUGLOG='/tmp/cvmfs.log'
+CVMFS_NFILES=1048576
+# CVMFS_DEBUGLOG=/tmp/cvmfs-@fqrn@.log
 
-CVMFS_MAX_IPADDR_PER_PROXY='1'
-CVMFS_IPFAMILY_PREFER='4'
+CVMFS_CACHE_REFCOUNT=1
 
-# local cache = 40 GiB
-CVMFS_QUOTA_LIMIT='40960'
+CVMFS_MAX_IPADDR_PER_PROXY='2'
+CVMFS_IPFAMILY_PREFER=4
 
+CVMFS_USE_GEOAPI=no
+
+CVMFS_PROXY_RESET_AFTER=180
 CVMFS_FOLLOW_REDIRECTS='yes'
-CVMFS_HTTP_PROXY='auto;DIRECT'
-CVMFS_PAC_URLS="http://grid-wpad/wpad.dat;http://cernvm-wpad.cern.ch/wpad.dat;http://cernvm-wpad.fnal.gov/wpad.dat"
+CVMFS_TIMEOUT=10
+CVMFS_TIMEOUT_DIRECT=30
+CVMFS_MAX_RETRIES=3
+CVMFS_BACKOFF_MIN=5
+CVMFS_BACKOFF_MAX=15
+## CVMFS_HOST_RESET_AFTER=1800
+
+# local cache = 50 GiB
+CVMFS_QUOTA_LIMIT='51200'
+
+CVMFS_REPOSITORIES='cvmfs-config.cern.ch,alice.cern.ch,alice-ocdb.cern.ch'
+CVMFS_HTTP_PROXY='http://alien.spacescience.ro:3128; http://issaf.spacescience.ro:3128; http://monitor.spacescience.ro:3128'
 

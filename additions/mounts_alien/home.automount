@@ -1,0 +1,12 @@
+[Unit]
+Description=AutoMount NFS /home
+ConditionHost=alien-*
+
+[Automount]
+Where=/home
+DirectoryMode=0755
+TimeoutIdleSec=0
+
+[Install]
+WantedBy=multi-user.target
+

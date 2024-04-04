@@ -1,0 +1,7 @@
+---
+copy_list:
+  - { src: '/root/bin/', dst: '/root/bin/' }
+  - { src: '/etc/nhc/nhc.conf', dst: '/etc/nhc/' }
+  - { src: '/etc/munge/munge.key', dst: '/etc/munge/' }
+  - { src: '/etc/cvmfs/default.local', dst: '/etc/cvmfs/' }
+  - { src: '/etc/rdma/rdma.conf', dst: '/etc/rdma/' }

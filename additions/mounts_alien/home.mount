@@ -1,0 +1,14 @@
+[Unit]
+Description=Mount /export/home to /home
+RequiresMountsFor=/export
+ConditionHost=alien-*
+
+[Mount]
+What=/export/home
+Where=/home
+Type=none
+Options=bind,nofail,errors=continue
+DirectoryMode=2775
+
+[Install]
+WantedBy=multi-user.target

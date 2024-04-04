@@ -3,8 +3,8 @@
 
 - name: Install vobox requirements
   ansible.builtin.yum:
-    name: [ 'HEP_OSlibs', 'wlcg-voms-alice', 'wlcg-voms-dteam', 'wlcg-voms-ops' ]
-    state: latest
+    name: [ 'HEP_OSlibs' ]
+    state: present
     enablerepo: "epel,wlcg"
     disablerepo: "UMD*"
   tags: packages
@@ -12,7 +12,7 @@
 - name: Install vobox packages
   ansible.builtin.yum:
     name: [ 'wlcg-vobox' ]
-    state: latest
+    state: present
     enablerepo: "wlcg,UMD-4-base,UMD-4-updates"
     exclude: "xrootd4-*"
   tags: packages

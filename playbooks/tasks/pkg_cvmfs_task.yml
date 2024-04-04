@@ -1,0 +1,59 @@
+---
+- include_tasks: repo_cernvm_task.yml
+
+- name: Install CVMFS packages and dependencies
+  ansible.builtin.yum:
+    name: [ 'autofs', 'fuse', 'fuse-overlayfs', 'fuse3', 'cvmfs', 'cvmfs-config-default' ]
+    state: present
+    enablerepo: "cernvm,cernvm-config"
+    disablerepo: "UMD*"
+  tags: packages
+
+- name: Sync auto.master
+  ansible.builtin.copy:
+    force: true
+    owner: root
+    group: root
+    mode: 0644
+    backup: false
+    dest: /etc/
+    src: "{{ playbook_dir }}/../additions/autofs/auto.master"
+  tags: autofs
+
+- name: Restart autofs
+  ansible.builtin.systemd:
+    name: autofs.service
+    state: restarted
+    daemon_reload: true
+    enabled: true
+  tags: autofs
+
+- name: add cvmfs.default
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/cvmfs/default.local.base"
+    dest: /etc/cvmfs/default.local
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+
+- name: Set cvmfs cache
+  ansible.builtin.blockinfile:
+    path: /etc/cvmfs/default.local
+    marker: "#{mark} ANSIBLE MANAGED BLOCK"
+    marker_begin: "CVMFS CUSTOM SETTINGS BEGIN"
+    marker_end: "CVMFS CUSTOM SETTINGS END"
+    block: |
+      CVMFS_CACHE_BASE='{{ cvmfs_cache_base }}'
+      CVMFS_REPOSITORIES='{{ cvmfs_repos }}'
+      CVMFS_HTTP_PROXY='{{ cvmfs_proxy_list }}'
+
+- name: create cvmfs cache
+  file: path="{{ cvmfs_cache_base }}" state=directory group=cvmfs owner=cvmfs mode='0700'
+
+- name: create cvmfs cache
+  file: path="{{ cvmfs_cache_base }}/.." state=directory group=cvmfs owner=cvmfs mode='0700'
+
+- name: Configure cvmfs autofs
+  ansible.builtin.command: /usr/bin/cvmfs_config setup
+

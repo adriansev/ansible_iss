@@ -3,16 +3,33 @@
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - Centos
   ansible.builtin.yum:
-    name: [ 'tuned', 'tuned-utils', 'tuna' ]
+    name:
+      - munge
+      - slurm-slurmd
+      - slurm-contribs
     state: present
     update_cache: true
     enablerepo: "epel"
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
+  when: ansible_facts[ 'distribution' ] == 'CentOS'
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - Fedora
   ansible.builtin.dnf:
-    name: [ 'tuned', 'tuned-utils', 'tuna' ]
+    name:
+      - munge
+      - slurm-slurmd
+      - slurm-contribs
     state: present
     update_cache: true
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
 
+- name: Start and enable munge
+  ansible.builtin.systemd:
+    name: munge
+    state: stopped
+    enabled: true
+
+- name: Start and enable slurmd
+  ansible.builtin.systemd:
+    name: slurmd
+    state: stopped
+    enabled: true

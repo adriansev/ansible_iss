@@ -1,0 +1,35 @@
+---
+- name: Sync frontend data to hosts
+  ansible.posix.synchronize:
+    src:  "{{  sync_item.src }}"
+    dest: "{{  sync_item.dst }}"
+    links: true
+    archive: true
+    checksum: true
+    mode: push
+    rsync_opts:
+      - "-AW"
+      - "--exclude=.git"
+      - "--filter='-x security.selinux'"
+  loop_control:
+    loop_var: sync_item
+  loop: "{{ copy_list }}"
+  delegate_to: "{{ host_src_data_sync }}"
+
+- name: Sync frontend data to hosts exclusive content
+  ansible.posix.synchronize:
+    src:  "{{  sync_item_ex.src }}"
+    dest: "{{  sync_item_ex.dst }}"
+    delete: true
+    links: true
+    archive: true
+    checksum: true
+    mode: push
+    rsync_opts:
+      - "-AW"
+      - "--exclude=.git"
+      - "--filter='-x security.selinux'"
+  loop_control:
+    loop_var: sync_item_ex
+  loop: "{{ copy_list_exclusive }}"
+  delegate_to: "{{ host_src_data_sync }}"

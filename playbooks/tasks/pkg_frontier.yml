@@ -25,7 +25,7 @@
 - name: Install Frontier packages
   ansible.builtin.yum:
     name: frontier-squid
-    state: latest
+    state: present
     enablerepo: "cern-frontier"
   tags: packages
 

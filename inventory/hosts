@@ -100,7 +100,7 @@ issaf.spacescience.ro
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
-ansible_ssh_common_args=' -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@grid05.spacescience.ro:60000 '
+ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@grid05.spacescience.ro:60000 '
 rocks_node="1"
 
 [wn_umd]
@@ -109,7 +109,7 @@ rocks_node="1"
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
-ansible_ssh_common_args=' -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@alien.spacescience.ro:60000 '
+ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@alien.spacescience.ro:60000 '
 rocks_node="1"
 
 [wn_alien]
@@ -118,7 +118,7 @@ rocks_node="1"
 ansible_connection=ssh
 ansible_user=root
 ansible_port=22
-ansible_ssh_common_args=' -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000 '
+ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000 '
 rocks_node="1"
 
 [wn_issaf]

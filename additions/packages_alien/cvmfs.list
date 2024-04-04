@@ -1,0 +1,6 @@
+fuse
+fuse-libs
+autofs
+cvmfs
+cvmfs-fuse3
+cvmfs-config-default.noarch

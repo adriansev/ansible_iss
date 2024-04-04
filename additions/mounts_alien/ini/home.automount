@@ -1,0 +1,11 @@
+[Unit]
+Description=Mount NFS home
+
+[Autoount]
+Where=/home
+DirectoryMode=0755
+TimeoutSec=0
+
+[Install]
+WantedBy=multi-user.target
+

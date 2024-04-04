@@ -1,0 +1,12 @@
+[Unit]
+Description=AutoMount /share/apps
+ConditionHost=alien-*
+
+[Automount]
+Where=/share/apps
+DirectoryMode=0755
+TimeoutIdleSec=0
+
+[Install]
+WantedBy=multi-user.target
+

@@ -2,7 +2,7 @@
 - name: Install lldpd EL
   yum:
     name: lldpd
-    state: latest
+    state: present
     update_cache: true
     enablerepo: "epel"
   when: ansible_facts[ 'distribution' ] == 'CentOS'
@@ -10,7 +10,7 @@
 - name: Install lldpd Fedora
   dnf:
     name: lldpd
-    state: latest
+    state: present
     update_cache: true
   when: ansible_facts[ 'distribution' ] == 'Fedora' or ansible_facts[ 'distribution' ] == 'AlmaLinux'
 

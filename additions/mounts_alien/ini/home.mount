@@ -1,0 +1,17 @@
+[Unit]
+Description=Mount NFS home
+
+[Mount]
+What=172.18.0.1:/export/home
+Where=/home
+Type=nfs4
+Options=rw,vers=4.1,retry=2,timeo=20,retrans=5,rsize=131072,wsize=131072,soft,rshared,nconnect=16
+#,nconnect=16
+
+##MountFlags=shared
+TimeoutSec=30
+LazyUnmount=true
+
+[Install]
+WantedBy=multi-user.target
+

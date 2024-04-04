@@ -1,0 +1,12 @@
+[Unit]
+Description=AutoMount /var/arc/sessions
+ConditionHost=alien-*
+
+[Automount]
+Where=/var/arc/sessions
+DirectoryMode=0777
+TimeoutIdleSec=0
+
+[Install]
+WantedBy=multi-user.target
+

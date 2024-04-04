@@ -1,0 +1,58 @@
+---
+
+- name: Install hardware management and monitoring tools - EL7
+  ansible.builtin.yum:
+    name:
+      - nfs-utils
+      - nfs-utils-coreos
+      - nfsv4-client-utils
+      - nfs4-acl-tools
+      - libnfs-utils
+    state: present
+    update_cache: false
+    enablerepo: "epel"
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
+  tags: packages
+
+- name: Install hardware management and monitoring tools - EL9
+  ansible.builtin.dnf:
+    name:
+      - nfs-utils
+      - nfs-utils-coreos
+      - nfsv4-client-utils
+      - nfs4-acl-tools
+      - libnfs-utils
+    state: present
+    update_cache: false
+  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
+  tags: packages
+
+- name: Sync mount services
+  ansible.builtin.copy:
+    mode: 0644
+    owner: root
+    group: root
+    backup: false
+    force: true
+    dest: /etc/systemd/system/
+    src: "{{ mounts_sysd }}"
+  loop_control:
+    loop_var: mounts_sysd
+  loop: "{{ mounts_list }}"
+  tags: mounts
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+  tags: mounts
+
+- name: Enable and start mount points
+  ansible.builtin.systemd:
+    enabled: true
+    state: started
+    name: "{{ mount_units }}"
+  loop_control:
+    loop_var: mount_units
+  loop: "{{ mounts_list_enable }}"
+  tags: mounts
+

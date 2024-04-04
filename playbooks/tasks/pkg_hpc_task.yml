@@ -12,7 +12,7 @@
       - numad
       - libcgroup-tools
       - libcgroup
-    state: latest
+    state: present
     update_cache: true
     enablerepo: "epel"
   when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
@@ -27,7 +27,7 @@
       - numactl
       - numad
       - numatop
-    state: latest
+    state: present
     update_cache: true
   when: ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora'
   tags: packages
@@ -42,7 +42,7 @@
       - numactl
       - numad
       - numatop
-    state: latest
+    state: present
     update_cache: true
   when: ansible_facts['distribution'] == 'Fedora'
   tags: packages

@@ -1,0 +1,42 @@
+---
+- name: Add groups on nodes
+  ansible.builtin.group:
+    name: "{{  group_def.name }}"
+    gid: "{{  group_def.gid }}"
+    state: present
+  loop_control:
+    loop_var: group_def
+  loop: "{{ group_details }}"
+  register: group_creation
+
+- name: Add users on compute nodes
+  ansible.builtin.user:
+    name: "{{ user_def.name }}"
+    uid: "{{ user_def.uid }}"
+    groups: "{{ user_def.groups }}"
+    password: "{{ user_def.hash }}"
+    home: "{{ user_def.home }}"
+    shell: "{{ user_def.shell }}"
+    state: present
+    create_home: false
+    update_password: always
+  loop_control:
+    loop_var: user_def
+  loop: "{{ user_details }}"
+  when: group_creation is defined
+
+- name: Delete groups on nodes
+  ansible.builtin.group:
+    name: "{{ group_del_name }}"
+    state: absent
+  loop_control:
+    loop_var: group_del_name
+  loop: "{{ delete_groups }}"
+
+- name: Delete users on compute nodes
+  ansible.builtin.user:
+    name: "{{ user_del_name }}"
+    state: absent
+  loop_control:
+    loop_var: user_del_name
+  loop: "{{ delete_users }}"

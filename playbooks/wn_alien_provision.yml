@@ -1,0 +1,55 @@
+---
+- hosts: "{{ target | default('alien-0-73') }}"
+  gather_facts: True
+  vars:
+    cvmfs_cache_base: "/data/cvmfs/cache"
+    cvmfs_repos: "cvmfs-config.cern.ch,alice.cern.ch,alice-ocdb.cern.ch"
+    cvmfs_proxy_list: "http://alien.spacescience.ro:3128; http://issaf.spacescience.ro:3128; http://monitor.spacescience.ro:3128"
+    mounts_list:
+      - "{{ playbook_dir }}/../additions/mounts_alien/export.mount"
+      - "{{ playbook_dir }}/../additions/mounts_alien/export.automount"
+      - "{{ playbook_dir }}/../additions/mounts_alien/home.mount"
+      - "{{ playbook_dir }}/../additions/mounts_alien/home.automount"
+      - "{{ playbook_dir }}/../additions/mounts_alien/share-apps.mount"
+      - "{{ playbook_dir }}/../additions/mounts_alien/share-apps.automount"
+      - "{{ playbook_dir }}/../additions/mounts_alien/var-arc-sessions.mount"
+      - "{{ playbook_dir }}/../additions/mounts_alien/var-arc-sessions.automount"
+    mounts_list_enable:
+      - "export.automount"
+      - "home.automount"
+      - "share-apps.automount"
+      - "var-arc-sessions.automount"
+
+    host_src_data_sync: "alien.spacescience.ro"
+
+  vars_files:
+      - "{{ playbook_dir }}/../additions/users_alien/user_group_info.yml"
+      - "{{ playbook_dir }}/../additions/users_alien/delete_users_groups.yml"
+      - "{{ playbook_dir }}/../additions/data_sync_alien/data_list.yml"
+      - "{{ playbook_dir }}/../additions/data_sync_alien/data_list_exclusive.yml"
+
+  # Let's not do it dynamically - we are not on frontend
+  # pre_tasks:
+  # - name: Create user yml list
+  #   local_action: command cmd="{{ playbook_dir }}/../additions/users/make_id_lists"
+  # run_once: True
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/00basic_tools.yml"
+      - "tasks/00basic_tools_hw.yml"
+      - "tasks/pkg_kernelml_install_task.yml"
+      - "tasks/pkg_cvmfs_task.yml"
+      - "tasks/pkg_igtfca_task.yml"
+      - "tasks/pkg_lsc_vomses_task.yml"
+      - "tasks/pkg_hpc_task.yml"
+      - "tasks/pkg_slurm_task.yml"
+      - "tasks/sync_data_task.yml"
+      - "tasks/cfg_slurm22_task.yml"
+      - "tasks/mounts_task.yml"
+      - "tasks/users_task.yml"
+      - "tasks/cfg_ipset_task.yml"

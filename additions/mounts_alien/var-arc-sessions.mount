@@ -1,0 +1,15 @@
+[Unit]
+Description=Mount /export/var_arc/sessions to /var/arc/sessions
+RequiresMountsFor=/export
+ConditionHost=alien-*
+
+[Mount]
+What=/export/var_arc/sessions
+Where=/var/arc/sessions
+Type=none
+Options=bind,nofail,errors=continue
+DirectoryMode=2775
+
+[Install]
+WantedBy=multi-user.target
+

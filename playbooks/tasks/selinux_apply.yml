@@ -1,0 +1,25 @@
+- name: Install tools
+  yum: pkg=policycoreutils-python
+       state=installed
+
+- name: Remove SELinux policy package
+  command: semodule -r myapp
+  failed_when: false
+
+- name: Copy SELinux type enforcement file
+  copy: src=myapp.te
+        dest=/tmp/
+
+- name: Compile SELinux module file
+  command: checkmodule -M -m -o /tmp/myapp.mod /tmp/myapp.te
+
+- name: Build SELinux policy package
+  command: semodule_package -o /tmp/myapp.pp -m /tmp/myapp.mod
+
+- name: Load SELinux policy package
+  command: semodule -i /tmp/myapp.pp
+
+- name: Remove temporary files
+  file: path=/tmp/myapp.*
+        state=absent
+

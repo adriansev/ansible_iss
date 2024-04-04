@@ -5,7 +5,7 @@
   ansible.builtin.yum:
     name:
       - influxdb2
-    state: latest
+    state: present
     enablerepo: "influxdata"
   when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
   tags: packages
@@ -14,7 +14,7 @@
   ansible.builtin.dnf:
     name:
       - influxdb2
-    state: latest
+    state: present
     enablerepo: "influxdata"
   when: ( ansible_facts['distribution'] == 'AlmaLinux' and ( ansible_facts['distribution_major_version'] | int  > 7 ) ) or ansible_facts['distribution'] == 'Fedora'
   tags: packages

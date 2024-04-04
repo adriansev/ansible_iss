@@ -6,7 +6,7 @@
     update_cache: true
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
 
-- name: Install yum utils Fedora
+- name: Install yum utils EL9/Fedora
   ansible.builtin.dnf:
     name: ['yum', 'dnf-utils', 'dnf-plugins-core']
     state: present
