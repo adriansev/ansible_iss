@@ -11,3 +11,6 @@ galaxy_cache
 ansible_collections
 inventory.json
 additions_work/**
+additions/users_alien/delete_users_groups.yml
+additions/users_alien/user_group_info.yml
+

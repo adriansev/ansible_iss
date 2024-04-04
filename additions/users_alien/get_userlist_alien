@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+scp make_id_lists alien_root:/tmp/
+ssh alien_root "cd /tmp && ./make_id_lists"
+scp alien_root:/tmp/user_group_info.yml ./
