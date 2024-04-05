@@ -62,6 +62,7 @@
     with_items:
       - "tasks/00basic_tools.yml"
       - "tasks/00basic_tools_hw.yml"
+      - "tasks/cfg_ssh_task.yml"
       - "tasks/pkg_kernelml_install_task.yml"
       - "tasks/pkg_cvmfs_task.yml"
       - "tasks/pkg_igtfca_task.yml"
