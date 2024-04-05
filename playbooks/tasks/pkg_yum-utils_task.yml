@@ -3,12 +3,12 @@
   ansible.builtin.yum:
     name: ['yum-utils', 'yum-plugin-fastestmirror', 'yum-plugin-priorities', 'yum-plugin-protectbase']
     state: present
-    update_cache: true
+    update_cache: false
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
 
 - name: Install yum utils EL9/Fedora
   ansible.builtin.dnf:
     name: ['yum', 'dnf-utils', 'dnf-plugins-core']
     state: present
-    update_cache: true
+    update_cache: false
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'

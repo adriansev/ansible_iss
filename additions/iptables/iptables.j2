@@ -1,0 +1,43 @@
+{{ iptables_v4_custom_table_setup }}
+
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+
+-A INPUT -i lo -j ACCEPT
+
+# DEFAULT ACCEPTS
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# REMOVE INVALID FLAGS COMBINATIONS
+-A INPUT -m conntrack --ctstate INVALID -j DROP
+
+# ACCEPTS WHOLE IP/NET
+-A INPUT -m set --match-set accept_net src -j ACCEPT
+-A INPUT -m set --match-set accept_ip  src -j ACCEPT
+
+# ACCEPTS IP/NET TO PORT
+-A INPUT -m set --match-set accept_port_net src -j ACCEPT
+-A INPUT -m set --match-set accept_port_ip  src -j ACCEPT
+
+# FAIL2BAN
+-A INPUT -m set --match-set f2b-sshd src -j DROP
+
+# BLACKLISTING
+-A INPUT -m set --match-set blacklist_net src -j DROP
+-A INPUT -m set --match-set blacklist_ip  src -j DROP
+
+# ACCEPT ALL ICMP
+-A INPUT -p icmp -j ACCEPT
+
+{{ ip_v4_filter_custom_rule_after_ipsets }}
+
+# DEFAULT SSH
+-A INPUT -m tcp -p tcp --dport 60000 -j ACCEPT
+
+# DROP EVERYTHING ELSE
+-A INPUT -j DROP
+-A FORWARD -j DROP
+COMMIT
+

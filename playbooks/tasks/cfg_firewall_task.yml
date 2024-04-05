@@ -1,0 +1,78 @@
+---
+- name: Iptables v4
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/iptables/iptables.j2"
+    dest: /etc/sysconfig/iptables
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+    validate: /usr/sbin/iptables-restore --test %s
+  register: _iptables_v4_update
+
+- name: Restart iptables
+  ansible.builtin.systemd:
+    name: iptables
+    state: restarted
+    enabled: true
+  when: _iptables_v4_update.changed
+
+- name: Iptables v6
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/iptables/ip6tables.j2"
+    dest: /etc/sysconfig/ip6tables
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+    validate: /usr/sbin/ip6tables-restore --test %s
+  register: _iptables_v6_update
+
+- name: Restart ip6tables
+  ansible.builtin.systemd:
+    name: iptables
+    state: restarted
+    enabled: true
+  when: _iptables_v6_update.changed
+
+- name: mkdir /root/ipset_sync
+  ansible.builtin.file:
+    path: /root/ipset_sync
+    state: directory
+
+- name: copy ipset template definition
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/ipset/ipset_sets_def"
+    dest: /root/ipset_sync/
+    owner: root
+    group: root
+    mode: '0600'
+    force: true
+
+- name: ipset rules
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/ipset/ipset.j2"
+    dest: /root/ipset_sync/ipset.ansible
+    owner: root
+    group: root
+    mode: '0600'
+    force: true
+  register: _ipset_rules_update
+
+- name: ipset should be started
+  ansible.builtin.systemd:
+    name: ipset
+    state: started
+    enabled: true
+
+- name: create ipset sets
+  ansible.builtin.command: "ipset -exist -file /root/ipset_sync/ipset_sets_def restore"
+
+- name: apply ipset content
+  ansible.builtin.command: "ipset -exist -file /root/ipset_sync/ipset.ansible restore"
+
+- name: restart ipset
+  ansible.builtin.systemd:
+    name: ipset
+    state: restarted
+

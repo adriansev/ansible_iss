@@ -1,18 +1,26 @@
 ---
-- name: Install lldpd EL
+- name: Install lldpd EL7
   yum:
     name: lldpd
     state: present
-    update_cache: true
+    update_cache: false
     enablerepo: "epel"
   when: ansible_facts[ 'distribution' ] == 'CentOS'
+
+- name: Install lldpd EL9
+  dnf:
+    name: lldpd
+    state: present
+    update_cache: false
+    enablerepo: "epel"
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux'
 
 - name: Install lldpd Fedora
   dnf:
     name: lldpd
     state: present
-    update_cache: true
-  when: ansible_facts[ 'distribution' ] == 'Fedora' or ansible_facts[ 'distribution' ] == 'AlmaLinux'
+    update_cache: false
+  when: ansible_facts[ 'distribution' ] == 'Fedora'
 
 - name: Ansible create file with content example
   copy:

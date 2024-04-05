@@ -1,0 +1,10 @@
+{% for set_definition in ipset_tables %}
+{% for set, entry_list in set_definition.items() %}
+flush {{ set }}
+{% if (entry_list is defined) and entry_list %}
+{% for entry in entry_list %}
+add {{ set }} {{ entry }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endfor %}

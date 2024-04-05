@@ -21,7 +21,7 @@
       - ipset-service
       - rsync
     state: present
-    update_cache: false
+    update_cache: true
     enablerepo: "epel"
   when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
   tags: packages
@@ -42,7 +42,7 @@
       - ipset-service
       - rsync
     state: present
-    update_cache: false
+    update_cache: true
   when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
   tags: packages
 
@@ -71,21 +71,6 @@
     path: /etc/sysconfig/ipset-config
     option: IPSET_SAVE_ON_STOP
     value: "yes"
-    state: present
-    no_extra_spaces: true
-    modify_inactive_option: true
-
-- name: Create /etc/ipset/ipset.d
-  ansible.builtin.file:
-    path: /etc/ipset/ipset.d
-    state: directory
-    mode: '0755'
-
-- name: Set ipset to save on restart
-  community.general.ini_file:
-    path: /etc/sysconfig/ipset-config
-    option: IPSET_DATA_DIR
-    value: "/etc/ipset/ipset.d"
     state: present
     no_extra_spaces: true
     modify_inactive_option: true
