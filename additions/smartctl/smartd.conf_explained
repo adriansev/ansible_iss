@@ -1,0 +1,43 @@
+# -a : '-H' to check the SMART health status, '-f' to report failures of Usage (rather than Prefail) Attributes,
+#      '-t' to track changes in both Prefailure and Usage Attributes, '-l error' to report increases in the number of ATA errors,
+#      '-l selftest' to report increases in the number of Self-Test Log errors, '-l selfteststs' to report changes of Self-Test execution status,
+#      '-C 197' to report nonzero values of the current pending sector count, and '-U 198' to report nonzero values of the offline pending sector count.
+# -o : [ATA only] Enables or disables SMART Automatic Offline Testing when smartd starts up and has no further effect.
+# -S : Enables or disables Attribute Autosave when smartd starts up and has no further effect.
+# -r ID[!] : [ATA only] When tracking, report the Raw value of Attribute ID along with its (normally reported) Normalized value.
+#            ID must be a decimal integer in the range from 1 to 255.
+#            This Directive modifies the behavior of the '-p', '-u', and '-t' tracking Directives and has no effect without one of them.
+# -W DIFF[,INFO[,CRIT]] : Report if the current temperature had changed by at least DIFF degrees since last report, or if new min or max temperature is detected.
+#                         Report or Warn if the temperature is greater or equal than one of INFO or CRIT degrees Celsius.
+#                         If the limit CRIT is reached, a message with loglevel 'LOG_CRIT' will be logged to syslog and a warning email will be send if '-m' is specified.
+#                         If only the limit INFO is reached, a message with loglevel 'LOG_INFO' will be logged.
+
+-s REGEXP
+              Run  Self-Tests  or Offline Immediate Tests, at scheduled times.  A Self- or Offline Immediate Test will be run at the end of periodic
+              device polling, if all 12 characters of the string T/MM/DD/d/HH match the extended regular expression REGEXP.  Here:
+
+              T   is the type of the test.  The values that smartd will try to match (in turn) are: 'L' for a Long Self-Test, 'S' for a Short  Self-
+                  Test,  'C'  for a Conveyance Self-Test (ATA only), and 'O' for an Offline Immediate Test (ATA only).  As soon as a match is found,
+                  the test will be started and no additional matches will be sought for that device and that polling cycle.
+
+                  To run scheduled Selective Self-Tests, use 'n' for next span, 'r' to redo last span, or 'c' to continue with  next  span  or  redo
+                  last  span  based  on  status  of  last  test.   The LBA range is based on the first span from the last test.  See the smartctl -t
+                  select,[next|redo|cont] options for further info.
+
+                  Some disks (e.g. WD) do not preserve the selective self test log across power cycles.   If  state  persistence  ('-s'  option)  is
+                  enabled, the last test span is preserved by smartd and used if (and only if) the selective self test log is empty.
+
+              MM  is  the  month of the year, expressed with two decimal digits.  The range is from 01 (January) to 12 (December) inclusive.  Do not
+                  use a single decimal digit or the match will always fail!
+
+              DD  is the day of the month, expressed with two decimal digits.  The range is from 01 to 31 inclusive.  Do not use  a  single  decimal
+                  digit or the match will always fail!
+
+              d   is the day of the week, expressed with one decimal digit.  The range is from 1 (Monday) to 7 (Sunday) inclusive.
+
+              HH  is  the  hour  of  the day, written with two decimal digits, and given in hours after midnight.  The range is 00 (midnight to just
+                  before 1 am) to 23 (11pm to just before midnight) inclusive.  Do not use a single decimal digit or the match will always fail!
+
+
+DEFAULT -m smart@spacescience.ro
+DEVICESCAN -a -o off -S on -r 1 -r 7 -s S/../(04|07|10|13|18|21|24|27|30)/./02 -W 0,45,48
