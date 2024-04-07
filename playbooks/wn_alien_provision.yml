@@ -6,6 +6,8 @@
     cvmfs_repos: "cvmfs-config.cern.ch,alice.cern.ch,alice-ocdb.cern.ch"
     cvmfs_proxy_list: "http://alien.spacescience.ro:3128; http://issaf.spacescience.ro:3128; http://monitor.spacescience.ro:3128"
 
+    chrony_base_ip: "pub85"
+
     mounts_list:
       - "{{ playbook_dir }}/../additions/mounts_alien/export.mount"
       - "{{ playbook_dir }}/../additions/mounts_alien/export.automount"
@@ -62,13 +64,17 @@
     with_items:
       - "tasks/00basic_tools.yml"
       - "tasks/00basic_tools_hw.yml"
-      - "tasks/cfg_ssh_task.yml"
       - "tasks/pkg_kernelml_install_task.yml"
-      - "tasks/pkg_cvmfs_task.yml"
       - "tasks/pkg_igtfca_task.yml"
       - "tasks/pkg_lsc_vomses_task.yml"
       - "tasks/pkg_hpc_task.yml"
       - "tasks/pkg_munge_task.yml"
+      - "tasks/cfg_cvmfs_task.yml"
+      - "tasks/cfg_chrony_task.yml"
+      - "tasks/cfg_ssh_task.yml"
+      - "tasks/cfg_lmsensors.yml"
+      - "tasks/cfg_smartd_task.yml"
+      - "tasks/cfg_lldpd_task.yml"
       - "tasks/sync_data_task.yml"
       - "tasks/mounts_task.yml"
       - "tasks/users_task.yml"

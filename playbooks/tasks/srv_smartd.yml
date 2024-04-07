@@ -1,7 +1,0 @@
----
-- name: Smartd start
-  ansible.builtin.systemd:
-    name: smartd
-    state: restarted
-    daemon_reload: true
-    enabled: true

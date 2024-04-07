@@ -1,0 +1,20 @@
+---
+- include_tasks: pkg_lldpd_task.yml
+
+- name: Ansible create file with content example
+  ansible.builtin.copy:
+    dest: "/etc/lldpd.d/lldpd.conf"
+    mode: 0644
+    owner: root
+    group: root
+    force: true
+    content: |
+      configure lldp portidsubtype ifname
+      update
+
+- name: Restart lldpd
+  ansible.builtin.service:
+    name: lldpd
+    state: restarted
+    enabled: true
+
