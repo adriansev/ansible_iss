@@ -1,0 +1,13 @@
+---
+- hosts: "{{ target }}"
+  gather_facts: False
+  tasks:
+  - name: Run custom command
+    ansible.builtin.raw: "{{ run_command_on_host }}"
+    args:
+      executable: /usr/bin/bash
+#    register: command_output_on_host
+
+#  - name: Print output
+#    ansible.builtin.debug:
+#      msg: "{% if command_output_on_host.rc == 0 %} {{ command_output_on_host.stdout }} {% else %} {{ command_output_on_host.stderr }} {% endif %}"
