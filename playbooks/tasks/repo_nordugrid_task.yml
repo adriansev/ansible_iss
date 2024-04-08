@@ -1,0 +1,29 @@
+---
+- include_tasks: pkg_yum-utils_task.yml
+
+- name: Import Nordugrid key
+  ansible.builtin.rpm_key:
+    state: present
+    key: http://download.nordugrid.org/RPM-GPG-KEY-nordugrid-6
+
+- name: Install WLCG repository EL7
+  ansible.builtin.yum:
+    name: https://download.nordugrid.org/packages/nordugrid-release/releases/6.1/centos/el7/x86_64/nordugrid-release-6.1-1.el7.noarch.rpm
+    state: present
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+  tags: repo
+
+- name: Install WLCG repository EL9
+  ansible.builtin.dnf:
+    name: https://download.nordugrid.org/packages/nordugrid-release/releases/6.1/rocky/9/x86_64/nordugrid-release-6.1-1.el9.noarch.rpm
+    state: present
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
+  tags: repo
+
+- name: Install WLCG repository Fedora
+  ansible.builtin.dnf:
+    name: https://download.nordugrid.org/packages/nordugrid-release/releases/6.1/fedora/38/x86_64/nordugrid-release-6.1-1.fc38.noarch.rpm
+    state: present
+  when: ansible_facts[ 'distribution' ] == 'Fedora'
+  tags: repo
+

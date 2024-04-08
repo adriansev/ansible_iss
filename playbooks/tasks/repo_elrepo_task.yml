@@ -15,42 +15,33 @@
     name: elrepo-release.noarch
     state: present
     update_cache: false
-  when: rocks_node is undefined and ( ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9' )
+  when: rocks_node is undefined or ( ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9' )
   tags: repo
+
+- name: Enable permanently elrepo
+  community.general.ini_file:
+    path: /etc/yum.repos.d/elrepo.repo
+    section: elrepo
+    option: enabled
+    value: "{{ '0' if rocks_node is defined else '1' }}"
+    mode: '0644'
+  when: rocks_node is undefined
 
 - name: Enable permanently elrepo-kernel
   community.general.ini_file:
     path: /etc/yum.repos.d/elrepo.repo
     section: elrepo-kernel
     option: enabled
-    value: 1
+    value: "{{ '0' if rocks_node is defined else '1' }}"
     mode: '0644'
-  when: rocks_node is undefined and ( ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux' )
-
-- name: Disable permanently elrepo-kernel on rocks nodes
-  community.general.ini_file:
-    path: /etc/yum.repos.d/elrepo.repo
-    section: elrepo-kernel
-    option: enabled
-    value: 0
-    mode: '0644'
-  when: rocks_node is defined and ( ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux' )
+  when: rocks_node is undefined
 
 - name: Enable permanently elrepo-extras
   community.general.ini_file:
     path: /etc/yum.repos.d/elrepo.repo
     section: elrepo-extras
     option: enabled
-    value: 1
+    value: "{{ '0' if rocks_node is defined else '1' }}"
     mode: '0644'
-  when: rocks_node is undefined and ( ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux' )
-
-- name: Disable permanently elrepo-extras on rocks nodes
-  community.general.ini_file:
-    path: /etc/yum.repos.d/elrepo.repo
-    section: elrepo-extras
-    option: enabled
-    value: 0
-    mode: '0644'
-  when: rocks_node is defined and ( ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux' )
+  when: rocks_node is undefined
 

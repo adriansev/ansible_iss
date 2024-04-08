@@ -26,6 +26,12 @@
   when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
   tags: packages
 
+- name: Ensure the crb repository is enabled
+  community.general.dnf_config_manager:
+    name: crb
+    state: enabled
+  when: ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9'
+
 - name: Install hardware management and monitoring tools - EL9
   ansible.builtin.dnf:
     name:
