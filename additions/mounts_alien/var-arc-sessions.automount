@@ -1,6 +1,5 @@
 [Unit]
 Description=AutoMount /var/arc/sessions
-ConditionHost=alien-*
 
 [Automount]
 Where=/var/arc/sessions

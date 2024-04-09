@@ -1,7 +1,6 @@
 [Unit]
 Description=Mount /export/apps to /share/apps
 RequiresMountsFor=/export
-ConditionHost=alien-*
 
 [Mount]
 What=/export/apps

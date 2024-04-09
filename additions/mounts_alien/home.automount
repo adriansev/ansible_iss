@@ -1,6 +1,5 @@
 [Unit]
 Description=AutoMount NFS /home
-ConditionHost=alien-*
 
 [Automount]
 Where=/home

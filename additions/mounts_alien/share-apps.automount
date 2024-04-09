@@ -1,6 +1,5 @@
 [Unit]
 Description=AutoMount /share/apps
-ConditionHost=alien-*
 
 [Automount]
 Where=/share/apps

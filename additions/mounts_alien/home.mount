@@ -1,7 +1,6 @@
 [Unit]
 Description=Mount /export/home to /home
 RequiresMountsFor=/export
-ConditionHost=alien-*
 
 [Mount]
 What=/export/home

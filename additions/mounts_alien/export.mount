@@ -1,6 +1,5 @@
 [Unit]
 Description=Mount NFS /export
-ConditionHost=alien-*
 
 [Mount]
 What=172.18.0.1:/export

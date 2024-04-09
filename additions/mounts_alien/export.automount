@@ -1,6 +1,5 @@
 [Unit]
 Description=AutoMount NFS /export
-ConditionHost=alien-*
 
 [Automount]
 Where=/export
