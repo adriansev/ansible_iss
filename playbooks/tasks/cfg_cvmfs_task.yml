@@ -36,6 +36,7 @@
     marker_begin: "CVMFS CUSTOM SETTINGS BEGIN"
     marker_end: "CVMFS CUSTOM SETTINGS END"
     block: |
+      CVMFS_QUOTA_LIMIT='{{ cvmfs_cache_size }}'
       CVMFS_CACHE_BASE='{{ cvmfs_cache_base }}'
       CVMFS_REPOSITORIES='{{ cvmfs_repos }}'
       CVMFS_HTTP_PROXY='{{ cvmfs_proxy_list }}'

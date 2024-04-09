@@ -22,6 +22,5 @@
 - name: Start and enable munge
   ansible.builtin.systemd:
     name: munge
-    state: stopped
+    state: started
     enabled: true
-

@@ -25,5 +25,4 @@
 - name: Start and enable slurmd
   ansible.builtin.systemd:
     name: slurmd
-    state: stopped
     enabled: true

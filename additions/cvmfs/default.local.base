@@ -17,9 +17,3 @@ CVMFS_BACKOFF_MIN=5
 CVMFS_BACKOFF_MAX=15
 ## CVMFS_HOST_RESET_AFTER=1800
 
-# local cache = 50 GiB
-CVMFS_QUOTA_LIMIT='51200'
-
-CVMFS_REPOSITORIES='cvmfs-config.cern.ch,alice.cern.ch,alice-ocdb.cern.ch'
-CVMFS_HTTP_PROXY='http://alien.spacescience.ro:3128; http://issaf.spacescience.ro:3128; http://monitor.spacescience.ro:3128'
-

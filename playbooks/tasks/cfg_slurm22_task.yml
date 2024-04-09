@@ -1,10 +1,4 @@
 ---
-##- name: Fix /etc/slurm/conf.d/accounting.conf for slurm22
-##  ansible.builtin.lineinfile:
-##    path: /etc/slurm/conf.d/accounting.conf
-##    regexp: 'AccountingStoreJobComment=.*'
-##    line: "AccountingStoreFlags=job_comment"
-
 - name: Start and enable munge
   ansible.builtin.systemd:
     name: munge
@@ -16,4 +10,3 @@
     name: slurmd
     state: restarted
     enabled: true
-

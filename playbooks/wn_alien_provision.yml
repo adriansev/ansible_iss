@@ -2,9 +2,10 @@
 - hosts: "{{ target | default('alien-0-73') }}"
   gather_facts: True
   vars:
+    cvmfs_cache_size: "51200"
     cvmfs_cache_base: "/data/cvmfs/cache"
     cvmfs_repos: "cvmfs-config.cern.ch,alice.cern.ch,alice-ocdb.cern.ch"
-    cvmfs_proxy_list: "http://alien.spacescience.ro:3128; http://issaf.spacescience.ro:3128; http://monitor.spacescience.ro:3128"
+    cvmfs_proxy_list: "http://alien.spacescience.ro:3128;http://issaf.spacescience.ro:3128;http://monitor.spacescience.ro:3128"
 
     chrony_base_ip: "pub85"
 
@@ -73,6 +74,7 @@
       - "tasks/pkg_hep_oslibs_task.yml"
       - "tasks/pkg_apptainer_task.yml"
       - "tasks/pkg_nhc_task.yml"
+      - "tasks/pkg_slurm_task.yml"
       - "tasks/cfg_cvmfs_task.yml"
       - "tasks/cfg_chrony_task.yml"
       - "tasks/cfg_ssh_task.yml"
@@ -84,5 +86,5 @@
       - "tasks/mounts_task.yml"
       - "tasks/users_task.yml"
 
+
 ##      - "tasks/cfg_slurm22_task.yml"
-##      - "tasks/pkg_slurm_task.yml"
