@@ -1,40 +1,4 @@
 ---
-- name: Iptables v4
-  ansible.builtin.template:
-    src: "{{ playbook_dir }}/../additions/iptables/iptables.j2"
-    dest: /etc/sysconfig/iptables
-    owner: root
-    group: root
-    mode: '0644'
-    force: true
-    validate: /usr/sbin/iptables-restore --test %s
-  register: _iptables_v4_update
-
-- name: Restart iptables
-  ansible.builtin.systemd:
-    name: iptables
-    state: restarted
-    enabled: true
-  when: _iptables_v4_update.changed
-
-- name: Iptables v6
-  ansible.builtin.template:
-    src: "{{ playbook_dir }}/../additions/iptables/ip6tables.j2"
-    dest: /etc/sysconfig/ip6tables
-    owner: root
-    group: root
-    mode: '0644'
-    force: true
-    validate: /usr/sbin/ip6tables-restore --test %s
-  register: _iptables_v6_update
-
-- name: Restart ip6tables
-  ansible.builtin.systemd:
-    name: iptables
-    state: restarted
-    enabled: true
-  when: _iptables_v6_update.changed
-
 - name: mkdir /root/ipset_sync
   ansible.builtin.file:
     path: /root/ipset_sync
@@ -75,4 +39,40 @@
   ansible.builtin.systemd:
     name: ipset
     state: restarted
+
+- name: Iptables v4
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/iptables/iptables.j2"
+    dest: /etc/sysconfig/iptables
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+    validate: /usr/sbin/iptables-restore --test %s
+  register: _iptables_v4_update
+
+- name: Restart iptables
+  ansible.builtin.systemd:
+    name: iptables
+    state: restarted
+    enabled: true
+  when: _iptables_v4_update.changed
+
+- name: Iptables v6
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/iptables/ip6tables.j2"
+    dest: /etc/sysconfig/ip6tables
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+    validate: /usr/sbin/ip6tables-restore --test %s
+  register: _iptables_v6_update
+
+- name: Restart ip6tables
+  ansible.builtin.systemd:
+    name: iptables
+    state: restarted
+    enabled: true
+  when: _iptables_v6_update.changed
 
