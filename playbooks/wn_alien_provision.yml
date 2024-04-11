@@ -82,6 +82,7 @@
       - "tasks/cfg_lmsensors.yml"
       - "tasks/cfg_smartd_task.yml"
       - "tasks/cfg_lldpd_task.yml"
+      - "tasks/alice_wn_prepare_task.yml"
       - "tasks/sync_data_task.yml"
       - "tasks/mounts_task.yml"
       - "tasks/users_task.yml"

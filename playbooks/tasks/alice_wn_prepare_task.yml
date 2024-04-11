@@ -1,0 +1,41 @@
+---
+- name: Create system directories
+  ansible.builtin.file:
+    path: "{{ sys_dir }}"
+    state: directory
+    mode: '1777'
+  loop_control:
+    loop_var: sys_dir
+  loop:
+    - /data/arcce
+    - /data/workdir
+    - /data/scratch
+
+
+- name: Create ALICE work dirs
+  ansible.builtin.file:
+    path: "{{ alice_dir }}"
+    state: directory
+    recurse: true
+    owner: aliprod
+    group: aliprod
+  loop_control:
+    loop_var: alice_dir
+  loop:
+    - /data/ALICE
+    - /data/ALICE/cache
+    - /data/ALICE/alien-logs
+    - /data/ALICE/tmp
+
+- name: Create symlink - workdir
+  ansible.builtin.file:
+    src: /data/workdir
+    dest: /workdir
+    state: link
+
+- name: Create symlink - scratch
+  ansible.builtin.file:
+    src: /data/scratch
+    dest: /scratch
+    state: link
+
