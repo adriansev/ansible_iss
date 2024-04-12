@@ -134,10 +134,10 @@ alien-0-72 ansible_host=172.18.3.181
 alien-0-73 ansible_host=172.18.3.180
 
 [wn_alien_pub]
-a03
-
-
-
+a00.spacescience.ro
+a01.spacescience.ro
+a02.spacescience.ro
+a03.spacescience.ro
 
 #[switch_dell:vars]
 #ansible_user=admin

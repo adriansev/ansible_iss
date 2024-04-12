@@ -30,3 +30,20 @@
     value: 4
     no_extra_spaces: true
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
+
+- name: Epel - exclude nordugrid
+  community.general.ini_file:
+    path: /etc/yum.repos.d/epel.repo
+    section: epel
+    option: exclude
+    value: nordugrid-*
+    no_extra_spaces: true
+
+- name: Epel-testing - exclude nordugrid
+  community.general.ini_file:
+    path: /etc/yum.repos.d/epel-testing.repo
+    section: epel-testing
+    option: exclude
+    value: nordugrid-*
+    no_extra_spaces: true
+

@@ -19,8 +19,3 @@
     enablerepo: "epel"
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
 
-- name: Start and enable munge
-  ansible.builtin.systemd:
-    name: munge
-    state: started
-    enabled: true

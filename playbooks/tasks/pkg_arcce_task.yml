@@ -3,26 +3,50 @@
 
 - name: Install arcce-wn EL7
   ansible.builtin.yum:
-    name: [ 'nordugrid-arc6-wn', 'nordugrid-arc-client' ]
+    name:
+      - nordugrid-arc6-wn
+      - nordugrid-arc-client
+      - nordugrid-arc-plugins-arcrest
+      - nordugrid-arc-plugins-gfal
+      - nordugrid-arc-plugins-globus
+      - nordugrid-arc-plugins-python
+      - nordugrid-arc-plugins-xrootd
+      - nordugrid-arc-plugins-gridftpjob
     state: present
-    enablerepo: "epel,nordugrid"
+    enablerepo: "epel,nordugrid,nordugrid-updates"
     disablerepo: "UMD*"
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
   tags: packages
 
 - name: Install arcce-wn EL9
   ansible.builtin.dnf:
-    name: [ 'nordugrid-arc-wn', 'nordugrid-arc-client' ]
+    name:
+      - nordugrid-arc-wn
+      - nordugrid-arc-client
+      - nordugrid-arc-plugins-arcrest
+      - nordugrid-arc-plugins-gfal
+      - nordugrid-arc-plugins-globus
+      - nordugrid-arc-plugins-python
+      - nordugrid-arc-plugins-xrootd
+      - nordugrid-arc-plugins-gridftpjob
     state: present
-    enablerepo: "epel,nordugrid"
+    enablerepo: "epel,nordugrid,nordugrid-updates"
     disablerepo: "UMD*"
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
   tags: packages
 
 - name: Install arcce-wn Fedora
   ansible.builtin.dnf:
-    name: [ 'nordugrid-arc-wn', 'nordugrid-arc-client' ]
+    name:
+      - nordugrid-arc-wn
+      - nordugrid-arc-client
+      - nordugrid-arc-plugins-arcrest
+      - nordugrid-arc-plugins-gfal
+      - nordugrid-arc-plugins-globus
+      - nordugrid-arc-plugins-python
+      - nordugrid-arc-plugins-xrootd
+      - nordugrid-arc-plugins-gridftpjob
     state: present
-    enablerepo: "nordugrid"
+    enablerepo: "nordugrid,nordugrid-updates"
   when: ansible_facts[ 'distribution' ] == 'Fedora'
   tags: packages
