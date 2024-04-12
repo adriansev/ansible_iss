@@ -34,7 +34,7 @@
 {{ ip_v4_filter_custom_rule_after_ipsets }}
 
 # DEFAULT SSH
--A INPUT -m tcp -p tcp --dport 60000 -j ACCEPT
+-A INPUT -m tcp -p tcp -m multiport --dports 22,60000 -j ACCEPT --source 85.120.46.0/24,46.243.114.128/25
 
 # DROP EVERYTHING ELSE
 -A INPUT -j DROP

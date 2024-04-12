@@ -33,12 +33,13 @@
 
     ipset_tables:
       - accept_ip:
+        - "85.120.46.17"
         - "172.18.0.1"
       - accept_ip6:
+        - "2001:b30:4210:1::17"
       - accept_net:
       - accept_net6:
       - accept_port_ip:
-        - "172.18.0.1,6818"
       - accept_port_ip6:
       - accept_port_net:
         - "172.18.0.0/22,22"

@@ -29,5 +29,3 @@ alien-0-70 ansible_host=172.18.3.183 rocks_node="1"
 alien-0-71 ansible_host=172.18.3.182
 alien-0-72 ansible_host=172.18.3.181
 alien-0-73 ansible_host=172.18.3.180
-alien-0-74 ansible_host=172.18.3.179
-

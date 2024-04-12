@@ -2,7 +2,7 @@
 Description=Mount NFS /export
 
 [Mount]
-What=172.18.0.1:/export
+What=alien.spacescience.ro:/export
 Where=/export
 Type=nfs4
 Options=bg,nofail,_netdev,rw,noatime,sync,vers=4.2,proto=tcp,hard,retry=3,retrans=5,timeo=50,rsize=1048576,wsize=1048576,acregmin=15,acregmax=90,acdirmin=90,acdirmax=120,noresvport

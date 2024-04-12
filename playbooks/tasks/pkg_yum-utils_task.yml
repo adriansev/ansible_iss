@@ -6,9 +6,27 @@
     update_cache: false
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
 
+- name: Yum prefer IPv4 - EL7
+  community.general.ini_file:
+    path: /etc/yum.conf
+    section: main
+    option: ip_resolve
+    value: 4
+    no_extra_spaces: true
+  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+
 - name: Install yum utils EL9/Fedora
   ansible.builtin.dnf:
     name: ['yum', 'dnf-utils', 'dnf-plugins-core']
     state: present
     update_cache: false
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
+
+- name: Dnf prefer IPv4 - EL9
+  community.general.ini_file:
+    path: /etc/dnf/dnf.conf
+    section: main
+    option: ip_resolve
+    value: 4
+    no_extra_spaces: true
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
