@@ -122,17 +122,6 @@ rocks_node="1"
 
 [wn_issaf]
 
-[wn_alien_new:vars]
-ansible_connection=ssh
-ansible_user=root
-ansible_port=22
-ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@alien.spacescience.ro:60000 '
-
-[wn_alien_new]
-alien-0-71 ansible_host=172.18.3.182
-alien-0-72 ansible_host=172.18.3.181
-alien-0-73 ansible_host=172.18.3.180
-
 [wn_alien_pub]
 a00.spacescience.ro
 a01.spacescience.ro
