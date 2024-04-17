@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ target | default('alien-0-73') }}"
+- hosts: "{{ target }}"
   gather_facts: True
   vars:
     cvmfs_cache_size: "51200"
@@ -45,6 +45,33 @@
         - "172.18.0.0/22,22"
       - accept_port_net6:
 
+    profile: iss
+
+    sysctl_list:
+      - "{{ playbook_dir }}/../additions/sysctl.d/60-memory.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/70-mtu.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/72-packet_tuning.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/82-ipv4.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/82-ipv6.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/82-netcore.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/84-fs.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/84-kernel.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/90-raid_speed.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/99-delayacct.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/99-inotify.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/99-security.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/80-network_buffers_25GB.conf"
+      - "{{ playbook_dir }}/../additions/sysctl.d/90-singularity.conf"
+
+    tuning_list:
+      - "{{ playbook_dir }}/../additions/root_tuning.d/00-blockdev.tune"
+      - "{{ playbook_dir }}/../additions/root_tuning.d/00-nm_mtu.tune_eth"
+      - "{{ playbook_dir }}/../additions/root_tuning.d/01-mtu_txq.tune_eth"
+      - "{{ playbook_dir }}/../additions/root_tuning.d/05-fq_shape.tune_eth"
+      - "{{ playbook_dir }}/../additions/root_tuning.d/20-ring.tune_eth"
+      - "{{ playbook_dir }}/../additions/root_tuning.d/25-channels.tune_eth"
+      - "{{ playbook_dir }}/../additions/root_tuning.d/10-nic_lldp_off.tune_eth"
+
   vars_files:
       - "{{ playbook_dir }}/../additions/users_alien/user_group_info.yml"
       - "{{ playbook_dir }}/../additions/users_alien/delete_users_groups.yml"
@@ -88,3 +115,8 @@
       - "tasks/cfg_lldpd_task.yml"
       - "tasks/alice_wn_prepare_task.yml"
       - "tasks/cfg_slurm22_task.yml"
+      - "tasks/cfg_tuned_task.yml"
+      - "tasks/cfg_tuning_infra.yml"
+      - "tasks/tune_sysctl_task.yml"
+      - "tasks/tune_scripts_task.yml"
+
