@@ -18,14 +18,3 @@ alien-0-59 ansible_host=172.18.3.194 rocks_node="1"
 alien-0-60 ansible_host=172.18.3.193 rocks_node="1"
 alien-0-61 ansible_host=172.18.3.192 rocks_node="1"
 alien-0-62 ansible_host=172.18.3.191 rocks_node="1"
-#alien-0-63 ansible_host=172.18.3.190 rocks_node="1"
-#alien-0-64 ansible_host=172.18.3.189 rocks_node="1"
-#alien-0-65 ansible_host=172.18.3.188 rocks_node="1"
-#alien-0-66 ansible_host=172.18.3.187 rocks_node="1"
-alien-0-67 ansible_host=172.18.3.186 rocks_node="1"
-alien-0-68 ansible_host=172.18.3.185 rocks_node="1"
-alien-0-69 ansible_host=172.18.3.184 rocks_node="1"
-alien-0-70 ansible_host=172.18.3.183 rocks_node="1"
-alien-0-71 ansible_host=172.18.3.182
-alien-0-72 ansible_host=172.18.3.181
-alien-0-73 ansible_host=172.18.3.180
