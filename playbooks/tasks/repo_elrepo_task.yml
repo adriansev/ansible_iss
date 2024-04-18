@@ -15,7 +15,7 @@
     name: elrepo-release.noarch
     state: present
     update_cache: false
-  when: rocks_node is undefined or ( ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9' )
+  when: rocks_node is undefined and ( ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9' )
   tags: repo
 
 - name: Enable permanently elrepo
@@ -26,6 +26,7 @@
     value: "{{ '0' if rocks_node is defined else '1' }}"
     mode: '0644'
     create: false
+  when: ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux'
 
 - name: Enable permanently elrepo-kernel
   community.general.ini_file:
@@ -35,6 +36,7 @@
     value: "{{ '0' if rocks_node is defined else '1' }}"
     mode: '0644'
     create: false
+  when: ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux'
 
 - name: Enable permanently elrepo-extras
   community.general.ini_file:
@@ -44,4 +46,5 @@
     value: "{{ '0' if rocks_node is defined else '1' }}"
     mode: '0644'
     create: false
+  when: ansible_facts[ 'distribution' ] == 'CentOS' or ansible_facts[ 'distribution' ] == 'AlmaLinux'
 

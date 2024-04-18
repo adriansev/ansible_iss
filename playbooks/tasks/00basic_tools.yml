@@ -6,7 +6,7 @@
     - repo_elrepo_task.yml
     - pkg_yum-utils_task.yml
 
-- name: Install hardware management and monitoring tools - EL7
+- name: Install system management and monitoring tools - EL7
   ansible.builtin.yum:
     name:
       - coreutils
@@ -23,16 +23,17 @@
     state: present
     update_cache: true
     enablerepo: "epel"
-  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
+  register: systools_el7
+  when: systools_el7 is undefined and ( ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7' )
   tags: packages
 
 - name: Ensure the crb repository is enabled
   community.general.dnf_config_manager:
     name: crb
     state: enabled
-  when: ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9'
+  when: ansible_facts['distribution'] == 'AlmaLinux'
 
-- name: Install hardware management and monitoring tools - EL9
+- name: Install system management and monitoring tools - EL9
   ansible.builtin.dnf:
     name:
       - coreutils
@@ -49,7 +50,8 @@
       - rsync
     state: present
     update_cache: true
-  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
+  register: systools_el9
+  when: systools_el9 is undefined and ( ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora' )
   tags: packages
 
 - name: Create /etc/ipset/ipset.d

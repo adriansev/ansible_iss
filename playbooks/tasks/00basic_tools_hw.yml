@@ -13,7 +13,8 @@
     state: present
     update_cache: false
     enablerepo: "epel"
-  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
+  register: install_hwtools_el7
+  when: install_hwtools_el7 is undefined and ( (ansible_facts['distribution'] == 'CentOS') and (ansible_facts['distribution_major_version'] == '7') )
   tags: packages
 
 - name: Install hardware management and monitoring tools - EL9
@@ -29,6 +30,7 @@
       - nvme-cli
     state: present
     update_cache: false
-  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
+  register: install_hwtools_el9
+  when: install_hwtools_el9 is undefined and ( (ansible_facts['distribution'] == 'AlmaLinux') or (ansible_facts['distribution'] == 'Fedora') )
   tags: packages
 
