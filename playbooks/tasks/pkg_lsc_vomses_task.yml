@@ -20,6 +20,7 @@
 - name: lsc+vomses EL9
   ansible.builtin.dnf:
     name:
+      - wlcg-iam-lsc-ops
       - wlcg-iam-lsc-dteam
       - wlcg-iam-lsc-alice
       - wlcg-iam-vomses-alice
