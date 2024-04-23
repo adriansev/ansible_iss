@@ -1,20 +1,37 @@
 [wn_alien]
-alien-0-44 ansible_host=172.18.3.209 rocks_node="1"
-alien-0-45 ansible_host=172.18.3.208 rocks_node="1"
-alien-0-46 ansible_host=172.18.3.207 rocks_node="1"
-alien-0-47 ansible_host=172.18.3.206 rocks_node="1"
-alien-0-48 ansible_host=172.18.3.205 rocks_node="1"
-alien-0-49 ansible_host=172.18.3.204 rocks_node="1"
-alien-0-50 ansible_host=172.18.3.203 rocks_node="1"
-alien-0-51 ansible_host=172.18.3.202 rocks_node="1"
-alien-0-52 ansible_host=172.18.3.201 rocks_node="1"
-alien-0-53 ansible_host=172.18.3.200 rocks_node="1"
-alien-0-54 ansible_host=172.18.3.199 rocks_node="1"
-alien-0-55 ansible_host=172.18.3.198 rocks_node="1"
-alien-0-56 ansible_host=172.18.3.197 rocks_node="1"
-alien-0-57 ansible_host=172.18.3.196 rocks_node="1"
-alien-0-58 ansible_host=172.18.3.195 rocks_node="1"
-alien-0-59 ansible_host=172.18.3.194 rocks_node="1"
-alien-0-60 ansible_host=172.18.3.193 rocks_node="1"
-alien-0-61 ansible_host=172.18.3.192 rocks_node="1"
-alien-0-62 ansible_host=172.18.3.191 rocks_node="1"
+a00.spacescience.ro
+a01.spacescience.ro
+a02.spacescience.ro
+a03.spacescience.ro
+
+# REZERVATE pentru compute nou
+# a04.spacescience.ro
+# a05.spacescience.ro
+# a06.spacescience.ro
+# a07.spacescience.ro
+
+a08.spacescience.ro
+a09.spacescience.ro
+a10.spacescience.ro
+a11.spacescience.ro
+
+# Microblades
+a12.spacescience.ro
+a13.spacescience.ro
+a14.spacescience.ro
+a15.spacescience.ro
+a16.spacescience.ro
+a17.spacescience.ro
+a18.spacescience.ro
+a19.spacescience.ro
+a20.spacescience.ro
+a21.spacescience.ro
+a22.spacescience.ro
+a23.spacescience.ro
+a24.spacescience.ro
+a25.spacescience.ro
+a26.spacescience.ro
+a27.spacescience.ro
+a28.spacescience.ro
+a29.spacescience.ro
+a30.spacescience.ro
