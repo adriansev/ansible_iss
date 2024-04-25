@@ -20,6 +20,11 @@
       - ipset
       - ipset-service
       - rsync
+      - iotop
+      - blktrace
+      - bcc-tools
+      - ethtool
+      - lsof
     state: present
     update_cache: true
     enablerepo: "epel"
@@ -48,6 +53,11 @@
       - ipset
       - ipset-service
       - rsync
+      - iotop
+      - blktrace
+      - bcc-tools
+      - ethtool
+      - lsof
     state: present
     update_cache: true
   register: systools_el9
