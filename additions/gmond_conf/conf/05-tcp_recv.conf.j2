@@ -1,0 +1,8 @@
+tcp_recv_channel
+{
+  port = {{ _gmond_tcp_recv_port | default("8649", true) }}
+  family = {{ _gmond_tcp_recv_port_family | default("inet4", true) }}
+
+## timeout = "" /* how many microseconds to block before closing a connection to a client */
+## bind = "" /* bind to a particular local address */
+}

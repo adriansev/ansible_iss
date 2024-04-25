@@ -1,6 +1,6 @@
 ---
-- hosts: "{{ target }}"
-  gather_facts: True
+- hosts: "{{ target | default('wn_alien') }}"
+  gather_facts: False
   vars:
     cvmfs_cache_size: "51200"
     cvmfs_cache_base: "/data/cvmfs/cache"
@@ -119,4 +119,6 @@
       - "tasks/cfg_tuning_infra.yml"
       - "tasks/tune_sysctl_task.yml"
       - "tasks/tune_scripts_task.yml"
+      - "tasks/cfg_gmond_alien.yml"
+      - "tasks/pkg_utils_task.yml"
 

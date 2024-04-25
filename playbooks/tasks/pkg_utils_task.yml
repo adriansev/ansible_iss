@@ -1,0 +1,58 @@
+---
+- name: Install misc tools for server admin - EL7
+  ansible.builtin.yum:
+    name:
+      - mc
+      - htop
+      - iotop-c
+    state: present
+    update_cache: false
+    enablerepo: "epel"
+  when: ansible_facts[ 'distribution' ] == 'CentOS'
+
+- name: Install misc tools for server admin - EL9
+  ansible.builtin.dnf:
+    name:
+      - mc
+      - htop
+      - iotop-c
+    state: present
+    update_cache: false
+    enablerepo: "epel"
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux'
+
+- name: Install misc tools for server admin - Fedora
+  ansible.builtin.dnf:
+    name:
+      - mc
+      - htop
+      - iotop-c
+    state: present
+    update_cache: false
+  when: ansible_facts[ 'distribution' ] == 'Fedora'
+
+- name: Create htop conf dir
+  ansible.builtin.file:
+    path: /root/.config/htop
+    state: directory
+
+- name: Configure htop EL7
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/htop/htoprc_el7"
+    dest: /root/.config/htop/htoprc
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+  when: ansible_facts[ 'distribution' ] == 'CentOS'
+
+- name: Configure htop EL9
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/htop/htoprc_el9"
+    dest: /root/.config/htop/htoprc
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
+

@@ -1,0 +1,55 @@
+---
+- include_tasks: pkg_gmond_task.yml
+
+- name: Create gmond conf.d dir
+  ansible.builtin.file:
+    path: /etc/ganglia/conf.d
+    state: directory
+
+- name: Copy generic gmond configuration
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/gmond_conf/conf/gmond.conf"
+    dest: /etc/ganglia/
+    mode: 0644
+    owner: root
+    group: root
+    backup: true
+    force: true
+
+- name: Gmond conf.d common configuration
+  ansible.builtin.copy:
+    dest: /etc/ganglia/conf.d/
+    src: "{{ playbook_dir }}/../additions/gmond_conf/conf/conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: '0700'
+    force: true
+  with_items:
+    - 00-globals.conf
+    - 01-host.conf
+    - 90-metrics.conf
+
+- name: Gmond conf.d cluster def
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/gmond_conf/conf/02-cluster.conf.j2"
+    dest: /etc/ganglia/conf.d/02-cluster.conf
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+
+- name: Gmond conf.d udp_send_1 def
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/gmond_conf/conf/03-udp_send.conf.j2"
+    dest: /etc/ganglia/conf.d/03-udp_send.conf
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+
+- name: Enable and restart gmond
+  ansible.builtin.systemd:
+    name: gmond
+    state: restarted
+    enabled: true
+

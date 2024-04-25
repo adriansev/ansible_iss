@@ -1,0 +1,13 @@
+udp_send_channel
+{
+  host = {{ _gmond_udp_send_host }}
+  port = {{ _gmond_udp_send_port | default("8649", true) }}
+
+  # ttl = 4 /* modify the Time-To-Live (TTL) of outgoing messages (unicast or multicast) */
+
+  /* bind and bind_hostname are mutually exclusive. */
+## bind = "" /* bind to a particular local address */
+## bind_hostname = yes /* resolve hostname and then bind to it */
+## mcast_join = "" /* join the mcast_join multicast group */
+## mcast_if = ""   /* send data out the interface specified by mcast_if */
+}

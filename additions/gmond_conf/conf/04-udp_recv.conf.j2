@@ -1,0 +1,18 @@
+udp_recv_channel
+{
+  # to receive sFlow datagrams, add a udp_recv_channel with the port set to 6343
+  port = {{ _gmond_udp_recv_port | default("8649", true) }}
+  family = {{ _gmond_udp_recv_port_family | default("inet4", true) }}
+
+  /* retry_bind then the daemon will not abort on failure if fails to bind */
+  retry_bind = true
+
+  # buffer = 10485760 /* 10 MiB buffered UDP*/
+
+## specifying a bind address with the same value used for mcast_join
+## will prevent unicast UDP messages to the same port from being processed.
+## bind = "" /* bind to a particular local address to be used as the source for the multicast packets */
+## mcast_join = "" /* join the mcast_join multicast group */
+## mcast_if = ""   /* send data out the interface specified by mcast_if */
+}
+
