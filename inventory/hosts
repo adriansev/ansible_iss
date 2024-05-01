@@ -1,42 +1,33 @@
 # Ex 1: Ungrouped hosts, specify before any group headers.
 
+# AUGER hosts
 paoshift.spacescience.ro
 auger01.spacescience.ro
+
 paowall
 paostation1
 paostation2
 
-sev.spacescience.ro
-monitor.spacescience.ro
-issaf.spacescience.ro
-
-r3bsuit.spacescience.ro
-luxe.spacescience.ro
-
-alien.spacescience.ro
-
-mgm.spacescience.ro
-fst01.spacescience.ro
-fst02.spacescience.ro
-fst03.spacescience.ro
-fst04.spacescience.ro
-fst05.spacescience.ro
-fst06.spacescience.ro
-fst07.spacescience.ro
-fst08.spacescience.ro
-fst09.spacescience.ro
-fst10.spacescience.ro
-fst11.spacescience.ro
-fst12.spacescience.ro
-fst13.spacescience.ro
-fst14.spacescience.ro
-fst15.spacescience.ro
-
+# AUGER GRID hosts
 grid05.spacescience.ro
 seau2.spacescience.ro
 
 ## grid04 EL6 - too old python for ansible to work
 ##grid04.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python ansible_ssh_common_args='-o "PubkeyAcceptedKeyTypes=+ssh-rsa" -o "HostkeyAlgorithms=+ssh-rsa" -o "PubkeyAcceptedKeyTypes=+ssh-rsa"'
+
+r3bsuit.spacescience.ro
+luxe.spacescience.ro
+
+sev.spacescience.ro
+monitor.spacescience.ro
+issaf.spacescience.ro
+
+alien.spacescience.ro
+
+mgm.spacescience.ro
+mgm2.spacescience.ro
+mgm3.spacescience.ro
+
 
 [all:vars]
 ansible_connection=ssh
@@ -57,23 +48,67 @@ paowall
 paostation1
 paostation2
 
-[rocks_servers]
-alien.spacescience.ro rocks_fe="1"
-issaf.spacescience.ro rocks_fe="1"
-grid05.spacescience.ro rocks_fe="1"
-
+#########################################################################
+#########################################################################
 [eos_fst]
 
 [eos_mgm]
 mgm.spacescience.ro
+mgm2.spacescience.ro
+mgm3.spacescience.ro
 
 [eos_cluster:children]
 eos_mgm
 eos_fst
 
-[emi_servers]
-grid05.spacescience.ro
-seau2.spacescience.ro
+#########################################################################
+#########################################################################
+[wn_umd:vars]
+ansible_connection=ssh
+ansible_user=root
+ansible_port=22
+ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@grid05.spacescience.ro:60000 '
+rocks_node="1"
+
+[wn_umd]
+
+
+#########################################################################
+#########################################################################
+
+[wn_alien:vars]
+
+[wn_alien]
+
+[alien]
+alien.spacescience.ro
+
+[alien_cluster:children]
+alien
+wn_alien
+
+
+#########################################################################
+#########################################################################
+[wn_issaf:vars]
+ansible_connection=ssh
+ansible_user=root
+ansible_port=22
+ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000 '
+rocks_node="1"
+
+[wn_issaf]
+
+## [issaf]
+## issaf.spacescience.ro
+
+## [issaf_cluster:children]
+## issaf
+## wn_issaf
+
+#########################################################################
+#########################################################################
+# MISC grouping by attributes
 
 [areca_raid]
 fst15.spacescience.ro
@@ -96,28 +131,9 @@ fst14.spacescience.ro
 seau2.spacescience.ro
 issaf.spacescience.ro
 
-[wn_umd:vars]
-ansible_connection=ssh
-ansible_user=root
-ansible_port=22
-ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@grid05.spacescience.ro:60000 '
-rocks_node="1"
 
-[wn_umd]
-
-[wn_alien:vars]
-
-[wn_alien]
-
-[wn_issaf:vars]
-ansible_connection=ssh
-ansible_user=root
-ansible_port=22
-ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000 '
-rocks_node="1"
-
-[wn_issaf]
-
+#########################################################################
+#########################################################################
 #[switch_dell:vars]
 #ansible_user=admin
 #ansible_port=22
