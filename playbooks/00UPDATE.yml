@@ -17,5 +17,5 @@
     when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
 
   - name: Re-create grub conf
-    ansible.builtin.command: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+    ansible.builtin.command: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg --update-bls-cmdline
 

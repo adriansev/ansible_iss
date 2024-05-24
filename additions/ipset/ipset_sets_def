@@ -1,3 +1,6 @@
+create accept_port_tcp  bitmap:port   range 1-65535
+create accept_port_udp  bitmap:port   range 1-65535
+
 create accept_ip        hash:ip       family inet  hashsize 1024 maxelem 65536
 create accept_net       hash:net      family inet  hashsize 1024 maxelem 65536
 create accept_port_ip   hash:ip,port  family inet  hashsize 1024 maxelem 65536

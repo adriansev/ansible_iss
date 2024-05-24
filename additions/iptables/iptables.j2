@@ -18,8 +18,8 @@
 -A INPUT -m set --match-set accept_ip  src -j ACCEPT
 
 # ACCEPTS IP/NET TO PORT
--A INPUT -m set --match-set accept_port_net src -j ACCEPT
--A INPUT -m set --match-set accept_port_ip  src -j ACCEPT
+-A INPUT -m set --match-set accept_port_net src,dst -j ACCEPT
+-A INPUT -m set --match-set accept_port_ip  src,dst -j ACCEPT
 
 # FAIL2BAN
 -A INPUT -m set --match-set f2b-sshd src -j DROP
@@ -27,6 +27,10 @@
 # BLACKLISTING
 -A INPUT -m set --match-set blacklist_net src -j DROP
 -A INPUT -m set --match-set blacklist_ip  src -j DROP
+
+# ACCEPT WORLDWIDE on PORTS
+-A INPUT -m tcp -p tcp -m set --match-set accept_port_tcp dst -j ACCEPT
+-A INPUT -m udp -p udp -m set --match-set accept_port_udp dst -j ACCEPT
 
 # ACCEPT ALL ICMP
 -A INPUT -p icmp -j ACCEPT

@@ -18,5 +18,5 @@
       - ca-policy-lcg
     state: latest
     enablerepo: "EGI-trustanchors"
-  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ( ansible_facts['distribution_major_version'] | int  > 7 ) ) or ansible_facts['distribution'] == 'Fedora'
+  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] | int  > 7 ) or ansible_facts['distribution'] == 'Fedora'
   tags: packages

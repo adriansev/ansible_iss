@@ -1,5 +1,5 @@
 ---
-- ansible.builtin.import_tasks: repo_wlcg_task.yml
+- include_tasks: repo_wlcg_task.yml
 
 - name: lsc+vomses EL7
   ansible.builtin.yum:
@@ -30,5 +30,5 @@
       - wlcg-voms-alice
     state: latest
     enablerepo: "wlcg"
-  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ( ansible_facts['distribution_major_version'] | int  > 7 ) ) or ansible_facts['distribution'] == 'Fedora'
+  when: ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9'
   tags: packages

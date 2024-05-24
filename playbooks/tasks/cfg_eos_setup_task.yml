@@ -1,0 +1,26 @@
+---
+- name: Sync eos common files
+  ansible.builtin.copy:
+    dest: /etc/
+    src: "{{ playbook_dir }}/../additions/eos_setup/{{ eos_common_files }}"
+    owner: root
+    group: root
+    mode: '0600'
+    force: true
+  loop_control:
+    loop_var: eos_common_files
+  with_items:
+    - eos.keytab
+    - xrd.cf.fst
+    - xrd.cf.mgm
+    - xrd.cf.mq
+
+- name: eos_env configuration
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/eos_setup/eos_env.j2"
+    dest: /etc/sysconfig/eos_env
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+

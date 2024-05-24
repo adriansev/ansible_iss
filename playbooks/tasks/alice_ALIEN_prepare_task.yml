@@ -7,9 +7,9 @@
   loop_control:
     loop_var: sys_dir
   loop:
-    - /data/arcce
-    - /data/workdir
-    - /data/scratch
+    - /home/data/arcce
+    - /home/data/workdir
+    - /home/data/scratch
 
 - name: Create ALICE work dirs
   ansible.builtin.file:
@@ -21,20 +21,20 @@
   loop_control:
     loop_var: alice_dir
   loop:
-    - /data/ALICE
-    - /data/ALICE/cache
-    - /data/ALICE/alien-logs
-    - /data/ALICE/tmp
+    - /home/data/ALICE
+    - /home/data/ALICE/cache
+    - /home/data/ALICE/alien-logs
+    - /home/data/ALICE/tmp
 
 - name: Create symlink - workdir
   ansible.builtin.file:
-    src: /data/workdir
+    src: /home/data/workdir
     dest: /workdir
     state: link
 
 - name: Create symlink - scratch
   ansible.builtin.file:
-    src: /data/scratch
+    src: /home/data/scratch
     dest: /scratch
     state: link
 

@@ -80,7 +80,7 @@
       - "{{ playbook_dir }}/../additions/root_tuning.d/25-channels.tune_eth"
       - "{{ playbook_dir }}/../additions/root_tuning.d/10-nic_lldp_off.tune_eth"
 
-    _eos_env_roles: "fst"
+    _eos_env_roles: "mgm mq"
 
   vars_files:
       - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_alien_wn.yml"
@@ -96,7 +96,7 @@
       - "tasks/pkg_kernelml_install_task.yml"
       - "tasks/pkg_igtfca_task.yml"
       - "tasks/pkg_lsc_vomses_task.yml"
-      - "tasks/pkg_eos_fst_task.yml"
+      - "tasks/pkg_eos_mgm_task.yml"
       - "tasks/cfg_firewall_task.yml"
       - "tasks/cfg_chrony_task.yml"
       - "tasks/cfg_ssh_task.yml"
