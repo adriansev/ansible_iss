@@ -2,6 +2,9 @@
 - hosts: "{{ target | default('wn_alien') }}"
   gather_facts: False
   vars:
+    _linger_users_list:
+      - aliprod
+
     cvmfs_cache_size: "51200"
     cvmfs_cache_base: "/data/cvmfs/cache"
     cvmfs_repos: "cvmfs-config.cern.ch,alice.cern.ch,alice-ocdb.cern.ch"
@@ -121,4 +124,6 @@
       - "tasks/tune_scripts_task.yml"
       - "tasks/cfg_gmond_alien.yml"
       - "tasks/pkg_utils_task.yml"
+      - "tasks/cfg_linger4user_task.yml"
+
 
