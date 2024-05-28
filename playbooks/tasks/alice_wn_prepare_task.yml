@@ -1,4 +1,15 @@
 ---
+- name: Disable un-needed timers
+  ansible.builtin.systemd_service:
+    name: "{{ _timer_disable }}"
+    state: stopped
+    enabled: false
+  loop_control:
+    loop_var: _timer_disable
+  loop:
+    - "dnf-makecache.timer"
+    - "mlocate-updatedb.timer"
+
 - name: Create system directories
   ansible.builtin.file:
     path: "{{ sys_dir }}"
@@ -7,24 +18,10 @@
   loop_control:
     loop_var: sys_dir
   loop:
+    - /data/home
     - /data/arcce
     - /data/workdir
     - /data/scratch
-
-- name: Create ALICE work dirs
-  ansible.builtin.file:
-    path: "{{ alice_dir }}"
-    state: directory
-    recurse: true
-    owner: aliprod
-    group: aliprod
-  loop_control:
-    loop_var: alice_dir
-  loop:
-    - /data/ALICE
-    - /data/ALICE/cache
-    - /data/ALICE/alien-logs
-    - /data/ALICE/tmp
 
 - name: Create symlink - workdir
   ansible.builtin.file:

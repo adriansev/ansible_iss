@@ -1,0 +1,16 @@
+---
+- name: Create ALICE work dirs
+  ansible.builtin.file:
+    path: "{{ alice_dir }}"
+    state: directory
+    recurse: true
+    owner: aliprod
+    group: aliprod
+  loop_control:
+    loop_var: alice_dir
+  loop:
+    - /data/ALICE
+    - /data/ALICE/cache
+    - /data/ALICE/alien-logs
+    - /data/ALICE/tmp
+

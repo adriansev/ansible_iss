@@ -8,8 +8,8 @@
     mode: 0755
   with_items:
     - /etc/squid
-    - /home/frontier_logs/
-    - /home/frontier_cache/
+    - /home/frontier/logs/
+    - /home/frontier/cache/
 
 - name: Create squidconf
   copy:
@@ -31,7 +31,7 @@
 
 - name: frontier squid customizations
   copy:
-    src: "{{ playbook_dir }}/../additions/frontier/customize.sh.vobox"
+    src: "{{ playbook_dir }}/../additions/frontier/customize.sh.alien"
     dest: /etc/squid/customize.sh
     backup: true
     owner: frontier
@@ -48,6 +48,6 @@
     recurse: true
   with_items:
     - /etc/squid
-    - /home/frontier_logs/
-    - /home/frontier_cache/
+    - /home/frontier/logs/
+    - /home/frontier/cache/
 

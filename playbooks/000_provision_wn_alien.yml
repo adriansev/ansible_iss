@@ -13,18 +13,9 @@
     chrony_base_ip: "pub85"
 
     mounts_list:
-      - "{{ playbook_dir }}/../additions/mounts_alien/export.mount"
-      - "{{ playbook_dir }}/../additions/mounts_alien/export.automount"
-      - "{{ playbook_dir }}/../additions/mounts_alien/home.mount"
-      - "{{ playbook_dir }}/../additions/mounts_alien/home.automount"
-      - "{{ playbook_dir }}/../additions/mounts_alien/share-apps.mount"
-      - "{{ playbook_dir }}/../additions/mounts_alien/share-apps.automount"
       - "{{ playbook_dir }}/../additions/mounts_alien/var-arc-sessions.mount"
       - "{{ playbook_dir }}/../additions/mounts_alien/var-arc-sessions.automount"
     mounts_list_enable:
-      - "export.automount"
-      - "home.automount"
-      - "share-apps.automount"
       - "var-arc-sessions.automount"
 
     host_src_data_sync: "alien.spacescience.ro"
@@ -76,7 +67,7 @@
       - "{{ playbook_dir }}/../additions/root_tuning.d/10-nic_lldp_off.tune_eth"
 
   vars_files:
-      - "{{ playbook_dir }}/../additions/users_alien/user_group_info.yml"
+      - "{{ playbook_dir }}/../additions/users_alien/user_group_info_wn.yml"
       - "{{ playbook_dir }}/../additions/users_alien/delete_users_groups.yml"
       - "{{ playbook_dir }}/../additions/data_sync_alien/data_list.yml"
       - "{{ playbook_dir }}/../additions/data_sync_alien/data_list_exclusive.yml"
@@ -106,9 +97,6 @@
       - "tasks/pkg_apptainer_task.yml"
       - "tasks/pkg_nhc_task.yml"
       - "tasks/pkg_slurm_task.yml"
-      - "tasks/sync_data_task.yml"
-      - "tasks/mounts_task.yml"
-      - "tasks/users_task.yml"
       - "tasks/cfg_firewall_task.yml"
       - "tasks/cfg_cvmfs_task.yml"
       - "tasks/cfg_chrony_task.yml"
@@ -116,14 +104,18 @@
       - "tasks/cfg_lmsensors.yml"
       - "tasks/cfg_smartd_task.yml"
       - "tasks/cfg_lldpd_task.yml"
-      - "tasks/alice_wn_prepare_task.yml"
-      - "tasks/cfg_slurm22_task.yml"
       - "tasks/cfg_tuned_task.yml"
       - "tasks/cfg_tuning_infra.yml"
+      - "tasks/cfg_gmond_alien.yml"
+      - "tasks/cfg_slurm22_task.yml"
       - "tasks/tune_sysctl_task.yml"
       - "tasks/tune_scripts_task.yml"
-      - "tasks/cfg_gmond_alien.yml"
       - "tasks/pkg_utils_task.yml"
+###      - "tasks/sync_data_task.yml"
+      - "tasks/mounts_task.yml"
+      - "tasks/alice_wn_prepare_task.yml"
+      - "tasks/users_home_task.yml"
+      - "tasks/alice_wn_prepare_aliprod_task.yml"
       - "tasks/cfg_linger4user_task.yml"
 
 

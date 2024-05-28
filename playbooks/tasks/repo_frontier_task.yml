@@ -1,10 +1,21 @@
 ---
 - include_tasks: pkg_yum-utils_task.yml
 
+- name: Import Frontier key
+  ansible.builtin.rpm_key:
+    key: http://frontier.cern.ch/dist/rpms/cernFrontierGpgPublicKey
+  tags: rpmkey
+
+- name: Install Frontier repository EL9
+  ansible.builtin.dnf:
+    name: http://frontier.cern.ch/dist/rpms/RPMS/noarch/frontier-release-1.2-1.noarch.rpm
+    state: present
+  when: ansible_facts['distribution'] == 'AlmaLinux'
+  tags: repo
+
 - name: Install Frontier repository EL7
   ansible.builtin.yum:
-    name: http://frontier.cern.ch/dist/rpms/RPMS/noarch/frontier-release-1.1-1.noarch.rpm
+    name: http://frontier.cern.ch/dist/rpms/RPMS/noarch/frontier-release-1.2-1.noarch.rpm
     state: present
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
   tags: repo
-
