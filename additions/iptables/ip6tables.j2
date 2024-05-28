@@ -33,7 +33,7 @@
 -A INPUT -m udp -p udp -m set --match-set accept_port_udp dst -j ACCEPT
 
 # ACCEPT ALL ICMP
--A INPUT -p icmp -j ACCEPT
+-A INPUT -p ipv6-icmp -j ACCEPT
 
 {{ ip_v6_filter_custom_rule_after_ipsets }}
 
