@@ -1,7 +1,3 @@
 ---
 copy_list_exclusive:
   - { src: '/etc/slurm/', dst: '/etc/slurm/' }
-
-
-
-###  - { src: '/root/tuning.d/', dst: '/root/tuning.d/' }
