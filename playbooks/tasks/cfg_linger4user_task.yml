@@ -4,6 +4,11 @@
     path: /var/lib/systemd/linger/
     state: directory
 
+- name: Create systemd user@.service.d override directory
+  ansible.builtin.file:
+    path: /etc/systemd/system/user@.service.d/
+    state: directory
+
 - name: Enable linger for this list of users
   ansible.builtin.copy:
     content: ""
@@ -15,4 +20,19 @@
   loop_control:
     loop_var: _linger_user
   loop: "{{ _linger_users_list }}"
+
+- name: Add to user@.service the delegation of cgroup modules
+  ansible.builtin.copy:
+    dest: "/etc/systemd/system/user@.service.d/delegate.conf"
+    force: true
+    group: root
+    owner: root
+    mode: 0644
+    content: |
+      [Service]
+      Delegate=cpu cpuset io memory pids
+
+- name: systemd daemon-reload
+  ansible.builtin.systemd:
+    daemon_reload: yes
 
