@@ -47,6 +47,6 @@ with open(f'{my_path}/user_group_info.yml', 'w') as yml:
     yml.write('user_details:\n')
     for u in user_list_sorted:
         add_groups = get_user_additional_groups(u["pw_name"])
-        yml.write(f'  - {{ name: \'{u["pw_name"]}\', uid: {u["pw_uid"]}, gid: {u["pw_gid"]}, shell: \'{u["pw_shell"]}\', home: \'{u["pw_dir"]}\', groups: { add_groups }, hash: \'{u["sp_pwdp"]}\' }}\n')
+        yml.write(f'  - {{ name: \'{u["pw_name"]}\', group: \'{u["pw_name"]}\', uid: {u["pw_uid"]}, gid: {u["pw_gid"]}, shell: \'{u["pw_shell"]}\', home: \'{u["pw_dir"]}\', groups: { add_groups }, hash: \'{u["sp_pwdp"]}\' }}\n')
 
 #rich.print(user_list_sorted)
