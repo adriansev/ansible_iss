@@ -8,8 +8,8 @@
     mode: 0755
   with_items:
     - /etc/squid
-    - /home/frontier/logs/
-    - /home/frontier/cache/
+    - "{{ frontier_logs }}"
+    - "{{ frontier_cache }}"
 
 - name: Create squidconf
   copy:
@@ -30,13 +30,13 @@
   tags: packages
 
 - name: frontier squid customizations
-  copy:
-    src: "{{ playbook_dir }}/../additions/frontier/customize.sh.alien"
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/frontier/customize.sh.j2"
     dest: /etc/squid/customize.sh
-    backup: true
     owner: frontier
     group: frontier
     mode: '0755'
+    backup: true
     force: true
 
 - name: proper ownership
@@ -48,6 +48,5 @@
     recurse: true
   with_items:
     - /etc/squid
-    - /home/frontier/logs/
-    - /home/frontier/cache/
-
+    - "{{ frontier_logs }}"
+    - "{{ frontier_cache }}"

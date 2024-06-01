@@ -13,12 +13,13 @@
   ansible.builtin.user:
     name: "{{ user_def.name }}"
     uid: "{{ user_def.uid }}"
+    group: "{{ user_def.group }}"
     groups: "{{ user_def.groups }}"
     password: "{{ user_def.hash }}"
     home: "{{ user_def.home }}"
     shell: "{{ user_def.shell }}"
     state: present
-    create_home: false
+    create_home: "{{ users_create_home | default('false') }}"
     update_password: always
   loop_control:
     loop_var: user_def

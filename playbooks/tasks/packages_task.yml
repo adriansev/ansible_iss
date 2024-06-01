@@ -1,5 +1,5 @@
 ---
-- name: Install packages on worker nodes
+- name: Install packages
   ansible.builtin.yum:
     name: "{{ pkg_name }}"
     state: present

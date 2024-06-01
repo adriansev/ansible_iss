@@ -5,6 +5,16 @@
       - mc
       - htop
       - iotop-c
+      - jq
+      - jc
+      - ps_mem
+      - the_silver_searcher
+      - freeipmi
+      - freeipmi-bmc-watchdog
+      - freeipmi-ipmidetectd
+      - freeipmi-ipmiseld
+      - ipmievd
+      - ipmitool
     state: present
     update_cache: false
     enablerepo: "epel"
@@ -16,6 +26,16 @@
       - mc
       - htop
       - iotop-c
+      - jq
+      - jc
+      - ps_mem
+      - the_silver_searcher
+      - freeipmi
+      - freeipmi-bmc-watchdog
+      - freeipmi-ipmidetectd
+      - freeipmi-ipmiseld
+      - ipmievd
+      - ipmitool
     state: present
     update_cache: false
     enablerepo: "epel"
@@ -27,6 +47,16 @@
       - mc
       - htop
       - iotop-c
+      - jq
+      - jc
+      - ps_mem
+      - the_silver_searcher
+      - freeipmi
+      - freeipmi-bmc-watchdog
+      - freeipmi-ipmidetectd
+      - freeipmi-ipmiseld
+      - ipmievd
+      - ipmitool
     state: present
     update_cache: false
   when: ansible_facts[ 'distribution' ] == 'Fedora'
@@ -55,4 +85,6 @@
     mode: '0644'
     force: true
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
+
+
 

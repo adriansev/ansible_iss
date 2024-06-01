@@ -20,6 +20,8 @@
 
     host_src_data_sync: "alien.spacescience.ro"
 
+    users_create_home: false
+
     iptables_v4_custom_table_setup: ""
     iptables_v6_custom_table_setup: ""
     ip_v4_filter_custom_rule_after_ipsets: ""
@@ -114,7 +116,7 @@
       - "tasks/tune_sysctl_task.yml"
       - "tasks/tune_scripts_task.yml"
       - "tasks/alice_wn_prepare_task.yml"
-      - "tasks/users_home_task.yml"
+      - "tasks/users_task.yml"
       - "tasks/alice_wn_prepare_aliprod_task.yml"
       - "tasks/cfg_linger4user_task.yml"
 

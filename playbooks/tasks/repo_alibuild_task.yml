@@ -1,0 +1,31 @@
+---
+- name: AliBuild repo install EL9
+  ansible.builtin.yum_repository:
+    name: alice-system-deps
+    description: alice-system-deps
+    file: alice-system-deps
+    baseurl: https://s3.cern.ch/swift/v1/alibuild-repo/RPMS/o2-full-deps_el9.x86-64/
+    gpgcheck: false
+    enabled: true
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9'
+  tags: repo
+
+- name: AliBuild repo install Fedora
+  ansible.builtin.yum_repository:
+    name: alice-system-deps
+    description: alice-system-deps
+    file: alice-system-deps
+    baseurl: https://s3.cern.ch/swift/v1/alibuild-repo/RPMS/o2-full-deps_fedora.x86-64/
+    gpgcheck: false
+    enabled: true
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_facts['distribution'] == 'Fedora'
+  tags: repo
+

@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ target }}"
+- hosts: "{{ target | default('alien.spacescience.ro') }}"
   gather_facts: False
   vars:
     cvmfs_cache_size: "51200"
