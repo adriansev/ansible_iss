@@ -11,9 +11,19 @@
 
     users_create_home: true
 
-    iptables_v4_custom_table_setup: ""
+    iptables_v4_custom_table_setup: |
+      *nat
+      -A POSTROUTING -o enp193s0f0np0 -j MASQUERADE
+      COMMIT
+
     iptables_v6_custom_table_setup: ""
-    ip_v4_filter_custom_rule_after_ipsets: ""
+
+    ip_v4_filter_custom_rule_after_ipsets: |
+      # DHCP!!!! Interface specification is required for DHCP access!!!
+      -A INPUT -i enp193s0f1np1 -j ACCEPT
+      -A FORWARD -i enp193s0f0np0 -o enp193s0f1np1 -j ACCEPT -m state --state RELATED,ESTABLISHED
+      -A FORWARD -i enp193s0f1np1 -j ACCEPT
+
     ip_v6_filter_custom_rule_after_ipsets: ""
 
     ipset_tables:
@@ -25,6 +35,8 @@
       - accept_port_ip:
       - accept_port_ip6:
       - accept_port_net:
+        - "85.120.46.0/24,8649"
+        - "46.243.114.128/25,8649"
         - "85.120.46.0/24,9090"
         - "46.243.114.128/25,9090"
         - "85.120.46.0/24,tcp:3128"
@@ -34,8 +46,12 @@
         - "128.142.0.0/16,udp:3401"
         - "188.184.128.0/17,udp:3401"
         - "188.185.128.0/17,udp:3401"
+        - "85.120.46.0/24,10080"
+        - "46.243.114.128/25,10080"
       - accept_port_net6:
+        - "2001:b30:4210::/48,8649"
         - "2001:b30:4210::/48,9090"
+        - "2001:b30:4210::/48,10080"
         - "2001:b30:4210::/48,tcp:3128"
         - "2001:b30:4210::/48,udp:3401"
         - "2001:1458:300::/46,udp:3401"
@@ -103,7 +119,7 @@
 #      - "tasks/pkg_nhc_task.yml"
 #      - "tasks/pkg_frontier_task.yml"
 #      - "tasks/users_task.yml"
-#      - "tasks/cfg_firewall_task.yml"
+      - "tasks/cfg_firewall_task.yml"
 #      - "tasks/cfg_cvmfs_task.yml"
 #      - "tasks/cfg_chrony_task.yml"
 #      - "tasks/cfg_ssh_task.yml"
@@ -114,8 +130,8 @@
 #      - "tasks/cfg_tuning_infra.yml"
 #      - "tasks/tune_sysctl_task.yml"
 #      - "tasks/tune_scripts_task.yml"
-      - "tasks/pkg_utils_task.yml"
-      - "tasks/packages_task.yml"
-      - "tasks/pkg_alibuild_task.yml"
+#      - "tasks/pkg_utils_task.yml"
+#      - "tasks/packages_task.yml"
+#      - "tasks/pkg_alibuild_task.yml"
 
 ###      - "tasks/cfg_gmond_alien.yml"
