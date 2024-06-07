@@ -1,0 +1,13 @@
+[Unit]
+Description=Mount /fastdata/users to /alicefast
+RequiresMountsFor=/fastdata
+
+[Mount]
+What=/fastdata/users
+Where=/alicefast
+Type=none
+Options=bind,nofail,errors=continue
+DirectoryMode=2775
+
+[Install]
+WantedBy=multi-user.target

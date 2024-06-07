@@ -1,0 +1,13 @@
+---
+- hosts: "{{ target | default('issaf_cluster') }}"
+  gather_facts: False
+  vars_files:
+      - "{{ playbook_dir }}/../additions/packages_sets/packages_issaf.yml"
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/packages_task.yml"

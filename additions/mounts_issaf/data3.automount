@@ -1,0 +1,11 @@
+[Unit]
+Description=Mount NFS data3
+
+[Automount]
+Where=/data3
+DirectoryMode=0777
+##TimeoutSec=0
+
+[Install]
+WantedBy=multi-user.target
+

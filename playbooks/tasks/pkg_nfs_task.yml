@@ -1,0 +1,28 @@
+---
+- name: Install misc tools for server admin - EL9
+  ansible.builtin.dnf:
+    name:
+      - libnfsidmap
+      - libnfs
+      - nfs-utils
+      - libnfs-utils
+      - nfsv4-client-utils
+      - nfs4-acl-tools
+    state: present
+    update_cache: false
+    enablerepo: "epel"
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux'
+
+- name: Install misc tools for server admin - Fedora
+  ansible.builtin.dnf:
+    name:
+      - libnfsidmap
+      - libnfs
+      - nfs-utils
+      - libnfs-utils
+      - nfsv4-client-utils
+      - nfs4-acl-tools
+    state: present
+    update_cache: false
+  when: ansible_facts[ 'distribution' ] == 'Fedora'
+

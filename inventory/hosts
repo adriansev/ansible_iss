@@ -24,7 +24,7 @@ issaf.spacescience.ro
 
 alien.spacescience.ro
 
-mgm.spacescience.ro
+mgm1.spacescience.ro
 mgm2.spacescience.ro
 mgm3.spacescience.ro
 
@@ -53,7 +53,7 @@ paostation2
 [eos_fst]
 
 [eos_mgm]
-mgm.spacescience.ro
+mgm1.spacescience.ro
 mgm2.spacescience.ro
 mgm3.spacescience.ro
 
@@ -93,18 +93,19 @@ wn_alien
 [wn_issaf:vars]
 ansible_connection=ssh
 ansible_user=root
-ansible_port=22
-ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000 '
-rocks_node="1"
+ansible_port=60000
+## ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000 '
+ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -J root@issaf.spacescience.ro '
+
 
 [wn_issaf]
 
-## [issaf]
-## issaf.spacescience.ro
+[issaf]
+issaf.spacescience.ro
 
-## [issaf_cluster:children]
-## issaf
-## wn_issaf
+[issaf_cluster:children]
+issaf
+wn_issaf
 
 #########################################################################
 #########################################################################

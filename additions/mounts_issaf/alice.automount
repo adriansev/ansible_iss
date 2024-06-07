@@ -1,0 +1,11 @@
+[Unit]
+Description=AutoMount /data/data to /alice
+
+[Automount]
+Where=/alice
+DirectoryMode=2775
+##TimeoutSec=0
+
+[Install]
+WantedBy=multi-user.target
+

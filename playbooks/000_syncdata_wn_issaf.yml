@@ -1,0 +1,17 @@
+---
+- hosts: "{{ target | default('wn_issaf') }}"
+  gather_facts: False
+  vars:
+    host_src_data_sync: "issaf.spacescience.ro"
+
+  vars_files:
+      - "{{ playbook_dir }}/../additions/data_sync_issaf/data_list.yml"
+      - "{{ playbook_dir }}/../additions/data_sync_issaf/data_list_exclusive.yml"
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/sync_data_task.yml"

@@ -1,0 +1,10 @@
+---
+tuning_list:
+  - "{{ playbook_dir }}/../additions/root_tuning.d/00-blockdev.tune"
+  - "{{ playbook_dir }}/../additions/root_tuning.d/00-nm_mtu.tune_eth"
+  - "{{ playbook_dir }}/../additions/root_tuning.d/01-mtu_txq.tune_eth"
+  - "{{ playbook_dir }}/../additions/root_tuning.d/05-fq_shape.tune_eth"
+  - "{{ playbook_dir }}/../additions/root_tuning.d/20-ring.tune_eth"
+  - "{{ playbook_dir }}/../additions/root_tuning.d/25-channels.tune_eth"
+  - "{{ playbook_dir }}/../additions/root_tuning.d/10-nic_lldp_off.tune_eth"
+

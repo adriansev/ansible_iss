@@ -1,4 +1,9 @@
 ---
+iptables_v4_custom_table_setup: ""
+iptables_v6_custom_table_setup: ""
+ip_v4_filter_custom_rule_after_ipsets: ""
+ip_v6_filter_custom_rule_after_ipsets: ""
+
 ipset_tables:
   - accept_ip:
     - "85.120.46.17"

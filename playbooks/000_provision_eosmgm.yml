@@ -5,85 +5,15 @@
 
     host_src_data_sync: "mgm.spacescience.ro"
 
-    iptables_v4_custom_table_setup: ""
-    iptables_v6_custom_table_setup: ""
-    ip_v4_filter_custom_rule_after_ipsets: ""
-    ip_v6_filter_custom_rule_after_ipsets: ""
-
-    ipset_tables:
-      - accept_ip:
-        - "85.120.46.17"
-        - "85.120.46.20-85.120.46.40"
-      - accept_ip6:
-        - "2001:b30:4210:1::17"
-        - "2001:b30:4210:1::20"
-        - "2001:b30:4210:1::21"
-        - "2001:b30:4210:1::22"
-        - "2001:b30:4210:1::23"
-        - "2001:b30:4210:1::24"
-        - "2001:b30:4210:1::25"
-        - "2001:b30:4210:1::26"
-        - "2001:b30:4210:1::27"
-        - "2001:b30:4210:1::28"
-        - "2001:b30:4210:1::29"
-        - "2001:b30:4210:1::30"
-        - "2001:b30:4210:1::31"
-        - "2001:b30:4210:1::32"
-        - "2001:b30:4210:1::33"
-        - "2001:b30:4210:1::34"
-        - "2001:b30:4210:1::35"
-        - "2001:b30:4210:1::36"
-        - "2001:b30:4210:1::37"
-        - "2001:b30:4210:1::38"
-        - "2001:b30:4210:1::39"
-        - "2001:b30:4210:1::40"
-      - accept_net:
-      - accept_net6:
-      - accept_port_ip:
-      - accept_port_ip6:
-      - accept_port_net:
-        - "85.120.46.0/24,9090"
-        - "46.243.114.128/25,9090"
-      - accept_port_net6:
-        - "2001:b30:4210::/48,9090"
-      - accept_port_tcp:
-        - "1094"
-        - "1095"
-        - "8000"
-        - "60000"
-      - accept_port_udp:
-
     profile: iss
-
-    sysctl_list:
-      - "{{ playbook_dir }}/../additions/sysctl.d/60-memory.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/70-mtu.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/72-packet_tuning.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/82-ipv4.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/82-ipv6.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/82-netcore.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/84-fs.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/84-kernel.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/90-raid_speed.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/99-delayacct.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/99-inotify.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/99-security.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/80-network_buffers_25GB.conf"
-      - "{{ playbook_dir }}/../additions/sysctl.d/90-singularity.conf"
-
-    tuning_list:
-      - "{{ playbook_dir }}/../additions/root_tuning.d/00-blockdev.tune"
-      - "{{ playbook_dir }}/../additions/root_tuning.d/00-nm_mtu.tune_eth"
-      - "{{ playbook_dir }}/../additions/root_tuning.d/01-mtu_txq.tune_eth"
-      - "{{ playbook_dir }}/../additions/root_tuning.d/05-fq_shape.tune_eth"
-      - "{{ playbook_dir }}/../additions/root_tuning.d/20-ring.tune_eth"
-      - "{{ playbook_dir }}/../additions/root_tuning.d/25-channels.tune_eth"
-      - "{{ playbook_dir }}/../additions/root_tuning.d/10-nic_lldp_off.tune_eth"
 
     _eos_env_roles: "mgm mq"
 
   vars_files:
+      - "{{ playbook_dir }}/../additions/ipset/ipset_eos.yml"
       - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_alien_wn.yml"
+      - "{{ playbook_dir }}/../additions/sysctl_lists/sysctl_generic.yml"
+      - "{{ playbook_dir }}/../additions/root_tuning_list/tuning_generic.yml"
 
   tasks:
   - ansible.builtin.include_tasks:

@@ -13,6 +13,9 @@
 # REMOVE INVALID FLAGS COMBINATIONS
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 
+# DEFAULT ACCEPT ALL LOCAL SSH
+-A INPUT -m tcp -p tcp -m multiport --dports 22,60000 -j ACCEPT --source 2001:b30:4210::/48
+
 # ACCEPTS WHOLE IP/NET
 -A INPUT -m set --match-set accept_net6 src -j ACCEPT
 -A INPUT -m set --match-set accept_ip6  src -j ACCEPT
@@ -36,9 +39,6 @@
 -A INPUT -p ipv6-icmp -j ACCEPT
 
 {{ ip_v6_filter_custom_rule_after_ipsets }}
-
-# DEFAULT SSH
--A INPUT -m tcp -p tcp -m multiport --dports 22,60000 -j ACCEPT --source 2001:b30:4210::/48
 
 # DROP EVERYTHING ELSE
 -A INPUT -j DROP

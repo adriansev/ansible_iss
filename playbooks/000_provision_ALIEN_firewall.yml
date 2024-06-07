@@ -1,0 +1,14 @@
+---
+- hosts: "{{ target | default('alien.spacescience.ro') }}"
+  gather_facts: False
+  vars_files:
+      - "{{ playbook_dir }}/../additions/ipset/ipset_alien.yml"
+      - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_alien_wn.yml"
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/cfg_firewall_task.yml"

@@ -1,0 +1,40 @@
+---
+package_list:
+  - dnsmasq.x86_64
+  - dnsmasq-utils.x86_64
+  - mariadb-server.x86_64
+  - mariadb-devel.x86_64
+  - mariadb.x86_64
+  - mariadb-connector-c.x86_64
+  - mariadb-connector-c-devel.x86_64
+  - mariadb-connector-odbc.x86_64
+  - mariadb-server-utils.x86_64
+  - mariadb-backup.x86_64
+  - mariadb-common.x86_64
+  - mariadb-connector-c-config.noarch
+  - mariadb-errmsg.x86_64
+  - mysql-selinux.noarch
+  - python3-mysqlclient.x86_64
+  - slurm.x86_64
+  - slurm-contribs.x86_64
+  - slurm-libs.x86_64
+  - slurm-perlapi.x86_64
+  - slurm-rrdtool.x86_64
+  - slurm-slurmctld.x86_64
+  - slurm-slurmd.x86_64
+  - slurm-slurmdbd.x86_64
+  - slurm-slurmrestd.x86_64
+  - php
+  - php-common
+  - php-gd php-xml
+  - httpd.x86_64
+  - httpd-core.x86_64
+  - httpd-tools.x86_64
+  - mod_ssl.x86_64
+  - mod_xsendfile.x86_64
+  - mod_security.x86_64
+  - mod_security-mlogc.x86_64
+  - mod_security_crs.noarch
+
+
+

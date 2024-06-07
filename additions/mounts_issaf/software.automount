@@ -1,0 +1,11 @@
+[Unit]
+Description=Mount NFS /software
+
+[Automount]
+Where=/software
+DirectoryMode=0777
+##TimeoutSec=0
+
+[Install]
+WantedBy=multi-user.target
+

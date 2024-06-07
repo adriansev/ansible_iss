@@ -1,0 +1,3 @@
+---
+copy_list_exclusive:
+  - { src: '/etc/slurm/', dst: '/etc/slurm/' }

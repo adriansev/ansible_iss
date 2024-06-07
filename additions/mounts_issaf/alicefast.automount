@@ -1,0 +1,11 @@
+[Unit]
+Description=AutoMount /fastdata/users to /alicefast
+
+[Automount]
+Where=/alicefast
+DirectoryMode=2775
+##TimeoutSec=0
+
+[Install]
+WantedBy=multi-user.target
+

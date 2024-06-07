@@ -1,0 +1,13 @@
+[Unit]
+Description=Mount /data/data to /alice
+RequiresMountsFor=/data
+
+[Mount]
+What=/data/data
+Where=/alice
+Type=none
+Options=bind,nofail,errors=continue
+DirectoryMode=2775
+
+[Install]
+WantedBy=multi-user.target
