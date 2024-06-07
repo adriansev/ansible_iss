@@ -10,4 +10,5 @@
     loop_control:
       loop_var: task_item
     with_items:
+      - "tasks/pkg_alibuild_task.yml"
       - "tasks/packages_task.yml"

@@ -24,7 +24,6 @@
       - "{{ playbook_dir }}/../additions/root_tuning_list/tuning_generic.yml"
       - "{{ playbook_dir }}/../additions/users_issaf/user_group_info.yml"
       - "{{ playbook_dir }}/../additions/users_issaf/delete_users_groups.yml"
-      - "{{ playbook_dir }}/../additions/packages_sets/packages_issaf.yml"
 
   tasks:
   - ansible.builtin.include_tasks:
@@ -58,7 +57,4 @@
       - "tasks/tune_sysctl_task.yml"
       - "tasks/tune_scripts_task.yml"
       - "tasks/pkg_utils_task.yml"
-      - "tasks/packages_task.yml"
-      - "tasks/pkg_alibuild_task.yml"
-
-###      - "tasks/cfg_gmond_alien.yml"
+      - "tasks/cfg_gmond_issaf.yml"

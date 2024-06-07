@@ -53,6 +53,5 @@
       - "tasks/tune_sysctl_task.yml"
       - "tasks/tune_scripts_task.yml"
       - "tasks/pkg_utils_task.yml"
+      - "tasks/cfg_gmond_alien.yml"
 
-
-###      - "tasks/cfg_gmond_alien.yml"
