@@ -41,6 +41,7 @@ package_list:
   - boost1.78-devel
   - boost1.78-b2.x86_64
   - boost1.78-build.noarch
+  - swig.x86_64
   - readline.x86_64
   - readline-devel.x86_64
   - re2.x86_64
