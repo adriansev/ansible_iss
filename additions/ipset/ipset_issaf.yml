@@ -44,10 +44,9 @@ ipset_tables:
     - "2001:b30:4210::/48,udp:3401"
     - "2001:1458:300::/46,udp:3401"
     - "2001:1459:300::/46,udp:3401"
- - accept_port_tcp:
+  - accept_port_tcp:
     - "80"
     - "443"
     - "60000"
- - accept_port_udp:
-
+  - accept_port_udp:
 
