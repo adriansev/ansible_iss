@@ -93,4 +93,5 @@
       - "tasks/tune_sysctl_task.yml"
       - "tasks/tune_scripts_task.yml"
       - "tasks/cfg_gmond_issaf.yml"
+      - "tasks/wn_prepare_issaf_task.yml"
 

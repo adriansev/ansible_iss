@@ -230,6 +230,7 @@ package_list:
   - tbb.x86_64
   - tbb-devel.x86_64
   - python3-tbb.x86_64
+  - root
   - root-cli.noarch
   - root-cling.x86_64
   - root-core.x86_64

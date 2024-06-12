@@ -1,0 +1,21 @@
+---
+- name: Disable un-needed timers
+  ansible.builtin.systemd_service:
+    name: "{{ _timer_disable }}"
+    state: stopped
+    enabled: false
+  loop_control:
+    loop_var: _timer_disable
+  loop:
+    - "dnf-makecache.timer"
+#    - "mlocate-updatedb.timer"
+
+- name: Create system directories
+  ansible.builtin.file:
+    path: "{{ sys_dir }}"
+    state: directory
+    mode: '1777'
+  loop_control:
+    loop_var: sys_dir
+  loop:
+    - /scratch

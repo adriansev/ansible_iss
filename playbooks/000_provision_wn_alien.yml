@@ -68,8 +68,8 @@
       - "tasks/cfg_slurm22_task.yml"
       - "tasks/tune_sysctl_task.yml"
       - "tasks/tune_scripts_task.yml"
-      - "tasks/alice_wn_prepare_task.yml"
+      - "tasks/wn_prepare_alice_task.yml"
       - "tasks/users_task.yml"
-      - "tasks/alice_wn_prepare_aliprod_task.yml"
+      - "tasks/wn_prepare_alice_aliprod_task.yml"
       - "tasks/cfg_linger4user_task.yml"
 
