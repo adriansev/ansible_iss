@@ -141,6 +141,14 @@ package_list:
   - glibc-devel.x86_64
   - glibc-utils.x86_64
   - glibc-minimal-langpack.x86_64
+  - python3-clang.x86_64
+  - clang.x86_64
+  - clang-libs.x86_64
+  - clang-devel.x86_64
+  - clang-tools-extra.x86_64
+  - clang-analyzer.noarch
+  - git-clang-format.x86_64
+  - libomp.x86_64
   - gcc.x86_64
   - gcc-c++.x86_64
   - gcc-gfortran.x86_64
