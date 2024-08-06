@@ -1,7 +1,7 @@
 ---
 - name: Configure sshd ISS
   ansible.builtin.copy:
-    src: "{{ playbook_dir }}/../additions/ssh/90-issgeneric.conf"
+    src: "{{ playbook_dir }}/../additions/ssh/00-issgeneric.conf"
     dest: /etc/ssh/sshd_config.d/
     mode: 0600
     owner: root

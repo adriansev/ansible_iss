@@ -25,7 +25,7 @@
     profile: iss
 
   vars_files:
-      - "{{ playbook_dir }}/../additions/ipset/ipset_wn_alien.yml"
+      - "{{ playbook_dir }}/../additions/ipset/ipset_alien_wn.yml"
       - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_alien_wn.yml"
       - "{{ playbook_dir }}/../additions/sysctl_lists/sysctl_generic.yml"
       - "{{ playbook_dir }}/../additions/root_tuning_list/tuning_generic.yml"

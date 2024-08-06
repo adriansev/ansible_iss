@@ -9,6 +9,7 @@
   loop:
     - "dnf-makecache.timer"
     - "mlocate-updatedb.timer"
+  ignore_errors: true
 
 - name: Create system directories
   ansible.builtin.file:
