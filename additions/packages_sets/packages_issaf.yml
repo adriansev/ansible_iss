@@ -307,13 +307,16 @@ package_list:
   - root-montecarlo-pythia8.x86_64
   - root-multiproc.x86_64
   - root-net.x86_64
+  - root-netx.x86_64
   - root-net-auth.x86_64
   - root-net-davix.x86_64
   - root-net-http.x86_64
   - root-net-httpsniff.x86_64
-  - root-notebook.noarch
+  - root-net-rpdutils.x86_64
   - root-physics.x86_64
   - root-quadp.x86_64
+  - root-r.x86_64
+  - root-r-tools.x86_64
   - root-roofit.x86_64
   - root-roofit-batchcompute.x86_64
   - root-roofit-core.x86_64
@@ -349,8 +352,7 @@ package_list:
   - root-vecops.x86_64
   - root-xroofit.x86_64
   - python3-root.x86_64
-  - python3-jupyroot.x86_64
-
+  - python3-jupyroot.noarch
 
 
 
