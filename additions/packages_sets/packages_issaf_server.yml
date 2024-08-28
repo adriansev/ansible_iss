@@ -1,5 +1,7 @@
 ---
 package_list:
+  - python3-clustershell.noarch
+  - clustershell.noarch
   - dnsmasq.x86_64
   - dnsmasq-utils.x86_64
   - mariadb-server.x86_64

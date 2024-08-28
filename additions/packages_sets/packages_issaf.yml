@@ -124,6 +124,7 @@ package_list:
   - gfal2-util-scripts
   - python3-gfal2
   - python3-gfal2-util
+  - astyle.x86_64
   - make
   - automake
   - imake
@@ -152,6 +153,7 @@ package_list:
   - gcc.x86_64
   - gcc-c++.x86_64
   - gcc-gfortran.x86_64
+  - f2c.x86_64
   - libstdc++.x86_64
   - libstdc++-devel.x86_64
   - gdb.x86_64
@@ -314,6 +316,10 @@ package_list:
   - root-net-httpsniff.x86_64
   - root-net-rpdutils.x86_64
   - root-physics.x86_64
+  - root-proof.x86_64
+  - root-proof-bench.x86_64
+  - root-proof-player.x86_64
+  - root-proof-sessionviewer.x86_64
   - root-quadp.x86_64
   - root-r.x86_64
   - root-r-tools.x86_64
@@ -347,6 +353,8 @@ package_list:
   - root-tree-player.x86_64
   - root-tree-viewer.x86_64
   - root-tree-webviewer.x86_64
+  - root-tmva-sofie.x86_64
+  - root-tmva-sofie-parser.x86_64
   - root-unfold.x86_64
   - root-unuran.x86_64
   - root-vecops.x86_64
