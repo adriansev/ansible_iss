@@ -3,7 +3,7 @@
 
 - name: Install EOS packages EL7
   ansible.builtin.yum:
-    name: [ 'eos-server', 'eos-client', 'eos-xrootd', 'jemalloc' ]
+    name: [ 'eos-server', 'eos-client', 'jemalloc' ]
     state: present
     enablerepo: "eos-diopside, eos-diopside-dep"
   tags: present
@@ -11,7 +11,7 @@
 
 - name: Install EOS packages EL9
   ansible.builtin.dnf:
-    name: [ 'eos-server', 'eos-client', 'eos-xrootd', 'jemalloc' ]
+    name: [ 'eos-server', 'eos-client', 'jemalloc' ]
     state: present
     enablerepo: "eos-diopside, eos-diopside-dep"
   tags: packages
@@ -19,7 +19,7 @@
 
 - name: Install EOS packages Fedora
   ansible.builtin.dnf:
-    name: [ 'eos-server', 'eos-client', 'eos-xrootd', 'jemalloc' ]
+    name: [ 'eos-server', 'eos-client', 'jemalloc' ]
     state: present
     enablerepo: "eos-diopside, eos-diopside-dep"
   tags: packages
