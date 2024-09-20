@@ -13,3 +13,5 @@ inventory.json
 additions_work/**
 additions/users_alien/*.yml
 additions/users_issaf/*.yml
+additions/seagate_seachest/bin/**
+

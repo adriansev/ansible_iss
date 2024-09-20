@@ -1,0 +1,32 @@
+---
+- hosts: "{{ target | default('storages') }}"
+  gather_facts: False
+
+  vars:
+    mdraid_is_enabled: "yes"
+    mdraid_check_type: "check"
+    mdraid_check_devs: "\"\""
+    mdraid_repair_devs: "\"\""
+    mdraid_skip_devs: "\"\""
+    mdraid_max_concurrent: ""
+    mdraid_check_time_cron: "0 0 1 * *"
+    mdraid_check_time_systemd: "*-*-01 00:00:00"
+
+
+
+
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/00basic_tools.yml"
+      - "tasks/00storage_tools.yml"
+      - "tasks/mdraid_cli.yml"
+      - "tasks/mdraid_conf_task.yml"
+      - "tasks/seatools_sync.yml"
+
+
+

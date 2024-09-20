@@ -1,0 +1,17 @@
+---
+- hosts: "{{ target }}"
+  gather_facts: False
+  vars:
+    users_create_home: true
+
+  vars_files:
+      - "{{ playbook_dir }}/../additions/users_eos/user_group_info.yml"
+      - "{{ playbook_dir }}/../additions/users_eos/delete_users_groups.yml"
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/users_task.yml"

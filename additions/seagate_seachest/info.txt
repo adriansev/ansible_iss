@@ -1,0 +1,9 @@
+https://www.seagate.com/gb/en/support/downloads/
+
+https://www.seagate.com/gb/en/support/software/seachest/
+
+https://www.seagate.com/content/dam/seagate/migrated-assets/old-support-files/seachest/SeaChestUtilities.zip
+
+https://www.seagate.com/gb/en/support/downloads/firmware/
+
+https://raw.githubusercontent.com/Seagate/ToolBin/refs/heads/master/SeaChest/seachestupdate.json

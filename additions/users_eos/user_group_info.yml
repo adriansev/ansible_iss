@@ -1,0 +1,12 @@
+---
+group_details:
+  - { name: 'ops', gid: 1000 }
+  - { name: 'dteam', gid: 1001 }
+  - { name: 'alice', gid: 1395 }
+  - { name: 'eosnobody', gid: 10368 }
+
+user_details:
+  - { name: 'ops', group: 'ops', uid: 1000, gid: 1000, shell: '/bin/bash', home: '/home/ops', groups: [], hash: '$6$0iiBgZYIBIpArb9Y$qYSUAk2mPdiIfgQcYGNLl9tX8uBDlCDk0/jQAINVzw/QnaMb0x5KWuVNNW5cP1J8H1yeeITYPNFRs6gdfrzCT/' }
+  - { name: 'dteam', group: 'dteam', uid: 1001, gid: 1001, shell: '/bin/bash', home: '/home/dteam', groups: [], hash: '$6$wnG.9ni.o6RZTgpo$LgvAtYvUzxM9F0ljNivCq3/8MHJHr.wFKngCWKIJz/oeFHFkj54VZRW1.M.LU8crc0wYGdhAW9l5gv7k5elGk/' }
+  - { name: 'aliprod', group: 'alice', uid: 10367, gid: 1395, shell: '/bin/bash', home: '/home/aliprod', groups: [], hash: '$6$Vs7JFwohUxvX4rQl$RkAhPEIO1J3jBlaa1wjaWVUJcutCtUG5hltysH6a7qLbM7xi8jGHb3yvoWrggoHqWr2wirimhEIP8FGXMLWhH/' }
+  - { name: 'eosnobody', group: 'eosnobody', uid: 10368, gid: 10368, shell: '/bin/bash', home: '/home/eosnobody', groups: [], hash: '!' }

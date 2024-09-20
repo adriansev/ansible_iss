@@ -35,6 +35,7 @@
     executable: pip3
     name:
       - sasutils
+      - rich
     extra_args: --user
     state: latest
 
