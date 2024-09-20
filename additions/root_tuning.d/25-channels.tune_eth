@@ -1,22 +1,35 @@
 #!/usr/bin/env bash
 
-CHANNELS_INFO=$( ${ETHTOOL} -l ${1} 2>/dev/null || { echo "Channels not supported for ${1}"; exit 0; } )
+CHANNELS_INFO=$( ethtool -l ${1} 2>/dev/null || { echo "Channels not supported for ${1}"; exit 0; } )
 
 echo "$(basename ${0} .tune_eth) - START"
 
-## settng of maximum number of channels
-ETH_MAX_CHANNELS=$( echo "${CHANNELS_INFO}" | ${GREP} -A 4 Pre-set | ${TAIL} -n +2 | ${SED} 's/:/=\"/;s/ /_/; s/\t//g;s/ //g; s/$/\"/g' )
+## setting of maximum number of channels
+ETH_MAX_CHANNELS=$( echo "${CHANNELS_INFO}" | grep -A 4 Pre-set | tail -n +2 | sed 's/:/=\"/;s/ /_/; s/\t//g;s/ //g; s/$/\"/g' )
+ETH_CUR_CHANNELS=$( echo "${CHANNELS_INFO}" | grep -A 4 Current | tail -n +2 | sed 's/:/=\"/;s/ /_/; s/\t//g;s/ //g; s/$/\"/g' )
 
-if [[ -n "${ETH_MAX_CHANNELS}" ]]; then
-    eval "${ETH_MAX_CHANNELS}"
-    [[ "${RX}" == "n/a" ]] && RX="0"
-    [[ "${TX}" == "n/a" ]] && TX="0"
-    [[ "${Other}" == "n/a" ]] && Other="0"
-    [[ "${Combined}" == "n/a" ]] && Combined="0"
-    ${ETHTOOL} -L ${1} rx 0 tx 0 other ${Other} combined "${Combined}"
-else
-    echo "Channels presets info emtpy for ${1}!";
-fi
+[[ -z ${ETH_MAX_CHANNELS} ]] && { echo "MAX Info Channels empty for ${1}"; exit 0; }
+[[ -z ${ETH_CUR_CHANNELS} ]] && { echo "CUR Info Channels empty for ${1}"; exit 0; }
+
+eval "${ETH_MAX_CHANNELS}"
+RX_MAX="${RX}"
+TX_MAX="${TX}"
+Other_MAX="${Other}"
+Combined_MAX="${Combined}"
+
+eval "${ETH_CUR_CHANNELS}"
+RX_CUR="${RX}"
+TX_CUR="${TX}"
+Other_CUR="${Other}"
+Combined_CUR="${Combined}"
+
+ARGS=""
+[[ "${RX_MAX}" != "n/a"       && "${RX_MAX}" != "0"       && "${RX_MAX}" != "${RX_CUR}" ]] && ARGS="${ARGS} rx ${RX}"
+[[ "${TX_MAX}" != "n/a"       && "${TX_MAX}" != "0"       && "${TX_MAX}" != "${TX_CUR}" ]] && ARGS="${ARGS} tx ${TX}"
+[[ "${Other_MAX}" != "n/a"    && "${Other_MAX}" != "0"    && "${Other_MAX}" != "${Other_CUR}" ]] && ARGS="${ARGS} other ${Other}"
+[[ "${Combined_MAX}" != "n/a" && "${Combined_MAX}" != "0" && "${Combined_MAX}" != "${Combined_CUR}" ]] && ARGS="${ARGS} combined ${Combined}"
+
+[[ -n "${ARGS}" ]] && ethtool -L ${1} ${ARGS}
 
 echo "$(basename ${0} .tune_eth) - END"
 

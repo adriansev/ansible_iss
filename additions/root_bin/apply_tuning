@@ -2,32 +2,20 @@
 
 exec >/root/tuning.log 2>&1
 
-export ETHTOOL="/usr/sbin/ethtool"
-export GREP="/usr/bin/grep"
-export IP="/usr/sbin/ip"
-export AWK="/usr/bin/awk"
-export TC="/usr/sbin/tc"
-export NMCLI="/usr/bin/nmcli"
-export TAIL="/usr/bin/tail"
-export SED="/usr/bin/sed"
-export FIND="/usr/bin/find"
-
 enable_if_present () {
     local eth tunable is_present
     eth="${1}"
     tunable="${2}"
-    is_present=$(${ETHTOOL} -k ${eth} | ${GREP} ${tunable} | ${GREP} -v fixed)
-    [[ -n "${is_present}" ]] && ${ETHTOOL} -K "${eth}" "${tunable}" on
+    is_present=$(ethtool -k ${eth} | grep ${tunable} | grep -v fixed)
+    [[ -n "${is_present}" ]] && ethtool -K "${eth}" "${tunable}" on
     }
-
 
 TUNING_DIR="/root/tuning.d"
 
 # Apply generic (non-eth related) tuning
-for TUNE in $(${FIND} ${TUNING_DIR} -name '*.tune' | sort); do ${TUNE}; done
+for TUNE in $(find ${TUNING_DIR} -name '*.tune' | sort); do ${TUNE}; done
 
 # Apply network (on eth device) tuning
-## eth_list=$(${IP} -o -d link show | ${AWK} -F': ' '/state UP/ && !/802.1Q/ {print $2}')
 eth_list=$(for eth_path in $(find /sys/class/net -type l); do [[ -n $(grep virtual <<< $(realpath ${eth_path})) ]] && continue; [[ $(< ${eth_path}/operstate) == "down" ]] && continue; echo $(basename ${eth_path}); done)
 
 for ETH_TUNE in $(find ${TUNING_DIR} -name '*.tune_eth' | sort); do

@@ -3,8 +3,8 @@
 echo "$(basename ${0} .tune_eth) - START"
 
 # GENERAL SETTIG OF MTU
-for int in $(${NMCLI} -t con show --active | ${AWK} -F: '{print $2}'); do
-    ${NMCLI} connection modify ${int} 802-3-ethernet.mtu 9000
+for int in $(nmcli -f NAME,UUID,TYPE,DEVICE -t con show --active | awk -F: '/ethernet/{print $2}'); do
+    nmcli connection modify ${int} 802-3-ethernet.mtu 9000
 done
 
 echo "$(basename ${0} .tune_eth) - END"

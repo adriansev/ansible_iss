@@ -1,19 +1,35 @@
 #!/usr/bin/env bash
 
-RING_INFO=$( ${ETHTOOL} -g ${1} 2>/dev/null || { echo "Ring setting is not supported for ${1}" ; exit 0; } )
+RING_INFO=$( ethtool -g ${1} 2>/dev/null || { echo "Ring setting is not supported for ${1}" ; exit 0; } )
 
 echo "$(basename ${0} .tune_eth) - START"
 
-## settng of maximum ring size
-eval $(echo "${RING_INFO}" | ${GREP} -A4 'Pre-set maximum' | ${TAIL} -n +2 | ${AWK} '{gsub(" |\t", "", $0); gsub(":", "=", $0); print;}') #'
+## setting of maximum ring size
+ETH_MAX_RINGSZ=$( echo "${RING_INFO}" | grep -A 4 Pre-set | tail -n +2 | sed 's/:/=\"/;s/ /_/; s/\t//g;s/ //g; s/$/\"/g' )
+ETH_CUR_RINGSZ=$( echo "${RING_INFO}" | grep -A 4 Current | tail -n +2 | sed 's/:/=\"/;s/ /_/; s/\t//g;s/ //g; s/$/\"/g' )
+
+[[ -z ${ETH_MAX_RINGSZ} ]] && { echo "MAX Ring size Info empty for ${1}"; exit 0; }
+[[ -z ${ETH_CUR_RINGSZ} ]] && { echo "CUR Ring size Info empty for ${1}"; exit 0; }
+
+eval "${ETH_MAX_RINGSZ}"
+RX_MAX="${RX}"
+RXMINI_MAX="${RX_Mini}"
+RXJUMBO_MAX="${RX_Jumbo}"
+TX_MAX="${TX}"
+
+eval "${ETH_CUR_RINGSZ}"
+RX_CUR="${RX}"
+RXMINI_CUR="${RX_Mini}"
+RXJUMBO_CUR="${RX_Jumbo}"
+TX_CUR="${TX}"
 
 ARGS=""
-[[ "${RX}" != "n/a" ]] && ARGS="rx ${RX}"
-[[ "${RXMini}" != "n/a" ]] && ARGS="${ARGS} rx-mini ${RXMini}"
-[[ "${RXJumbo}" != "n/a" ]] && ARGS="${ARGS} rx-jumbo ${RXJumbo}"
-[[ "${TX}" != "n/a" ]] && ARGS="${ARGS} tx ${TX}"
+[[ "${RX_MAX}" != "n/a"      && "${RX_MAX}" != "0"      && "${RX_MAX}" != "${RX_CUR}" ]] && ARGS="${ARGS} rx ${RX_MAX}"
+[[ "${RXMINI_MAX}" != "n/a"  && "${RXMINI_MAX}" != "0"  && "${RXMINI_MAX}" != "${RXMINI_CUR}" ]] && ARGS="${ARGS} rx-mini ${RXMINI_MAX}"
+[[ "${RXJUMBO_MAX}" != "n/a" && "${RXJUMBO_MAX}" != "0" && "${RXJUMBO_MAX}" != "${RXJUMBO_CUR}" ]] && ARGS="${ARGS} rx-jumbo ${RXJUMBO_MAX}"
+[[ "${TX_MAX}" != "n/a"      && "${TX_MAX}" != "0"      && "${TX_MAX}" != "${TX_CUR}" ]] && ARGS="${ARGS} tx ${TX_MAX}"
 
-${ETHTOOL} -G ${1} ${ARGS} &> /dev/null
+[[ -n "${ARGS}" ]] && ethtool -G ${1} ${ARGS}
 
 echo "$(basename ${0} .tune_eth) - END"
 
