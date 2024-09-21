@@ -3,17 +3,40 @@
   ansible.builtin.copy:
     dest: /etc/
     src: "{{ playbook_dir }}/../additions/eos_setup/{{ eos_common_files }}"
-    owner: root
-    group: root
-    mode: '0600'
+    owner: daemon
+    group: daemon
+    mode: '0400'
     force: true
   loop_control:
     loop_var: eos_common_files
   with_items:
+    - quarkdb.pass
     - eos.keytab
     - xrd.cf.fst
     - xrd.cf.mgm
     - xrd.cf.mq
+    - xrd.cf.quarkdb0
+
+- name: mkdir EOS directories
+  ansible.builtin.file:
+    owner: daemon
+    group: daemon
+    mode: '0755'
+    recurse: true
+    state: directory
+    path : "{{ eos_common_dirs }}"
+  loop_control:
+    loop_var: eos_common_dirs
+  with_items:
+    - /var/eos/md
+    - /var/eos/report
+    - /var/eos/auth
+    - /var/eos/stage
+    - /var/spool/eos/admin
+    - /var/spool/eos/core/mgm
+    - /var/spool/eos/core/mq
+    - /var/spool/eos/core/fst
+    - /var/log/eos
 
 - name: eos_env configuration
   ansible.builtin.template:

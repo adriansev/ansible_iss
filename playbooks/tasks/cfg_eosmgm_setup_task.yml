@@ -1,0 +1,39 @@
+---
+- name: mkdir /etc/systemd/system/xrootd@quarkdb0.service.d
+  ansible.builtin.file:
+    path: /etc/systemd/system/xrootd@quarkdb0.service.d
+    state: directory
+
+- name: QuarkDB service customization
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/eos_setup/xrootd@quarkdb0.service.d/custom.conf"
+    dest: /etc/systemd/system/xrootd@quarkdb0.service.d/
+    owner: root
+    group: root
+    mode: '0600'
+    force: true
+
+- name: QuarkDB configuration
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/eos_setup/xrd.cf.quarkdb0.j2"
+    dest: /etc/xrd.cf.quarkdb0
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+
+- name: mkdir EOS directories
+  ansible.builtin.file:
+    owner: daemon
+    group: daemon
+    mode: '0755'
+    recurse: true
+    state: directory
+    path : "{{ qdb_common_dirs }}"
+  loop_control:
+    loop_var: qdb_common_dirs
+  with_items:
+    - /var/log/quarkdb
+    - /var/spool/quarkdb
+    - /var/lib/quarkdb
+

@@ -4,6 +4,6 @@ if exec xrootd
   redis.mode raft
   redis.database /var/lib/quarkdb/qdb0
   redis.password_file /etc/quarkdb.pass
-  redis.myself mgm2.spacescience.ro:7000
+  redis.myself {{ ansible_fqdn }}:7000
 fi
 

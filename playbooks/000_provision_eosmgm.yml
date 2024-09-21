@@ -3,11 +3,19 @@
   vars:
     chrony_base_ip: "pub85"
 
-    host_src_data_sync: "mgm.spacescience.ro"
-
     profile: iss
 
     _eos_env_roles: "mgm mq"
+
+    mdraid_is_enabled: "yes"
+    mdraid_check_type: "check"
+    mdraid_check_devs: "\"\""
+    mdraid_repair_devs: "\"\""
+    mdraid_skip_devs: "\"\""
+    mdraid_max_concurrent: ""
+    mdraid_check_time_cron: "0 0 1 * *"
+    mdraid_check_time_systemd: "*-*-01 00:00:00"
+
 
   vars_files:
       - "{{ playbook_dir }}/../additions/ipset/ipset_eos.yml"
@@ -23,6 +31,9 @@
     with_items:
       - "tasks/00basic_tools.yml"
       - "tasks/00basic_tools_hw.yml"
+      - "tasks/00storage_tools.yml"
+      - "tasks/mdraid_cli.yml"
+      - "tasks/mdraid_conf_task.yml"
       - "tasks/pkg_kernelml_install_task.yml"
       - "tasks/pkg_igtfca_task.yml"
       - "tasks/pkg_lsc_vomses_task.yml"
@@ -40,6 +51,7 @@
       - "tasks/cfg_gmond_eos.yml"
       - "tasks/pkg_utils_task.yml"
       - "tasks/cfg_eos_setup_task.yml"
+      - "tasks/cfg_eosmgm_setup_task.yml"
 
 
 - name: Install mlsensor
