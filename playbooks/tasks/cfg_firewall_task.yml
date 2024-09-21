@@ -56,7 +56,9 @@
     name: iptables
     state: restarted
     enabled: true
-  when: _iptables_v4_update.changed
+
+# !!!! BETTER ALWAYS RESTART IPTABLES
+#  when: _iptables_v4_update.changed
 
 - name: Iptables v6
   ansible.builtin.template:
@@ -74,5 +76,7 @@
     name: iptables
     state: restarted
     enabled: true
-  when: _iptables_v6_update.changed
+
+# !!!! BETTER ALWAYS RESTART IPTABLES
+#  when: _iptables_v6_update.changed
 

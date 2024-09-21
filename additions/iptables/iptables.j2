@@ -13,21 +13,25 @@
 # REMOVE INVALID FLAGS COMBINATIONS
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 
-# DEFAULT ACCEPT ALL LOCAL SSH
+## WHITELISTING - first accept all what was specified to be accepted
+
+# DEFAULT ACCEPT ALL LOCAL SSH - MANAGEMENT
 -A INPUT -m tcp -p tcp -m multiport --dports 22,60000 -j ACCEPT --source 85.120.46.0/24,46.243.114.128/25
 
-# ACCEPTS WHOLE IP/NET
+# ACCEPTS ALLOWED IPs && NETWORKS
 -A INPUT -m set --match-set accept_net src -j ACCEPT
 -A INPUT -m set --match-set accept_ip  src -j ACCEPT
 
-# ACCEPTS IP/NET TO PORT
+# ACCEPTS ALLOWED IPs && NETWORKS TO PORT
 -A INPUT -m set --match-set accept_port_net src,dst -j ACCEPT
 -A INPUT -m set --match-set accept_port_ip  src,dst -j ACCEPT
+
+## BLACKLISTING
 
 # FAIL2BAN
 -A INPUT -m set --match-set f2b-sshd src -j DROP
 
-# BLACKLISTING
+# BLACKLISTING REQUESTED
 -A INPUT -m set --match-set blacklist_net src -j DROP
 -A INPUT -m set --match-set blacklist_ip  src -j DROP
 

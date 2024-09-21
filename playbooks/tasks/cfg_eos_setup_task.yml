@@ -15,7 +15,6 @@
     - xrd.cf.fst
     - xrd.cf.mgm
     - xrd.cf.mq
-    - xrd.cf.quarkdb0
 
 - name: mkdir EOS directories
   ansible.builtin.file:
