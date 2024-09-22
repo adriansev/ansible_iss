@@ -11,15 +11,16 @@ CHUNK_SIZE="$(< /sys/devices/virtual/block/${MD}/md/chunk_size)"
 TOTAL_DISKS="$(< /sys/devices/virtual/block/${MD}/md/raid_disks)"
 LEVEL="$(< /sys/devices/virtual/block/${MD}/md/level)"
 
+EXTENDED_OPTIONS="-E lazy_itable_init=0,lazy_journal_init=0"
 if [[ "${LEVEL}" == "raid6" ]]; then
   STRIDE=$(echo "scale=0; ${CHUNK_SIZE}/${BLOCK_SIZE}" | bc -l )
   DATA_DISKS=$(echo "scale=0; ${TOTAL_DISKS} - 2" | bc -l )
   STRIPE=$(echo "scale=0; ${DATA_DISKS} * ${STRIDE}" | bc -l )
-  RAID_OPTS="-E stride=${STRIDE},stripe-width=${STRIPE}"
+  RAID_OPTS="${EXTENDED_OPTIONS},stride=${STRIDE},stripe-width=${STRIPE}"
 fi
 
-echo parted -s -a optimal /dev/${MD} mklabel gpt
-echo parted -s -a optimal /dev/${MD} mkpart ${MD} 0% 100%
-echo mkfs.ext4 -L ${MD} -b "${BLOCK_SIZE}" ${RAID_OPTS} "/dev/${MD}p1"
-
-
+echo "
+parted -s -a optimal /dev/${MD} mklabel gpt
+parted -s -a optimal /dev/${MD} mkpart ${MD} 0% 100%
+mkfs.ext4 -L ${MD} -b "${BLOCK_SIZE}" ${EXTENDED_OPTIONS} /dev/${MD}p1
+"

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+BEGIN="${1}"
+END="${2}"
+
+list_storage | grep Slot | grep -v EncID | sed -n "${BEGIN},${END}p;$((END++))q" | awk '{printf "/dev/%s ", $3;}END{print "\n"}'
+
+
