@@ -56,6 +56,15 @@ if [[ -d /sys/devices/virtual/block ]]; then
 for mdev in $(ls -1 /sys/devices/virtual/block); do
     MDPATH="/sys/devices/virtual/block/${mdev}"
 
+    DEGRADED="$(< ${MDPATH}/md/degraded)"
+    STATE="$(< ${MDPATH}/md/array_state)"
+    SYNC="$(< ${MDPATH}/md/sync_action)"
+
+    # for any state other than a full working array, skip this array
+    [[ "${DEGRADED}" != "0" ]] && continue
+    [[ "${STATE}" != "clean" ]] && continue
+    [[ "${SYNC}" != "idle" ]] && continue
+
     TYPE="$(< ${MDPATH}/md/level)"
     NR_DISKS="$(< ${MDPATH}/md/raid_disks)"
     NR_DISKS_DATA="${NR_DISKS}"
