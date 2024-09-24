@@ -20,21 +20,56 @@
   ansible.builtin.file:
     owner: daemon
     group: daemon
-    mode: '0755'
+    mode: 'u=rwX,g=rwX,o=rX'
     recurse: true
     state: directory
     path : "{{ eos_common_dirs }}"
   loop_control:
     loop_var: eos_common_dirs
   with_items:
-    - /var/eos/md
-    - /var/eos/report
+    - /var/eos
     - /var/eos/auth
+    - /var/eos/html
+    - /var/eos/fst
+    - /var/eos/md
+    - /var/eos/mgm
+    - /var/eos/mq
+    - /var/eos/ns-queue
+    - /var/eos/qos
+    - /var/eos/report
     - /var/eos/stage
+    - /var/eos/wfe
+    - /var/spool/eos
     - /var/spool/eos/admin
     - /var/spool/eos/core/mgm
     - /var/spool/eos/core/mq
     - /var/spool/eos/core/fst
+    - /var/log/eos
+
+- name: EOS default acl permissions
+  ansible.posix.acl:
+    path: "{{ eos_common_dirs_def_acl }}"
+    entity: daemon
+    etype: user
+    permissions: rw
+    state: present
+    default: true
+  loop_control:
+    loop_var: eos_common_dirs_def_acl
+  with_items:
+    - /var/eos
+    - /var/eos/auth
+    - /var/eos/html
+    - /var/eos/fst
+    - /var/eos/md
+    - /var/eos/mgm
+    - /var/eos/mq
+    - /var/eos/ns-queue
+    - /var/eos/qos
+    - /var/eos/report
+    - /var/eos/stage
+    - /var/eos/wfe
+    - /var/spool/eos
     - /var/log/eos
 
 - name: eos_env configuration

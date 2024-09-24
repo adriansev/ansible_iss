@@ -26,7 +26,7 @@
   ansible.builtin.file:
     owner: daemon
     group: daemon
-    mode: '0755'
+    mode: 'u=rwX,g=rwX,o=rX'
     recurse: true
     state: directory
     path : "{{ qdb_common_dirs }}"
