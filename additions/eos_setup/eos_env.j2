@@ -109,7 +109,7 @@ EOS_USE_SHARED_MUTEX=1
 EOS_FST_NO_SSS_ENFORCEMENT=1
 
 # Network interface to monitor (default eth0)
-EOS_FST_NETWORK_INTERFACE="eno1"
+EOS_FST_NETWORK_INTERFACE="{{ ansible_default_ipv4["interface"] }}"
 
 # Specify in seconds how often FSTs should query for new delete operations
 EOS_FST_DELETE_QUERY_INTERVAL=300
