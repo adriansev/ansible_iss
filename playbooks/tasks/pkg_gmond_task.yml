@@ -13,6 +13,11 @@
     update_cache: false
   when: ( ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9' ) or ansible_facts[ 'distribution' ] == 'Fedora'
 
+- name: Gmond customize systemd unit - create dir
+  ansible.builtin.file:
+    path: /etc/systemd/system/gmond.service.d/
+    state: directory
+
 - name: Gmond customize systemd unit
   ansible.builtin.copy:
     dest: /etc/systemd/system/gmond.service.d/
