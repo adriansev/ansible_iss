@@ -1,0 +1,15 @@
+---
+- hosts: "{{ target }}"
+
+  tasks:
+  - name: "Dump ansible_facts"
+    debug:
+      msg: "{{ ansible_facts | to_nice_json }}"
+
+  - name: "Dump ansible_facts"
+    delegate_to: localhost
+    run_once: true
+    copy:
+        content: "{{ ansible_facts | to_nice_json }}"
+        dest: "/home/adrian/ansible/{{ inventory_hostname }}-dump.json"
+
