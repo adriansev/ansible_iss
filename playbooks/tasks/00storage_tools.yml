@@ -1,14 +1,14 @@
 ---
 - name: Install hardware monitoring tools on hardware machines (not vms) - Centos
   ansible.builtin.yum:
-    name: [ 'ledmon', 'lsscsi', 'sasutils', 'sdparm', 'sg3_utils', 'smp_utils' ]
+    name: [ledmon, lsscsi, sasutils, sdparm, sg3_utils, smp_utils]
     state: present
     update_cache: false
   when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - EL9
   ansible.builtin.dnf:
-    name: [ 'ledmon', 'lsscsi', 'sasutils', 'sdparm', 'sg3_utils', 'smp_utils' ]
+    name: [ledmon, lsscsi, sasutils, sdparm, sg3_utils, smp_utils]
     state: present
     update_cache: false
   when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
@@ -19,30 +19,29 @@
     src: "{{ playbook_dir }}/../{{ item }}"
     owner: root
     group: root
-    mode: '0700'
+    mode: "0700"
     force: true
   with_items:
-    - "additions/broadcom_net/bnxtnvm"
-    - "additions/broadcom_sas/lsigetlinux.sh"
-    - "additions/broadcom_sas/sas2ircu"
-    - "additions/broadcom_sas/sas3flash"
-    - "additions/broadcom_sas/sas3ircu"
-    - "additions/broadcom_sas/storcli"
-    - "additions/broadcom_sas/storcliconf.ini"
-    - "additions/seagate_seachest/bin/seachest_configure"
-    - "additions/seagate_seachest/bin/seachest_powercontrol"
-    - "additions/seagate_seachest/bin/seachest_lite"
-    - "additions/seagate_seachest/bin/seachest_reservations"
-    - "additions/seagate_seachest/bin/seachest_erase"
-    - "additions/seagate_seachest/bin/seachest_format"
-    - "additions/seagate_seachest/bin/seachest_basics"
-    - "additions/seagate_seachest/bin/seachest_info"
-    - "additions/seagate_seachest/bin/seachest_smart"
-    - "additions/seagate_seachest/bin/seachest_firmware"
-    - "additions/seagate_seachest/bin/seachest_generictests"
-    - "additions/seagate_seachest/bin/seachest_nvme"
-    - "additions/seagate_seachest/bin/seachest_security"
-
+    - additions/broadcom_net/bnxtnvm
+    - additions/broadcom_sas/lsigetlinux.sh
+    - additions/broadcom_sas/sas2ircu
+    - additions/broadcom_sas/sas3flash
+    - additions/broadcom_sas/sas3ircu
+    - additions/broadcom_sas/storcli
+    - additions/broadcom_sas/storcliconf.ini
+    - additions/seagate_seachest/bin/seachest_configure
+    - additions/seagate_seachest/bin/seachest_powercontrol
+    - additions/seagate_seachest/bin/seachest_lite
+    - additions/seagate_seachest/bin/seachest_reservations
+    - additions/seagate_seachest/bin/seachest_erase
+    - additions/seagate_seachest/bin/seachest_format
+    - additions/seagate_seachest/bin/seachest_basics
+    - additions/seagate_seachest/bin/seachest_info
+    - additions/seagate_seachest/bin/seachest_smart
+    - additions/seagate_seachest/bin/seachest_firmware
+    - additions/seagate_seachest/bin/seachest_generictests
+    - additions/seagate_seachest/bin/seachest_nvme
+    - additions/seagate_seachest/bin/seachest_security
 
 - name: Install from pip the jc module
   ansible.builtin.pip:
@@ -52,4 +51,3 @@
       - rich
     extra_args: --user
     state: present
-

@@ -6,27 +6,27 @@
   ansible.builtin.yum:
     name: [ 'https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm', 'https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-7.noarch.rpm' ]
     state: present
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
   tags: repo
 
 - name: Install rpmfusion repository EL8
   ansible.builtin.dnf:
     name: [ 'https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm', 'https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm' ]
     state: present
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '8'
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '8'
   tags: repo
 
 - name: Install rpmfusion repository Fedora
   ansible.builtin.dnf:
-    name: [ 'https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_distribution_major_version }}.noarch.rpm', 'https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_major_version }}.noarch.rpm' ]
+    name: [ 'https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_facts['distribution_major_version'] }}.noarch.rpm', 'https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_facts['distribution_major_version'] }}.noarch.rpm']
     state: present
-  when: ansible_facts[ 'distribution' ] == 'Fedora'
+  when: ansible_facts['distribution'] == 'Fedora'
   tags: repo
 
 - name: Install rpmfusion tainted repos
   ansible.builtin.yum:
     name: [ 'rpmfusion-free-release-tainted', 'rpmfusion-nonfree-release-tainted' ]
     state: present
-  when: ansible_facts[ 'os_family' ] == 'RedHat'
+  when: ansible_facts['os_family'] == 'RedHat'
   tags: repo
 

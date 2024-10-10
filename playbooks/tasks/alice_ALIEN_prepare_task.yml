@@ -37,4 +37,3 @@
     src: /home/data/scratch
     dest: /scratch
     state: link
-

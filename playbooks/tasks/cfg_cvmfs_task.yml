@@ -1,5 +1,6 @@
 ---
-- include_tasks: pkg_cvmfs_task.yml
+- name: include pkg_cvmfs_task.yml
+  ansible.builtin.include_tasks: pkg_cvmfs_task.yml
 
 - name: Sync auto.master
   ansible.builtin.copy:
@@ -26,7 +27,7 @@
     dest: /etc/cvmfs/default.local
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
     force: true
 
 - name: Set cvmfs cache
@@ -42,10 +43,21 @@
       CVMFS_HTTP_PROXY='{{ cvmfs_proxy_list }}'
 
 - name: create cvmfs cache
-  file: path="{{ cvmfs_cache_base }}" state=directory group=cvmfs owner=cvmfs mode='0700'
+  ansible.builtin.file:
+    path: "{{ cvmfs_cache_base }}"
+    state: directory
+    recurse: true
+    group: cvmfs
+    owner: cvmfs
+    mode: "0700"
 
 - name: create cvmfs cache
-  file: path="{{ cvmfs_cache_base }}/.." state=directory group=cvmfs owner=cvmfs mode='0700'
+  ansible.builtin.file:
+    path: "{{ cvmfs_cache_base }}/.."
+    state: directory
+    group: cvmfs
+    owner: cvmfs
+    mode: "0700"
 
 - name: Configure cvmfs autofs
   ansible.builtin.command: /usr/bin/cvmfs_config setup

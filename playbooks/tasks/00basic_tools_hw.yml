@@ -7,7 +7,6 @@
       - pciutils
       - lshw
       - smartmontools
-      - hddtemp
       - ipmitool
       - nvme-cli
     state: present
@@ -25,7 +24,6 @@
       - pciutils
       - lshw
       - smartmontools
-      - hddtemp
       - ipmitool
       - nvme-cli
     state: present
@@ -34,3 +32,19 @@
   when: install_hwtools_el9 is undefined and ( (ansible_facts['distribution'] == 'AlmaLinux') or (ansible_facts['distribution'] == 'Fedora') )
   tags: packages
 
+- name: Install hardware management and monitoring tools - Ubuntu
+  ansible.builtin.apt:
+    name:
+      - lm-sensors
+      - dmidecode
+      - pciutils
+      - lshw
+      - smartmontools
+      - ipmitool
+      - nvme-cli
+    state: present
+    install_recommends: false
+    update_cache: false
+  register: install_hwtools_ubuntu
+  when: install_hwtools_ubuntu is undefined and ansible_facts['distribution'] == 'Ubuntu'
+  tags: packages

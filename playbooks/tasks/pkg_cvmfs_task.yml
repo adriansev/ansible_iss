@@ -1,9 +1,10 @@
 ---
-- include_tasks: repo_cernvm_task.yml
+- name: include repo_cernvm_task.yml
+  ansible.builtin.include_tasks: repo_cernvm_task.yml
 
 - name: Install CVMFS packages and dependencies
   ansible.builtin.yum:
-    name: [ 'autofs', 'fuse', 'fuse-overlayfs', 'fuse3', 'cvmfs', 'cvmfs-config-default' ]
+    name: [ 'autofs', 'cvmfs', 'cvmfs-config-default' ]
     state: present
     enablerepo: "cernvm,cernvm-config"
     disablerepo: "UMD*"

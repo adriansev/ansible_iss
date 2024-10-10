@@ -5,7 +5,7 @@
     dest: /root/bin/
     owner: root
     group: root
-    mode: '0700'
+    mode: "0700"
     force: true
 
 - name: Sync info script
@@ -14,7 +14,7 @@
     dest: /root/bin/
     owner: root
     group: root
-    mode: '0700'
+    mode: "0700"
     force: true
 
 - name: Sync cron definition
@@ -23,6 +23,5 @@
     dest: /etc/cron.d/areca
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
     force: true
-

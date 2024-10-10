@@ -22,11 +22,10 @@
       - rsync
       - iotop
       - blktrace
-      - bcc-tools
       - ethtool
       - lsof
     state: present
-    update_cache: true
+    update_cache: false
     enablerepo: "epel"
   register: systools_el7
   when: systools_el7 is undefined and ( ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7' )
@@ -54,21 +53,43 @@
       - ipset-service
       - rsync
       - iotop
+      - iotop-c
       - blktrace
-      - bcc-tools
       - ethtool
       - lsof
     state: present
-    update_cache: true
+    update_cache: false
   register: systools_el9
   when: systools_el9 is undefined and ( ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora' )
+  tags: packages
+
+- name: Install system management and monitoring tools - Ubuntu
+  ansible.builtin.apt:
+    name:
+      - coreutils
+      - util-linux
+      - procps
+      - sysstat
+      - cron
+      - iproute2
+      - ipset
+      - ipset-persistent
+      - rsync
+      - iotop-c
+      - blktrace
+      - ethtool
+      - lsof
+    state: present
+    update_cache: false
+  register: systools_ubuntu
+  when: systools_ubuntu is undefined and ansible_facts['distribution'] == 'Ubuntu'
   tags: packages
 
 - name: Create /etc/ipset/ipset.d
   ansible.builtin.file:
     path: /etc/ipset/ipset.d
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Install from pip the jc module
   ansible.builtin.pip:
@@ -78,15 +99,24 @@
     extra_args: --user
     state: present
 
-- name: Enable and start cron
+- name: Enable and start cron - RH like
   ansible.builtin.systemd:
     name: crond
     state: started
     enabled: true
+  when: ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora' or ansible_facts['distribution'] == 'CentOS'
+
+- name: Enable and start cron - Ubuntu
+  ansible.builtin.systemd:
+    name: cron
+    state: started
+    enabled: true
+  when: ansible_facts['distribution'] == 'Ubuntu'
 
 - name: Set ipset to save on restart
   community.general.ini_file:
     path: /etc/sysconfig/ipset-config
+    mode: "0644"
     option: IPSET_SAVE_ON_STOP
     value: "yes"
     state: present
@@ -102,12 +132,12 @@
 - name: User HOME/bin path
   ansible.builtin.copy:
     dest: /etc/profile.d/add_user_paths.sh
-    content: |
-        pathmunge $HOME/bin
-        pathmunge $HOME/.local/bin
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
     backup: false
     force: true
-
+    content: |
+        pathmunge $HOME/bin
+        pathmunge $HOME/.local/bin
+  when: ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora' or ansible_facts['distribution'] == 'CentOS'
