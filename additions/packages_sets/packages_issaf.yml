@@ -37,10 +37,42 @@ package_list:
   - python3-boto3.noarch
 # alien.py
   - python3-websockets
-  - boost1.78
-  - boost1.78-devel
+  - boost1.78.x86_64
+  - boost1.78-devel.x86_64
   - boost1.78-b2.x86_64
   - boost1.78-build.noarch
+  - boost1.78-atomic.x86_64
+  - boost1.78-chrono.x86_64
+  - boost1.78-container.x86_64
+  - boost1.78-context.x86_64
+  - boost1.78-contract.x86_64
+  - boost1.78-coroutine.x86_64
+  - boost1.78-date-time.x86_64
+  - boost1.78-fiber.x86_64
+  - boost1.78-filesystem.x86_64
+  - boost1.78-graph-mpich.x86_64
+  - boost1.78-graph-openmpi.x86_64
+  - boost1.78-graph.x86_64
+  - boost1.78-iostreams.x86_64
+  - boost1.78-json.x86_64
+  - boost1.78-locale.x86_64
+  - boost1.78-log.x86_64
+  - boost1.78-math.x86_64
+  - boost1.78-nowide.x86_64
+  - boost1.78-numpy3.x86_64
+  - boost1.78-program-options.x86_64
+  - boost1.78-python3.x86_64
+  - boost1.78-random.x86_64
+  - boost1.78-regex.x86_64
+  - boost1.78-serialization.x86_64
+  - boost1.78-stacktrace.x86_64
+  - boost1.78-static.x86_64
+  - boost1.78-system.x86_64
+  - boost1.78-test.x86_64
+  - boost1.78-thread.x86_64
+  - boost1.78-timer.x86_64
+  - boost1.78-type_erasure.x86_64
+  - boost1.78-wave.x86_64
   - swig.x86_64
   - readline.x86_64
   - readline-devel.x86_64
@@ -125,6 +157,9 @@ package_list:
   - python3-gfal2
   - python3-gfal2-util
   - astyle.x86_64
+  - binutils.x86_64
+  - binutils-gold.x86_64
+  - mold.x86_64
   - make
   - automake
   - imake
@@ -142,14 +177,45 @@ package_list:
   - glibc-devel.x86_64
   - glibc-utils.x86_64
   - glibc-minimal-langpack.x86_64
-  - python3-clang.x86_64
+  - xsimd-devel.x86_64
+  - llvm.x86_64
+  - lld.x86_64
+  - llvm.x86_64
+  - llvm-devel.x86_64
+  - llvm-libs.x86_64
+  - llvm-toolset.x86_64
   - clang.x86_64
   - clang-libs.x86_64
   - clang-devel.x86_64
   - clang-tools-extra.x86_64
   - clang-analyzer.noarch
   - git-clang-format.x86_64
+  - python3-clang.x86_64
   - libomp.x86_64
+  - gcc-toolset-13.x86_64
+  - gcc-toolset-13-gcc.x86_64
+  - gcc-toolset-13-gcc-c++.x86_64
+  - gcc-toolset-13-gcc-gfortran.x86_64
+  - gcc-toolset-13-gdb.x86_64
+  - gcc-toolset-13-runtime.x86_64
+  - gcc-toolset-13-annobin-annocheck.x86_64
+  - gcc-toolset-13-annobin-plugin-gcc.x86_64
+  - gcc-toolset-13-gcc-plugin-annobin.x86_64
+  - gcc-toolset-13-gcc-plugin-devel.x86_64
+  - gcc-toolset-13-binutils-devel.x86_64
+  - gcc-toolset-13-binutils-gold.x86_64
+  - gcc-toolset-13-binutils.x86_64
+  - gcc-toolset-13-dwz.x86_64
+  - gcc-toolset-13-libasan-devel.x86_64
+  - gcc-toolset-13-libatomic-devel.x86_64
+  - gcc-toolset-13-libgccjit-devel.x86_64
+  - gcc-toolset-13-libgccjit.x86_64
+  - gcc-toolset-13-libitm-devel.x86_64
+  - gcc-toolset-13-liblsan-devel.x86_64
+  - gcc-toolset-13-libquadmath-devel.x86_64
+  - gcc-toolset-13-libstdc++-devel.x86_64
+  - gcc-toolset-13-libtsan-devel.x86_64
+  - gcc-toolset-13-libubsan-devel.x86_64
   - gcc.x86_64
   - gcc-c++.x86_64
   - gcc-gfortran.x86_64
@@ -361,6 +427,5 @@ package_list:
   - root-xroofit.x86_64
   - python3-root.x86_64
   - python3-jupyroot.noarch
-
 
 
