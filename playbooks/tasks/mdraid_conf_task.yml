@@ -1,7 +1,7 @@
 ---
 - name: Raid-check configuration
   ansible.builtin.template:
-    src: "{{ playbook_dir }}/../additions/mdraid/sysconfig_raid-check.j2"
+    src: "{{ playbook_dir }}/../additions/storage_cmds/sysconfig_raid-check.j2"
     dest: /etc/sysconfig/raid-check
     owner: root
     group: root
@@ -10,7 +10,7 @@
 
 - name: Raid-check timing (cron) - EL7
   ansible.builtin.template:
-    src: "{{ playbook_dir }}/../additions/mdraid/cron_raid-check.j2"
+    src: "{{ playbook_dir }}/../additions/storage_cmds/cron_raid-check.j2"
     dest: /etc/cron.d/raid-check
     owner: root
     group: root
@@ -26,7 +26,7 @@
 
 - name: Raid-check timing (systemd) - EL9
   ansible.builtin.template:
-    src: "{{ playbook_dir }}/../additions/mdraid/systemd_raid-check.j2"
+    src: "{{ playbook_dir }}/../additions/storage_cmds/systemd_raid-check.j2"
     dest: /etc/systemd/system/raid-check.timer.d/override.conf
     owner: root
     group: root

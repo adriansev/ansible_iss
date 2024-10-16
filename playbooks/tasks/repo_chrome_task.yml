@@ -1,0 +1,21 @@
+---
+- name: Import GOOGLE key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://dl.google.com/linux/linux_signing_key.pub
+
+- name: GOOGLE Chrome repo install
+  ansible.builtin.yum_repository:
+    name: google-chrome
+    description: google-chrome
+    file: google-chrome
+    baseurl: https://dl.google.com/linux/chrome/rpm/stable/x86_64
+    gpgkey: https://dl.google.com/linux/linux_signing_key.pub
+    gpgcheck: true
+    enabled: true
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  tags: repo
+

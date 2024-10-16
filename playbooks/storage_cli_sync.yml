@@ -2,4 +2,5 @@
 - hosts: "{{ target | default('storages') }}"
   gather_facts: False
   tasks:
-  - include_tasks: tasks/mdraid_cli.yml
+  - include_tasks: tasks/storage_cli.yml
+

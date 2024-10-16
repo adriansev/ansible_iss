@@ -1,0 +1,52 @@
+---
+- name: Include pkg_fail2ban_task.yml
+  ansible.builtin.include_tasks: pkg_fail2ban_task.yml
+
+- name: Fail2ban copy jail confs
+  ansible.builtin.copy:
+    mode: '0644'
+    owner: root
+    group: root
+    backup: false
+    force: true
+    dest: /etc/fail2ban/jail.d/
+    src: "{{ jail_confs }}"
+  loop_control:
+    loop_var: jail_confs
+  with_items:
+    - "{{ playbook_dir }}/../additions/fail2ban/jail.d/01-iss.conf"
+    - "{{ playbook_dir }}/../additions/fail2ban/jail.d/02-sshd.conf"
+
+- name: Fail2ban copy jail defaults
+  ansible.builtin.copy:
+    mode: "0644"
+    owner: root
+    group: root
+    backup: false
+    force: true
+    dest: /etc/fail2ban/fail2ban.d/
+    src: "{{ jail_confs_def }}"
+  loop_control:
+    loop_var: jail_confs_def
+  with_items:
+    - "{{ playbook_dir }}/../additions/fail2ban/fail2ban.d/custom.conf"
+
+- name: Fail2ban copy jail action
+  ansible.builtin.copy:
+    mode: "0644"
+    owner: root
+    group: root
+    backup: false
+    force: true
+    dest: /etc/fail2ban/action.d/
+    src: "{{ jail_confs_actions }}"
+  loop_control:
+    loop_var: jail_confs_actions
+  with_items:
+    - "{{ playbook_dir }}/../additions/fail2ban/action.d/iptables-ipset-iss.conf"
+
+- name: Restart fail2ban
+  ansible.builtin.systemd:
+    name: fail2ban
+    state: restarted
+    enabled: true

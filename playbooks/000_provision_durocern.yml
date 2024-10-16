@@ -1,0 +1,41 @@
+- hosts: "{{ target }}"
+  gather_facts: False
+  vars:
+    cvmfs_default_conf: "single"
+
+    cvmfs_cache_size: "51200"
+    cvmfs_cache_base: "/home/cvmfs/cache"
+    cvmfs_repos: "cvmfs-config.cern.ch,alice.cern.ch,alice-ocdb.cern.ch"
+    cvmfs_proxy_list: "DIRECT"
+
+    chrony_base_ip: "generic"
+
+  vars_files:
+      - "{{ playbook_dir }}/../additions/ipset/ipset_generic.yml"
+      - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_alien_wn.yml"
+      - "{{ playbook_dir }}/../additions/packages_sets/packages_issaf.yml"
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+#      - "tasks/00basic_tools.yml"
+#      - "tasks/00basic_tools_hw.yml"
+#      - "tasks/pkg_kernelml_install_task.yml"
+#      - "tasks/pkg_igtfca_task.yml"
+#      - "tasks/pkg_lsc_vomses_task.yml"
+#      - "tasks/pkg_utils_task.yml"
+#      - "tasks/pkg_alibuild_task.yml"
+#      - "tasks/pkg_chrome_task.yml"
+#      - "tasks/packages_task.yml"
+#      - "tasks/cfg_firewall_task.yml"
+      - "tasks/cfg_fail2ban_task.yml"
+#      - "tasks/cfg_chrony_task.yml"
+#      - "tasks/cfg_ssh_task.yml"
+#      - "tasks/cfg_lmsensors.yml"
+#      - "tasks/cfg_smartd_task.yml"
+#      - "tasks/cfg_lldpd_task.yml"
+#      - "tasks/cfg_cvmfs_task.yml"
+

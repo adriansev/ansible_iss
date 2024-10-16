@@ -1,8 +1,8 @@
 ---
-- name: Sync md tools
+- name: Sync storage tools
   ansible.builtin.copy:
     dest: /root/bin/
-    src: "{{ playbook_dir }}/../additions/mdraid/{{ mdadm_scripts }}"
+    src: "{{ playbook_dir }}/../additions/storage_cmds/{{ mdadm_scripts }}"
     owner: root
     group: root
     mode: '0700'
@@ -17,11 +17,12 @@
     - md_health
     - iostat_md
     - list_storage
+    - smartctl_dump
 
 - name: Sync md format tools
   ansible.builtin.copy:
     dest: /root/bin/md_mkformat/
-    src: "{{ playbook_dir }}/../additions/mdraid/md_mkformat/{{ md_format_scripts }}"
+    src: "{{ playbook_dir }}/../additions/storage_cmds/md_mkformat/{{ md_format_scripts }}"
     owner: root
     group: root
     mode: '0600'

@@ -23,7 +23,7 @@
 
 - name: add cvmfs.default
   ansible.builtin.copy:
-    src: "{{ playbook_dir }}/../additions/cvmfs/default.local.base"
+    src: "{{ playbook_dir }}/../additions/cvmfs/default.local.{{ cvmfs_default_conf | default('base') }}"
     dest: /etc/cvmfs/default.local
     owner: root
     group: root
