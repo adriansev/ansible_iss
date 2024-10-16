@@ -4,6 +4,8 @@ vault/*
 roles/**
 facts/**
 backup/**
+tmp
+cfg_ini
 collections/**
 .ansible_galaxy
 host_logs
