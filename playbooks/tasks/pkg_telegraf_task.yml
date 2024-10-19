@@ -1,5 +1,6 @@
 ---
-- ansible.builtin.import_tasks: repo_influxdata_task.yml
+- name: Import repo_influxdata_task.yml
+  ansible.builtin.include_tasks: repo_influxdata_task.yml
 
 - name: Install influxdb2 EL7
   ansible.builtin.yum:
