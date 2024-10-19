@@ -1,4 +1,0 @@
-#!/bin/bash
-
-ls -1 /sys/class/sas_expander
-

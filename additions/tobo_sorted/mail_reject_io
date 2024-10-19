@@ -1,6 +1,0 @@
-#!/bin/bash
-
-log=$(journalctl --no-pager -k --since "4 minutes ago" | grep "rejecting I/O")
-
-[[ -n "${log}" ]] && mail -s 'storage06 : reject IO!!!' glite@spacescience.ro <<< 'Rejecting I/O messages found in log in the last 4 minutes'
-
