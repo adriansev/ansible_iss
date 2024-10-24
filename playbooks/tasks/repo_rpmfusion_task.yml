@@ -1,32 +1,40 @@
 ---
-- include_tasks: pkg_yum-utils_task.yml
-- include_tasks: repo_epel_task.yml
+- name: Include pkg_yum-utils_task.yml
+  ansible.builtin.include_tasks: pkg_yum-utils_task.yml
+
+- name: Include repo_epel_task.yml
+  ansible.builtin.include_tasks: repo_epel_task.yml
 
 - name: Install rpmfusion repository EL7
-  ansible.builtin.yum:
-    name: [ 'https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm', 'https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-7.noarch.rpm' ]
+  ansible.builtin.dnf:
+    name:
+      - https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
+      - https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-7.noarch.rpm
     state: present
   when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
   tags: repo
 
-- name: Install rpmfusion repository EL8
+- name: Install rpmfusion repository EL9
   ansible.builtin.dnf:
-    name: [ 'https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm', 'https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm' ]
+    name:
+      - https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-9.noarch.rpm
+      - https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-9.noarch.rpm
     state: present
-  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '8'
+  when: ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9'
   tags: repo
 
 - name: Install rpmfusion repository Fedora
   ansible.builtin.dnf:
-    name: [ 'https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_facts['distribution_major_version'] }}.noarch.rpm', 'https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_facts['distribution_major_version'] }}.noarch.rpm']
+    name:
+      - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_facts["distribution_major_version"] }}.noarch.rpm
+      - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_facts["distribution_major_version"] }}.noarch.rpm
     state: present
   when: ansible_facts['distribution'] == 'Fedora'
   tags: repo
 
 - name: Install rpmfusion tainted repos
-  ansible.builtin.yum:
-    name: [ 'rpmfusion-free-release-tainted', 'rpmfusion-nonfree-release-tainted' ]
+  ansible.builtin.dnf:
+    name: [rpmfusion-free-release-tainted, rpmfusion-nonfree-release-tainted]
     state: present
   when: ansible_facts['os_family'] == 'RedHat'
   tags: repo
-

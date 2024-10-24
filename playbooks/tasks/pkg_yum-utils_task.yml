@@ -1,7 +1,7 @@
 ---
 - name: Install yum utils EL7
-  ansible.builtin.yum:
-    name: ['yum-utils', 'yum-plugin-fastestmirror', 'yum-plugin-priorities', 'yum-plugin-protectbase']
+  ansible.builtin.yum:  # noqa: fqcn[action-core]
+    name: [yum-utils, yum-plugin-fastestmirror, yum-plugin-priorities, yum-plugin-protectbase]
     state: present
     update_cache: false
   register: yum_utils_install_el7
@@ -14,12 +14,13 @@
     option: ip_resolve
     value: 4
     no_extra_spaces: true
+    mode: "0644"
   register: yum_prefer_ipv4_el7
   when: yum_prefer_ipv4_el7 is undefined and ( ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7' )
 
 - name: Install yum utils EL9/Fedora
   ansible.builtin.dnf:
-    name: ['yum', 'dnf-utils', 'dnf-plugins-core']
+    name: [yum, dnf-utils, dnf-plugins-core]
     state: present
     update_cache: false
   register: yum_utils_install_el9
@@ -29,13 +30,14 @@
   ansible.builtin.command: /usr/bin/dnf config-manager --save --setopt=install_weak_deps=False --setopt=ip_resolve=4
   register: dnf_prefer_ipv4_el9
   when: dnf_prefer_ipv4_el9 is undefined and ( ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora' )
+  changed_when: dnf_prefer_ipv4_el9.rc != 0
 
-- name: Task name
+- name: Check existence of epel.repo
   ansible.builtin.stat:
     path: /etc/yum.repos.d/epel.repo
-  register: epel_testing_present
+  register: epel_present
 
-- name: Task name
+- name: Check existence of epel-testing.repo
   ansible.builtin.stat:
     path: /etc/yum.repos.d/epel-testing.repo
   register: epel_testing_present
@@ -48,7 +50,7 @@
     value: "*nordugrid-*"
     create: false
     no_extra_spaces: true
-  when: epel_testing_present.stat.exists
+  when: epel_present.stat.exists
 
 - name: Epel-testing - exclude nordugrid
   community.general.ini_file:
@@ -59,4 +61,3 @@
     create: false
     no_extra_spaces: true
   when: epel_testing_present.stat.exists
-
