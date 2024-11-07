@@ -1,6 +1,7 @@
 # Ex 1: Ungrouped hosts, specify before any group headers.
 
 # AUGER hosts
+ginadesk ansible_user=root ansible_host=10.10.11.20 ansible_port=22
 paoshift.spacescience.ro
 auger01.spacescience.ro
 
@@ -14,6 +15,7 @@ seau2.spacescience.ro
 
 ## grid04 EL6 - too old python for ansible to work
 ##grid04.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python ansible_ssh_common_args='-o "PubkeyAcceptedKeyTypes=+ssh-rsa" -o "HostkeyAlgorithms=+ssh-rsa" -o "PubkeyAcceptedKeyTypes=+ssh-rsa"'
+sbdii.spacescience.ro
 
 r3bsuit.spacescience.ro
 luxe.spacescience.ro
@@ -22,8 +24,9 @@ sev.spacescience.ro
 monitor.spacescience.ro
 issaf.spacescience.ro
 
-durocern1 ansible_user=root ansible_host=10.10.8.110 ansible_port=22
+durocern1 ansible_user=root ansible_host=46.243.114.2 ansible_port=2201
 alice2    ansible_user=root ansible_host=10.10.11.26 ansible_port=60000
+vmhost1   ansible_user=root ansible_host=10.10.11.241 ansible_port=60000
 
 alien.spacescience.ro
 

@@ -1,0 +1,18 @@
+---
+- hosts: "{{ target | default('wn_issaf') }}"
+  gather_facts: False
+  vars:
+    users_create_home: true
+    cluster_user_list: issaf
+
+  vars_files:
+      - "{{ playbook_dir }}/../additions/users_{{ cluster_user_list }}/user_group_info.yml"
+      - "{{ playbook_dir }}/../additions/users_{{ cluster_user_list }}/delete_users_groups.yml"
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/users_task.yml"

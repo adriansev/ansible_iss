@@ -1,0 +1,30 @@
+---
+iptables_v4_custom_table_setup: ""
+iptables_v6_custom_table_setup: ""
+ip_v4_filter_custom_rule_after_ipsets: ""
+ip_v6_filter_custom_rule_after_ipsets: ""
+
+ipset_tables:
+  - accept_ip:
+    - "85.120.46.17"  # alien
+    - "85.120.46.19"  # grid05
+    - "85.120.46.24"  # mgm2
+    - "85.120.46.25"  # mgm3
+    - "85.120.46.36"  # mgm1
+  - accept_ip6:
+    - "2001:b30:4210:1::17"
+    - "2001:b30:4210:1::19"
+    - "2001:b30:4210:1::24"
+    - "2001:b30:4210:1::25"
+    - "2001:b30:4210:1::36"
+  - accept_net:
+  - accept_net6:
+  - accept_port_ip:
+  - accept_port_ip6:
+  - accept_port_net:
+  - accept_port_net6:
+  - accept_port_tcp:
+    - "2170-2172"
+    - "60000"
+  - accept_port_udp:
+

@@ -8,7 +8,7 @@ import grp
 
 my_path = os.path.dirname(os.path.realpath(__file__))
 
-group_info = [{'gr_name': g.gr_name, 'gr_passwd': g.gr_passwd, 'gr_gid': g.gr_gid, 'gr_mem': g.gr_mem } for g in grp.getgrall() if g.gr_gid > 999]
+group_info = [{'gr_name': g.gr_name, 'gr_passwd': g.gr_passwd, 'gr_gid': g.gr_gid, 'gr_mem': g.gr_mem } for g in grp.getgrall() if g.gr_gid > 999 and g.gr_name != 'nobody']
 group_info_sorted = sorted(group_info, key = lambda t: int(t['gr_gid']))
 
 def get_user_additional_groups(user):
@@ -26,6 +26,7 @@ def get_user_sinfo(user):
 user_info_list = []
 for user_info in pwd.getpwall():
     if user_info.pw_uid < 1000: continue
+    if user_info.pw_name == 'nobody': continue
     user_dict = dict()
     for i in dir(user_info):
         if not i.startswith('pw_'): continue

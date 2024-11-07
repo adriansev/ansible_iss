@@ -32,32 +32,3 @@
   when: dnf_prefer_ipv4_el9 is undefined and ( ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora' )
   changed_when: dnf_prefer_ipv4_el9.rc != 0
 
-- name: Check existence of epel.repo
-  ansible.builtin.stat:
-    path: /etc/yum.repos.d/epel.repo
-  register: epel_present
-
-- name: Check existence of epel-testing.repo
-  ansible.builtin.stat:
-    path: /etc/yum.repos.d/epel-testing.repo
-  register: epel_testing_present
-
-- name: Epel - exclude nordugrid
-  community.general.ini_file:
-    path: /etc/yum.repos.d/epel.repo
-    section: epel
-    option: exclude
-    value: "*nordugrid-*"
-    create: false
-    no_extra_spaces: true
-  when: epel_present.stat.exists
-
-- name: Epel-testing - exclude nordugrid
-  community.general.ini_file:
-    path: /etc/yum.repos.d/epel-testing.repo
-    section: epel-testing
-    option: exclude
-    value: "*nordugrid-*"
-    create: false
-    no_extra_spaces: true
-  when: epel_testing_present.stat.exists

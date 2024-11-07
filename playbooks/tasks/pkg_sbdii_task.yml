@@ -1,0 +1,27 @@
+---
+- name: Include repo_umd_task.yml
+  ansible.builtin.include_tasks: repo_umd_task.yml
+
+- name: Install sbdii packages
+  ansible.builtin.dnf:
+    name:
+      - ui
+      - apel-client
+      - apel-parsers
+      - apel-ssm
+      - apel-ssm-service
+      - bdii
+      - bdii-config-site
+      - glite-info-update-endpoints
+    state: present
+    disablerepo: "wlcg"
+    exclude: ""
+  tags: packages
+
+- name: Install glite-yaim-bdii
+  ansible.builtin.dnf:
+    name:
+      - glite-yaim-bdii
+    state: present
+    exclude: ""
+  tags: packages

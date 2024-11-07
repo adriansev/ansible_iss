@@ -1,0 +1,42 @@
+---
+- name: Include repo_remi_task.yml
+  ansible.builtin.include_tasks: repo_remi_task.yml
+
+- name: Configure remi php usage - EL9
+  ansible.builtin.dnf:
+    name: '@php:remi-8.3'
+    state: present
+    enablerepo: "remi, remi-modular"
+
+- name: Install php (latest stable) from remi - EL9
+  ansible.builtin.dnf:
+    name: 'php-*'
+    state: latest
+    update_only: true
+    enablerepo: "remi, remi-modular"
+  when: ( ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9' )
+  tags: packages
+
+- name: Install php (latest stable) from remi - Fedora
+  ansible.builtin.dnf:
+    name: 'php-*'
+    state: latest
+    update_only: true
+    enablerepo: "remi, remi-modular"
+  when: ansible_facts[ 'distribution' ] == 'Fedora'
+  tags: packages
+
+- name: Installing php packages (latest)
+  ansible.builtin.dnf:
+    name:
+      - php-bcmath
+      - php-cli
+      - php-common
+      - php-fpm
+      - php-imap
+      - php-lz4
+      - php-mbstring
+      - php-process
+      - php-sodium
+      - php-xz
+    state: present

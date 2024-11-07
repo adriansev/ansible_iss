@@ -1,0 +1,39 @@
+- hosts: "{{ target }}"
+  gather_facts: False
+  vars:
+    htcondor_version: "23.0"
+
+    # Domain config
+    # https://htcondor.readthedocs.io/en/latest/users-manual/submitting-a-job.html#submitting-jobs-using-a-shared-file-system
+    htcondor_domain: ""
+
+    # HTCondor roles:
+    # Are overwrited if htcondor_type_of_node is set
+    htcondor_role_manager: false
+    htcondor_role_submit: false
+    htcondor_role_execute: false
+
+    # Condor password (to be added to Vault?)
+    # it can also be set from CLI:
+    # ansible-playbook playbook-htcondor.yml --user cloudadm --extra-vars htcondor_password=changeme
+    htcondor_password: changeme
+
+    # Type of node to install: front, wn
+    htcondor_type_of_node: 'front'
+
+    # Server name
+    htcondor_server: "alien.spacescience.ro"
+
+    # Default ssh user
+    htcondor_ssh_user: condor
+
+  vars_files:
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/cfg_htcondor_task.yml"
+

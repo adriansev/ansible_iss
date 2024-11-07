@@ -1,0 +1,15 @@
+---
+- name: Include EPEL repository
+  ansible.builtin.include_tasks: repo_epel_task.yml
+
+- name: Add HTCondor GPG key
+  ansible.builtin.rpm_key:
+    state: present
+    key: "https://research.cs.wisc.edu/htcondor/repo/keys/HTCondor-{{ htcondor_version }}-Key"
+
+- name: Install HTCondor repository
+  ansible.builtin.dnf:
+    name: "https://research.cs.wisc.edu/htcondor/repo/{{ htcondor_version }}/htcondor-release-current.el9.noarch.rpm"
+    state: present
+  when: ansible_facts['distribution'] == 'AlmaLinux'
+  tags: repo

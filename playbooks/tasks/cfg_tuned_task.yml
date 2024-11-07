@@ -12,7 +12,7 @@
 
 - name: tuned role
   vars:
-    daemon: true
+    daemon: "{{ tuned_daemon_mode | default('true') }}"
     reapply_sysctl: true
     use_recommended_profile: false
     enable_recommend: false

@@ -1,6 +1,4 @@
 ---
-- include_tasks: pkg_yum-utils_task.yml
-
 - name: Import Nordugrid key
   ansible.builtin.rpm_key:
     state: present
@@ -27,3 +25,32 @@
   when: ansible_facts[ 'distribution' ] == 'Fedora'
   tags: repo
 
+- name: Check existence of epel.repo
+  ansible.builtin.stat:
+    path: /etc/yum.repos.d/epel.repo
+  register: epel_present
+
+- name: Check existence of epel-testing.repo
+  ansible.builtin.stat:
+    path: /etc/yum.repos.d/epel-testing.repo
+  register: epel_testing_present
+
+- name: Epel - exclude nordugrid
+  community.general.ini_file:
+    path: /etc/yum.repos.d/epel.repo
+    section: epel
+    option: exclude
+    value: "*nordugrid-*"
+    create: false
+    no_extra_spaces: true
+  when: epel_present.stat.exists
+
+- name: Epel-testing - exclude nordugrid
+  community.general.ini_file:
+    path: /etc/yum.repos.d/epel-testing.repo
+    section: epel-testing
+    option: exclude
+    value: "*nordugrid-*"
+    create: false
+    no_extra_spaces: true
+  when: epel_testing_present.stat.exists

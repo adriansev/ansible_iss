@@ -1,7 +1,9 @@
 ---
-- include_tasks: repo_epel_task.yml
+- name: Include repo_epel_task.yml
+  ansible.builtin.include_tasks: repo_epel_task.yml
 
-- include_tasks: pkg_munge_task.yml
+- name: Include pkg_munge_task.yml
+  ansible.builtin.include_tasks: pkg_munge_task.yml
 
 - name: Install slurmd - EL7
   ansible.builtin.yum:

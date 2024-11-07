@@ -1,0 +1,43 @@
+- hosts: "{{ target | default('sbdii.spacescience.ro') }}"
+  gather_facts: False
+  vars:
+    chrony_base_ip: "pub85"
+
+    profile: virtual-guest
+    tuned_daemon_mode: false
+
+    cvmfs_cache_size: "5120"
+    cvmfs_cache_base: "/home/cvmfs/cache"
+    cvmfs_repos: "cvmfs-config.cern.ch"
+    cvmfs_proxy_list: "http://monitor.spacescience.ro:3128;http://issaf.spacescience.ro:3128;http://alien.spacescience.ro:3128;"
+
+  vars_files:
+      - "{{ playbook_dir }}/../additions/ipset/ipset_sbdii.yml"
+      - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_sbdii.yml"
+      - "{{ playbook_dir }}/../additions/sysctl_lists/sysctl_generic.yml"
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/00basic_tools.yml"
+      - "tasks/00basic_tools_hw.yml"
+      - "tasks/pkg_utils_task.yml"
+      - "tasks/pkg_kernelml_install_task.yml"
+      - "tasks/pkg_igtfca_task.yml"
+      - "tasks/pkg_lsc_vomses_task.yml"
+      - "tasks/pkg_arcce_task.yml"
+      - "tasks/cfg_firewall_task.yml"
+      - "tasks/cfg_chrony_task.yml"
+      - "tasks/cfg_ssh_task.yml"
+      - "tasks/cfg_lmsensors.yml"
+      - "tasks/cfg_lldpd_task.yml"
+      - "tasks/cfg_tuned_task.yml"
+      - "tasks/cfg_gmond_misc.yml"
+      - "tasks/cfg_cvmfs_task.yml"
+      - "tasks/tune_sysctl_task.yml"
+      - "tasks/pkg_sbdii_task.yml"
+
+

@@ -1,0 +1,20 @@
+---
+- name: Include tasks htcondor
+  ansible.builtin.include_tasks: repo_htcondor_task.yml
+
+- name: Install htcondor - EL9
+  ansible.builtin.dnf:
+    name:
+      - condor.x86_64
+      - htcondor-ce.noarch
+      - htcondor-ce-client.noarch
+      - htcondor-ce-condor.noarch
+      - htcondor-ce-view.noarch
+      - htcondor-ce-apel.noarch
+      - htcondor-ce-bdii.noarch
+      - python3-condor.x86_64
+    state: present
+    update_cache: false
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
+
+##      - htcondor-ce-collector.noarch

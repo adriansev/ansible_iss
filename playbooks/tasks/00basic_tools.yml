@@ -2,9 +2,9 @@
 - name: Install epel and elrepo repositories
   ansible.builtin.include_tasks: "{{ item }}"
   with_items:
+    - pkg_yum-utils_task.yml
     - repo_epel_task.yml
     - repo_elrepo_task.yml
-    - pkg_yum-utils_task.yml
 
 - name: Install system management and monitoring tools - EL7
   ansible.builtin.yum:

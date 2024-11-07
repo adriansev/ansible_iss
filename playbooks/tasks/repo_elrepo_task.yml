@@ -1,7 +1,4 @@
 ---
-- name: Include pkg_yum-utils_task.yml
-  ansible.builtin.include_tasks: pkg_yum-utils_task.yml
-
 - name: Enable ElRepo Repository on CentOS 7
   ansible.builtin.yum:
     name: elrepo-release.noarch
