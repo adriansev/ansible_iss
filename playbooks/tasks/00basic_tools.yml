@@ -141,3 +141,15 @@
         pathmunge $HOME/bin
         pathmunge $HOME/.local/bin
   when: ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora' or ansible_facts['distribution'] == 'CentOS'
+
+- name: Set TZ default value
+  ansible.builtin.copy:
+    dest: /etc/profile.d/set_tz.sh
+    mode: "0644"
+    owner: root
+    group: root
+    backup: false
+    force: true
+    content: |
+        TZ=':/etc/localtime'
+        export TZ
