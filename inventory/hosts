@@ -27,6 +27,7 @@ issaf.spacescience.ro
 durocern1 ansible_user=root ansible_host=46.243.114.2 ansible_port=2201
 alice2    ansible_user=root ansible_host=10.10.11.26 ansible_port=60000
 vmhost1   ansible_user=root ansible_host=10.10.11.241 ansible_port=60000
+vmhost2   ansible_user=root ansible_host=10.10.11.243 ansible_port=60000
 
 alien.spacescience.ro
 
