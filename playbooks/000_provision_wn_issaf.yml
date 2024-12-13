@@ -88,7 +88,6 @@
       - "tasks/cfg_smartd_task.yml"
       - "tasks/cfg_lldpd_task.yml"
       - "tasks/cfg_tuned_task.yml"
-      - "tasks/cfg_tuning_infra.yml"
       - "tasks/cfg_slurm22_task.yml"
       - "tasks/tune_sysctl_task.yml"
       - "tasks/tune_scripts_task.yml"

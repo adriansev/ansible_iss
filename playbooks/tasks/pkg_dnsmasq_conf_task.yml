@@ -1,11 +1,4 @@
 ---
-- name: Install dnsmasq EL7
-  ansible.builtin.yum:
-    name: dnsmasq
-    state: present
-  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
-  tags: packages
-
 - name: Install dnsmasq Alma9
   ansible.builtin.dnf:
     name: dnsmasq

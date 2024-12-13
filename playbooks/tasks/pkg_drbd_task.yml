@@ -1,0 +1,39 @@
+---
+- name: Include repo_elrepo_task.yml
+  ansible.builtin.include_tasks: repo_elrepo_task.yml
+
+- name: Include repo_epel_task.yml
+  ansible.builtin.include_tasks: repo_epel_task.yml
+
+- name: Install drbd packages
+  ansible.builtin.dnf:
+    name:
+      - kmod-drbd9x
+      - drbd9x-utils
+      - drbdlinks
+    state: present
+    disablerepo: "wlcg"
+    enablerepo: "epel,elrepo"
+    exclude: ""
+  tags: packages
+
+- name: Load drbd module
+  ansible.builtin.copy:
+    dest: "/etc/modules-load.d/drbd.conf"
+    mode: 0644
+    owner: root
+    group: root
+    force: true
+    content: |
+        drbd
+
+- name: Load drbd module in dracut
+  ansible.builtin.copy:
+    dest: "/etc/dracut.conf.d/dracut.conf"
+    mode: 0644
+    owner: root
+    group: root
+    force: true
+    content: |
+        add_drivers+=" drbd "
+

@@ -1,7 +1,6 @@
 # Ex 1: Ungrouped hosts, specify before any group headers.
 
 # AUGER hosts
-ginadesk ansible_user=root ansible_host=10.10.11.20 ansible_port=22
 paoshift.spacescience.ro
 auger01.spacescience.ro
 
@@ -13,8 +12,6 @@ paostation2
 grid05.spacescience.ro
 seau2.spacescience.ro
 
-## grid04 EL6 - too old python for ansible to work
-##grid04.spacescience.ro ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python ansible_ssh_common_args='-o "PubkeyAcceptedKeyTypes=+ssh-rsa" -o "HostkeyAlgorithms=+ssh-rsa" -o "PubkeyAcceptedKeyTypes=+ssh-rsa"'
 sbdii.spacescience.ro
 
 r3bsuit.spacescience.ro
@@ -24,10 +21,10 @@ sev.spacescience.ro
 monitor.spacescience.ro
 issaf.spacescience.ro
 
-durocern1 ansible_user=root ansible_host=46.243.114.2 ansible_port=2201
-alice2    ansible_user=root ansible_host=10.10.11.26 ansible_port=60000
-vmhost1   ansible_user=root ansible_host=10.10.11.241 ansible_port=60000
-vmhost2   ansible_user=root ansible_host=10.10.11.243 ansible_port=60000
+durocern1 ansible_host=46.243.114.2 ansible_port=2201
+alice2    ansible_host=10.10.11.26
+vmhost1   ansible_host=10.10.11.241
+vmhost2   ansible_host=10.10.11.243
 
 alien.spacescience.ro
 
@@ -36,20 +33,17 @@ mgm2.spacescience.ro
 mgm3.spacescience.ro
 
 
-[all:vars]
-ansible_connection=ssh
-ansible_user=root
-ansible_port=60000
-ansible_ssh_private_key_file=~/.ssh/id_ed25519
-##ansible_python_interpreter=/usr/bin/env python3
-
+# [all:vars]
 
 ############################################################
 ## Define functional groups
 ############################################################
 
-##[paoremote:vars]
-##ansible_python_interpreter=/usr/bin/python3
+[vmhosts]
+vmhost1
+vmhost2
+
+# [paoremote:vars]
 
 [paoremote]
 paowall
@@ -99,12 +93,7 @@ wn_alien
 #########################################################################
 #########################################################################
 [wn_issaf:vars]
-ansible_connection=ssh
-ansible_user=root
-ansible_port=60000
-## ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -o ProxyJump=root@issaf.spacescience.ro:60000 '
-ansible_ssh_common_args=' -o PreferredAuthentications=publickey -o StrictHostKeyChecking=no -o Compression=yes -J root@issaf.spacescience.ro '
-
+ansible_ssh_extra_args = ' -J root@issaf.spacescience.ro '
 
 [wn_issaf]
 

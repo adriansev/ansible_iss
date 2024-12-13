@@ -49,7 +49,6 @@
       - "tasks/alice_ALIEN_prepare_task.yml"
       - "tasks/cfg_slurm22_task.yml"
       - "tasks/cfg_tuned_task.yml"
-      - "tasks/cfg_tuning_infra.yml"
       - "tasks/tune_sysctl_task.yml"
       - "tasks/tune_scripts_task.yml"
       - "tasks/pkg_utils_task.yml"

@@ -27,7 +27,7 @@
   when: yum_utils_install_el9 is undefined and ( ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora' )
 
 - name: Dnf prefer IPv4 - EL9
-  ansible.builtin.command: /usr/bin/dnf config-manager --save --setopt=install_weak_deps=False --setopt=ip_resolve=4
+  ansible.builtin.command: /usr/bin/dnf config-manager --save --setopt=install_weak_deps=False --setopt=ip_resolve=4 --setopt=clean_requirements_on_remove=False
   register: dnf_prefer_ipv4_el9
   when: dnf_prefer_ipv4_el9 is undefined and ( ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora' )
   changed_when: dnf_prefer_ipv4_el9.rc != 0

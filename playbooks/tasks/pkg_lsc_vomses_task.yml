@@ -5,12 +5,13 @@
   ansible.builtin.yum:
     name:
       - wlcg-iam-lsc-ops
+      - wlcg-iam-vomses-ops
+      - wlcg-voms-ops
       - wlcg-iam-lsc-dteam
+      - wlcg-iam-vomses-dteam
+      - wlcg-voms-dteam
       - wlcg-iam-lsc-alice
       - wlcg-iam-vomses-alice
-      - wlcg-iam-vomses-dteam
-      - wlcg-voms-ops
-      - wlcg-voms-dteam
       - wlcg-voms-alice
     state: latest
     enablerepo: "wlcg"
@@ -21,12 +22,13 @@
   ansible.builtin.dnf:
     name:
       - wlcg-iam-lsc-ops
+      - wlcg-iam-vomses-ops
+      - wlcg-voms-ops
       - wlcg-iam-lsc-dteam
+      - wlcg-iam-vomses-dteam
+      - wlcg-voms-dteam
       - wlcg-iam-lsc-alice
       - wlcg-iam-vomses-alice
-      - wlcg-iam-vomses-dteam
-      - wlcg-voms-ops
-      - wlcg-voms-dteam
       - wlcg-voms-alice
     state: latest
     enablerepo: "wlcg"

@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+
+HOST_ALIAS="alien_root"
+
+scp make_id_lists ${HOST_ALIAS}:/tmp/
+ssh ${HOST_ALIAS} "cd /tmp && ./make_id_lists"
+scp ${HOST_ALIAS}:/tmp/user_group_info.yml ./
+ssh ${HOST_ALIAS} "rm -rf /tmp/make_id_lists /tmp/user_group_info.yml"

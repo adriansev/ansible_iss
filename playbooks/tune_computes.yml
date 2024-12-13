@@ -7,8 +7,6 @@
 
   tasks:
     - include_tasks: tasks/cfg_tuned_task.yml
-    - include_tasks: tasks/cfg_tuning_infra.yml
-
     - include_tasks: tasks/tune_sysctl_task.yml
       vars:
         sysctl_list:

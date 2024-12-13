@@ -1,4 +1,4 @@
-- hosts: "{{ target }}"
+- hosts: "{{ target | default('eos_mgm') }}"
   gather_facts: False
   vars:
     chrony_base_ip: "pub85"
@@ -29,30 +29,29 @@
     loop_control:
       loop_var: task_item
     with_items:
-      - "tasks/00basic_tools.yml"
-      - "tasks/00basic_tools_hw.yml"
-      - "tasks/00storage_tools.yml"
-      - "tasks/storage_cli.yml"
-      - "tasks/mdraid_conf_task.yml"
-      - "tasks/pkg_kernelml_install_task.yml"
-      - "tasks/pkg_igtfca_task.yml"
-      - "tasks/pkg_lsc_vomses_task.yml"
-      - "tasks/pkg_eos_mgm_task.yml"
-      - "tasks/cfg_firewall_task.yml"
-      - "tasks/cfg_chrony_task.yml"
-      - "tasks/cfg_ssh_task.yml"
-      - "tasks/cfg_lmsensors.yml"
-      - "tasks/cfg_smartd_task.yml"
-      - "tasks/cfg_lldpd_task.yml"
-      - "tasks/cfg_tuned_task.yml"
-      - "tasks/cfg_tuning_infra.yml"
-      - "tasks/tune_sysctl_task.yml"
+#      - "tasks/00basic_tools.yml"
+#      - "tasks/00basic_tools_hw.yml"
+#      - "tasks/00storage_tools.yml"
+#      - "tasks/storage_cli.yml"
+#      - "tasks/mdraid_conf_task.yml"
+#      - "tasks/pkg_kernelml_install_task.yml"
+#      - "tasks/pkg_igtfca_task.yml"
+#      - "tasks/pkg_lsc_vomses_task.yml"
+#      - "tasks/pkg_eos_mgm_task.yml"
+#      - "tasks/cfg_firewall_task.yml"
+#      - "tasks/cfg_chrony_task.yml"
+#      - "tasks/cfg_ssh_task.yml"
+#      - "tasks/cfg_lmsensors.yml"
+#      - "tasks/cfg_smartd_task.yml"
+#      - "tasks/cfg_lldpd_task.yml"
+#      - "tasks/cfg_tuned_task.yml"
+#      - "tasks/tune_sysctl_task.yml"
       - "tasks/tune_scripts_task.yml"
-      - "tasks/cfg_gmond_eos.yml"
-      - "tasks/pkg_utils_task.yml"
-      - "tasks/cfg_eos_setup_task.yml"
-      - "tasks/cfg_eosmgm_setup_task.yml"
+#      - "tasks/cfg_gmond_eos.yml"
+#      - "tasks/pkg_utils_task.yml"
+#      - "tasks/cfg_eos_setup_task.yml"
+#      - "tasks/cfg_eosmgm_setup_task.yml"
 
 
-- name: Install mlsensor
-  ansible.builtin.import_playbook: pkg_mlsensor.yml
+#- name: Install mlsensor
+#  ansible.builtin.import_playbook: pkg_mlsensor.yml

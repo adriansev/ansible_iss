@@ -2,19 +2,14 @@
 - name: Include pkg_yum-utils_task.yml
   ansible.builtin.include_tasks: pkg_yum-utils_task.yml
 
-- name: Install vobox requirements
-  ansible.builtin.yum:
-    name: [ 'HEP_OSlibs' ]
-    state: present
-    enablerepo: "epel,wlcg"
-    disablerepo: "UMD*"
-  tags: packages
+- name: Include pkg_hep_oslibs_task.yml
+  ansible.builtin.include_tasks: pkg_hep_oslibs_task.yml
 
 - name: Install vobox packages
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: [ 'wlcg-vobox' ]
     state: present
-    enablerepo: "wlcg,UMD-4-base,UMD-4-updates"
+    enablerepo: "wlcg,UMD-5-release,UMD-5-contrib"
     exclude: "xrootd4-*"
   tags: packages
 

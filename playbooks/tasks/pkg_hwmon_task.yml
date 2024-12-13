@@ -1,9 +1,10 @@
 ---
-- include_tasks: repo_epel_task.yml
+- name: Include repo_epel_task.yml
+  ansible.builtin.include_tasks: repo_epel_task.yml
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - Centos
   ansible.builtin.yum:
-    name: [ 'edac-utils', 'linux-firmware', 'mdadm' ]
+    name: [ 'rasdaemon.x86_64', 'edac-utils', 'linux-firmware', 'mdadm' ]
     state: present
     update_cache: false
     enablerepo: "epel"
@@ -11,7 +12,7 @@
 
 - name: Install hardware monitoring tools on hardware machines (not vms) - Fedora
   ansible.builtin.dnf:
-    name: [ 'edac-utils', 'linux-firmware', 'mdadm' ]
+    name: [ 'rasdaemon.x86_64', 'edac-utils', 'linux-firmware', 'mdadm' ]
     state: present
     update_cache: false
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'

@@ -1,9 +1,9 @@
-- hosts: "{{ target | default('sbdii.spacescience.ro') }}"
+- hosts: "{{ target | default('vmhosts') }}"
   gather_facts: False
   vars:
-    chrony_base_ip: "pub85"
+    chrony_base_ip: "priv10"
 
-    profile: virtual-guest
+    profile: virtual-host
     tuned_daemon_mode: false
 
     iptables_v4_custom_table_setup: ""
@@ -13,33 +13,28 @@
 
     ipset_tables:
       - accept_ip:
-        - "85.120.46.17"  # alien
-        - "85.120.46.19"  # grid05
-        - "85.120.46.24"  # mgm2
-        - "85.120.46.25"  # mgm3
-        - "85.120.46.36"  # mgm1
-        - "85.120.46.40"  # seau2
+        - "10.10.10.120"
+        - "10.10.10.181"
+        - "10.10.11.241"
+        - "10.10.11.243"
       - accept_ip6:
-        - "2001:b30:4210:1::17"
-        - "2001:b30:4210:1::19"
-        - "2001:b30:4210:1::24"
-        - "2001:b30:4210:1::25"
-        - "2001:b30:4210:1::36"
-        - "2001:b30:4210:1::40"
       - accept_net:
       - accept_net6:
       - accept_port_ip:
       - accept_port_ip6:
       - accept_port_net:
+        - "85.120.46.0/24,9090"
+        - "46.243.114.128/25,9090"
+        - "10.10.10.8/22,9090"
+        - "10.10.10.8/22,22"
       - accept_port_net6:
       - accept_port_tcp:
-        - "2170-2172"
-        - "60000"
       - accept_port_udp:
 
   vars_files:
-      - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_sbdii.yml"
+      - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_iss.yml"
       - "{{ playbook_dir }}/../additions/sysctl_lists/sysctl_generic.yml"
+      - "{{ playbook_dir }}/../additions/packages_sets/packages_vmhosts.yml"
 
   tasks:
   - ansible.builtin.include_tasks:
@@ -51,8 +46,7 @@
       - "tasks/00basic_tools_hw.yml"
       - "tasks/pkg_utils_task.yml"
       - "tasks/pkg_kernelml_install_task.yml"
-      - "tasks/pkg_igtfca_task.yml"
-      - "tasks/pkg_lsc_vomses_task.yml"
+      - "tasks/pkg_drbd_task.yml"
       - "tasks/cfg_firewall_task.yml"
       - "tasks/cfg_chrony_task.yml"
       - "tasks/cfg_ssh_task.yml"
@@ -61,5 +55,5 @@
       - "tasks/cfg_tuned_task.yml"
       - "tasks/cfg_gmond_misc.yml"
       - "tasks/tune_sysctl_task.yml"
-      - "tasks/pkg_sbdii_task.yml"
+      - "tasks/packages_task.yml"
 

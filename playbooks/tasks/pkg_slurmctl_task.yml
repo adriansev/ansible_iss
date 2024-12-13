@@ -1,0 +1,24 @@
+---
+- name: Include repo_epel_task.yml
+  ansible.builtin.include_tasks: repo_epel_task.yml
+
+- name: Include pkg_munge_task.yml
+  ansible.builtin.include_tasks: pkg_munge_task.yml
+
+- name: Install slurmd - EL9
+  ansible.builtin.dnf:
+    name:
+      - slurm.x86_64
+      - slurm-libs.x86_64
+      - slurm-slurmctld.x86_64
+      - slurm-slurmd.x86_64
+      - slurm-slurmdbd.x86_64
+      - slurm-contribs
+      - mariadb.x86_64
+      - mariadb-server.x86_64
+      - mariadb-server-utils.x86_64
+      - mariadb-errmsg.x86_64
+    state: present
+    update_cache: false
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' or ansible_facts[ 'distribution' ] == 'Fedora'
+

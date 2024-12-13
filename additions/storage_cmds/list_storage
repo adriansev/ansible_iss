@@ -328,6 +328,7 @@ devices_info_list = []
 for dev_phys_path, dev_sys_path in dev_path_mapping:
     ata = scsi = wwn = nvme = ''
     dev_name = os.path.basename(dev_sys_path)
+    if dev_name not in dev_byid_map: continue
     by_id_name_list = dev_byid_map[dev_name]
 
     slot_info = get_slotinfo(dev_name)

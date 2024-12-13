@@ -1,0 +1,100 @@
+- hosts: "{{ target | default('grid05.spacescience.ro') }}"
+  gather_facts: False
+  vars:
+    cvmfs_cache_size: "51200"
+    cvmfs_cache_base: "/home/cvmfs/cache"
+    cvmfs_repos: "cvmfs-config.cern.ch,auger.egi.eu,dirac.egi.eu,lhcb.cern.ch,sft.cern.ch,grid.cern.ch"
+    cvmfs_proxy_list: "http://alien.spacescience.ro:3128;http://issaf.spacescience.ro:3128;http://monitor.spacescience.ro:3128"
+
+    chrony_base_ip: "pub85"
+
+    profile: iss
+    tuned_daemon_mode: false
+
+    iptables_v4_custom_table_setup: ""
+    iptables_v6_custom_table_setup: ""
+    ip_v4_filter_custom_rule_after_ipsets: ""
+    ip_v6_filter_custom_rule_after_ipsets: ""
+
+    ipset_tables:
+      - accept_ip:
+        - "85.120.46.15"  # sbdii
+        - "85.120.46.17"  # alien
+        - "85.120.46.15"  # sbdii
+        - "85.120.46.24"  # mgm2
+        - "85.120.46.25"  # mgm3
+        - "85.120.46.36"  # mgm1
+        - "85.120.46.40"  # seau2
+      - accept_ip6:
+        - "2001:b30:4210:1::15"
+        - "2001:b30:4210:1::17"
+        - "2001:b30:4210:1::24"
+        - "2001:b30:4210:1::25"
+        - "2001:b30:4210:1::36"
+        - "2001:b30:4210:1::40"
+      - accept_net:
+        - "172.16.1.1/24"
+      - accept_net6:
+      - accept_port_ip:
+      - accept_port_ip6:
+      - accept_port_net:
+        - "85.120.46.0/24,8649"
+        - "46.243.114.128/25,8649"
+      - accept_port_net6:
+        - "2001:b30:4210::/48,8649"
+      - accept_port_tcp:
+        - "80"
+        - "443"
+        - "1093"
+        - "2135"
+        - "2811"
+        - "8084"
+        - "8443"
+        - "30000-31000"
+        - "60000"
+      - accept_port_udp:
+        - "30000-31000"
+
+  vars_files:
+      - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_alien_wn.yml"
+      - "{{ playbook_dir }}/../additions/sysctl_lists/sysctl_generic.yml"
+      - "{{ playbook_dir }}/../additions/root_tuning_list/tuning_generic.yml"
+      - "{{ playbook_dir }}/../additions/users_grid05/user_group_info.yml"
+      - "{{ playbook_dir }}/../additions/users_grid05/delete_users_groups.yml"
+
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/00basic_tools.yml"
+      - "tasks/00basic_tools_hw.yml"
+      - "tasks/repo_umd_task.yml"
+      - "tasks/pkg_utils_task.yml"
+      - "tasks/pkg_kernelml_install_task.yml"
+      - "tasks/pkg_igtfca_task.yml"
+      - "tasks/pkg_lsc_vomses_task.yml"
+      - "tasks/cfg_firewall_task.yml"
+      - "tasks/cfg_chrony_task.yml"
+      - "tasks/cfg_ssh_task.yml"
+      - "tasks/cfg_lmsensors.yml"
+      - "tasks/cfg_lldpd_task.yml"
+      - "tasks/cfg_tuned_task.yml"
+###      - "tasks/cfg_gmond_misc.yml"
+      - "tasks/tune_sysctl_task.yml"
+      - "tasks/tune_scripts_task.yml"
+      - "tasks/pkg_hpc_task.yml"
+      - "tasks/pkg_apptainer_task.yml"
+      - "tasks/pkg_munge_task.yml"
+##      - "tasks/pkg_arcce_task.yml"
+      - "tasks/pkg_hep_oslibs_task.yml"
+      - "tasks/pkg_nhc_task.yml"
+      - "tasks/pkg_slurm_task.yml"
+      - "tasks/pkg_slurmctl_task.yml"
+      - "tasks/pkg_hep_oslibs_task.yml"
+      - "tasks/cfg_slurm22_task.yml"
+      - "tasks/users_task.yml"
+      - "tasks/cfg_cvmfs_task.yml"
+

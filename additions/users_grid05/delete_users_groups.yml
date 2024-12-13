@@ -1,0 +1,8 @@
+---
+
+# DO NOT REMOVE THE DUMMY NAMES!! VARIABLES MUST HAVE SOME CONTENT
+delete_groups:
+  - dummy_45914981921
+
+delete_users:
+  - dummy_45914981921
