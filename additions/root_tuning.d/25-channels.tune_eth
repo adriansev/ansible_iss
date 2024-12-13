@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-CHANNELS_INFO=$( ethtool -l ${1} 2>/dev/null || { echo "Channels not supported for ${1}"; exit 0; } )
+CHANNELS_INFO=$( ethtool -l ${1} 2>/dev/null)
+[[ $? != "0" ]] && { echo "Channels not supported for ${1}" ; exit 0; }
 
 echo "$(basename ${0} .tune_eth) - START"
 
@@ -23,13 +24,14 @@ TX_CUR="${TX}"
 Other_CUR="${Other}"
 Combined_CUR="${Combined}"
 
-ARGS=""
-[[ "${RX_MAX}" != "n/a"       && "${RX_MAX}" != "0"       && "${RX_MAX}" != "${RX_CUR}" ]] && ARGS="${ARGS} rx ${RX}"
-[[ "${TX_MAX}" != "n/a"       && "${TX_MAX}" != "0"       && "${TX_MAX}" != "${TX_CUR}" ]] && ARGS="${ARGS} tx ${TX}"
-[[ "${Other_MAX}" != "n/a"    && "${Other_MAX}" != "0"    && "${Other_MAX}" != "${Other_CUR}" ]] && ARGS="${ARGS} other ${Other}"
-[[ "${Combined_MAX}" != "n/a" && "${Combined_MAX}" != "0" && "${Combined_MAX}" != "${Combined_CUR}" ]] && ARGS="${ARGS} combined ${Combined}"
+# protect against resetting; we will assume that if rx_cur == rx_max then this script already ran
+#[[ "${Combined_MAX}" == "${Combined_CUR}" ]] && { echo "already executed"; exit 0; }
 
-[[ -n "${ARGS}" ]] && ethtool -L ${1} ${ARGS}
+echo "Set channels for ${1}"
+[[ "${Combined_MAX}" != "n/a" && "${Combined_MAX}" != "0" && "${Combined_MAX}" != "${Combined_CUR}" ]] && { echo "Set Combined"; ethtool -L ${1} combined ${Combined_MAX}; }
+[[ "${Other_MAX}" != "n/a"    && "${Other_MAX}" != "0"    && "${Other_MAX}" != "${Other_CUR}" ]]       && { echo "Set Other"; ethtool -L ${1} other ${Other_MAX}; }
+[[ "${TX_MAX}" != "n/a"       && "${TX_MAX}" != "0"       && "${TX_MAX}" != "${TX_CUR}" ]] && { echo "Set tx"; ethtool -L ${1} tx ${TX_MAX}; }
+[[ "${RX_MAX}" != "n/a"       && "${RX_MAX}" != "0"       && "${RX_MAX}" != "${RX_CUR}" ]] && { echo "Set rx"; ethtool -L ${1} rx ${RX_MAX}; }
 
 echo "$(basename ${0} .tune_eth) - END"
 

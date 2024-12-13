@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-RING_INFO=$( ethtool -g ${1} 2>/dev/null || { echo "Ring setting is not supported for ${1}" ; exit 0; } )
+RING_INFO=$(ethtool -g ${1} 2>/dev/null)
+[[ $? != "0" ]] && { echo "Ring setting is not supported for ${1}" ; exit 0; }
 
 echo "$(basename ${0} .tune_eth) - START"
 
@@ -23,13 +24,16 @@ RXMINI_CUR="${RX_Mini}"
 RXJUMBO_CUR="${RX_Jumbo}"
 TX_CUR="${TX}"
 
+# protect against resetting; we will assume that if rx_cur == rx_max then this script already ran
+[[ "${RX_MAX}" == "${RX_CUR}" ]] && { echo "already executed"; exit 0; }
+
 ARGS=""
 [[ "${RX_MAX}" != "n/a"      && "${RX_MAX}" != "0"      && "${RX_MAX}" != "${RX_CUR}" ]] && ARGS="${ARGS} rx ${RX_MAX}"
 [[ "${RXMINI_MAX}" != "n/a"  && "${RXMINI_MAX}" != "0"  && "${RXMINI_MAX}" != "${RXMINI_CUR}" ]] && ARGS="${ARGS} rx-mini ${RXMINI_MAX}"
 [[ "${RXJUMBO_MAX}" != "n/a" && "${RXJUMBO_MAX}" != "0" && "${RXJUMBO_MAX}" != "${RXJUMBO_CUR}" ]] && ARGS="${ARGS} rx-jumbo ${RXJUMBO_MAX}"
 [[ "${TX_MAX}" != "n/a"      && "${TX_MAX}" != "0"      && "${TX_MAX}" != "${TX_CUR}" ]] && ARGS="${ARGS} tx ${TX_MAX}"
 
-[[ -n "${ARGS}" ]] && ethtool -G ${1} ${ARGS}
+[[ -n "${ARGS}" ]] && echo ethtool -G ${1} ${ARGS}
 
 echo "$(basename ${0} .tune_eth) - END"
 

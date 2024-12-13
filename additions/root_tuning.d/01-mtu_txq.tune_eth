@@ -3,7 +3,8 @@
 echo "$(basename ${0} .tune_eth) - START"
 
 # Set mtu and txqueuelen
-ip link set "${1}" mtu 9000 txqueuelen 20000;
+mtu_already_set=$(ip -o link show dev "${1}" | grep 'mtu 9000')
+[[ -z "{mtu_already_set}" ]] && ip link set "${1}" mtu 9000 txqueuelen 20000;
 
 echo "$(basename ${0} .tune_eth) - END"
 
