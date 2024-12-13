@@ -1,11 +1,12 @@
 ---
-- include_tasks: pkg_smartd_task.yml
+- name: Include pkg_smartd_task.yml
+  ansible.builtin.include_tasks: pkg_smartd_task.yml
 
 - name: Smartd config
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/../additions/smartctl/smartd.conf"
     dest: /etc/smartmontools/smartd.conf
-    mode: 0644
+    mode: '0644'
     owner: root
     group: root
     backup: true
@@ -15,6 +16,9 @@
   ansible.builtin.file:
     path: /etc/systemd/system/smartd.service.d/
     state: directory
+    mode: '0644'
+    owner: root
+    group: root
 
 - name: Smartd customize systemd unit
   ansible.builtin.copy:
@@ -24,7 +28,7 @@
         TimeoutStartSec=900
         Restart=on-failure
         RestartSec=30
-    mode: 0644
+    mode: '0644'
     owner: root
     group: root
     backup: false
@@ -34,13 +38,16 @@
   ansible.builtin.file:
     path: /var/log/smartd/
     state: directory
+    mode: '0644'
+    owner: root
+    group: root
 
 - name: Smartd customize smartmontools default config
   ansible.builtin.copy:
     dest: /etc/sysconfig/smartmontools
     content: |
         smartd_opts="-q never -i 3600 -s /var/log/smartd/ -A /var/log/smartd/"
-    mode: 0644
+    mode: '0644'
     owner: root
     group: root
     backup: true

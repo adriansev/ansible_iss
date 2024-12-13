@@ -1,0 +1,13 @@
+---
+- name: Include repo_hpnssh_task.yml
+  ansible.builtin.include_tasks: repo_hpnssh_task.yml
+
+- name: Install hpnssh packages
+  ansible.builtin.dnf:
+    name:
+      - hpnssh.x86_64
+      - hpnssh-clients.x86_64
+      - hpnssh-server.x86_64
+      - hpnssh-keycat.x86_64
+    state: present
+  tags: packages

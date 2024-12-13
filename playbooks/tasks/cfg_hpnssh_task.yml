@@ -1,0 +1,29 @@
+---
+- name: Include pkg_hpnssh_task.yml
+  ansible.builtin.include_tasks: pkg_hpnssh_task.yml
+
+- name: Customize hpnssh default config
+  ansible.builtin.copy:
+    dest: /etc/hpnssh/sshd_config.d/00-issgeneric.conf
+    content: |
+        Port 65000
+
+        UsePAM yes
+        ChallengeResponseAuthentication yes
+        AuthenticationMethods publickey keyboard-interactive
+
+        PermitRootLogin prohibit-password
+        LoginGraceTime 20
+        StrictModes yes
+        MaxAuthTries 3
+        #MaxSessions 10
+
+        # random early drop can be enabled by specifying the three colon separated values start:rate:full (e.g. "10:30:60").
+        # sshd(8) will refuse connection attempts with a probability of rate/100 (30%) if there are currently start (10) unauthenticated connections.
+        # The probability increases linearly and all connection attempts are refused if the number of unauthenticated connections reaches full (60).
+        MaxStartups 10:30:60
+    mode: '0644'
+    owner: root
+    group: root
+    backup: true
+    force: true

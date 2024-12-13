@@ -1,0 +1,5 @@
+---
+- name: Enable Copr for hpnssh
+  community.general.copr:
+    name: rapier1/hpnssh
+  tags: repo
