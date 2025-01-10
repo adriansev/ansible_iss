@@ -1,0 +1,10 @@
+KEY     VO:*    PRIVKEY:/etc/grid-security/xrootd/privkey.pem   PUBKEY:/etc/grid-security/xrootd/pubkey.pem
+
+RULE    PATH:/eos/alice/ops/     AUTHZ:|                                NOAUTHZ:delete|read|write|write-once|   VO:ops      CERT:*
+RULE    PATH:/ops/               AUTHZ:|                                NOAUTHZ:delete|read|write|write-once|   VO:ops      CERT:*
+RULE    PATH:/eos/alice/dteam/   AUTHZ:|                                NOAUTHZ:delete|read|write|write-once|   VO:dteam    CERT:*
+RULE    PATH:/dteam/             AUTHZ:|                                NOAUTHZ:delete|read|write|write-once|   VO:dteam    CERT:*
+RULE    PATH:/                   AUTHZ:delete|read|write|write-once|    NOAUTHZ:|                               VO:*|       CERT:*
+
+EXPORT  PATH:/  VO:*    ACCESS:ALLOW    CERT:*
+
