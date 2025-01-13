@@ -1,0 +1,12 @@
+---
+- name: Import CEPH RPM key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://download.ceph.com/keys/release.asc
+  tags: rpmkey
+
+- name: Install CEPH repository
+  ansible.builtin.dnf:
+    name: "https://download.ceph.com/rpm-{{ CEPH_VERSION | default('19.2.0') }}/el9/noarch/ceph-release-1-1.el9.noarch.rpm"
+    state: present
+  tags: repo

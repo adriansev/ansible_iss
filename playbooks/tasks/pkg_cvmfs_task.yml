@@ -3,7 +3,7 @@
   ansible.builtin.include_tasks: repo_cernvm_task.yml
 
 - name: Install CVMFS packages and dependencies
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: [ 'autofs', 'cvmfs', 'cvmfs-config-default' ]
     state: present
     enablerepo: "cernvm,cernvm-config"

@@ -1,0 +1,28 @@
+---
+- name: Include repo_ceph_task.yml
+  ansible.builtin.include_tasks: repo_ceph_task.yml
+
+- name: Install CEPH packages and dependencies
+  ansible.builtin.dnf:
+    name:
+      - ceph.x86_64
+      - cephadm.noarch
+      - ceph-base.x86_64
+      - ceph-common.x86_64
+      - cephfs-shell.x86_64
+      - cephfs-top.noarch
+      - ceph-fuse.x86_64
+      - ceph-mds.x86_64
+      - ceph-mgr-cephadm.noarch
+      - ceph-mgr-dashboard.noarch
+      - ceph-mgr-modules-core.noarch
+      - ceph-mgr.x86_64
+      - ceph-mib.noarch
+      - ceph-mon.x86_64
+      - ceph-osd.x86_64
+      - ceph-volume.noarch
+      - qemu-kvm-block-rbd.x86_64
+      - rbd-fuse.x86_64
+    state: present
+    enablerepo: "ceph,epel"
+  tags: packages
