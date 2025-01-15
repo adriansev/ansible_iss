@@ -1,0 +1,49 @@
+---
+- hosts: "{{ target | default('nfs01') }}"
+  gather_facts: False
+  vars:
+    chrony_base_ip: "pub46"
+    profile: iss
+
+    mdraid_is_enabled: "yes"
+    mdraid_check_type: "check"
+    mdraid_check_devs: "\"\""
+    mdraid_repair_devs: "\"\""
+    mdraid_skip_devs: "\"\""
+    mdraid_max_concurrent: ""
+    mdraid_check_time_cron: "0 0 1 * *"
+    mdraid_check_time_systemd: "*-*-01 00:00:00"
+
+  vars_files:
+      - "{{ playbook_dir }}/../additions/ipset/ipset_issaf_wn.yml"
+      - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_issaf_wn.yml"
+      - "{{ playbook_dir }}/../additions/sysctl_lists/sysctl_generic.yml"
+      - "{{ playbook_dir }}/../additions/root_tuning_list/tuning_generic.yml"
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/00basic_tools.yml"
+      - "tasks/00basic_tools_hw.yml"
+      - "tasks/00storage_tools.yml"
+      - "tasks/storage_cli.yml"
+      - "tasks/mdraid_conf_task.yml"
+      - "tasks/seatools_sync.yml"
+      - "tasks/pkg_kernelml_install_task.yml"
+      - "tasks/pkg_utils_task.yml"
+      - "tasks/pkg_nfs_task.yml"
+      - "tasks/cfg_firewall_task.yml"
+      - "tasks/cfg_chrony_task.yml"
+      - "tasks/cfg_ssh_task.yml"
+      - "tasks/cfg_lmsensors.yml"
+      - "tasks/cfg_smartd_task.yml"
+      - "tasks/cfg_lldpd_task.yml"
+      - "tasks/cfg_tuned_task.yml"
+      - "tasks/tune_sysctl_task.yml"
+      - "tasks/tune_scripts_task.yml"
+      - "tasks/cfg_gmond_issaf.yml"
+      - "tasks/pkg_utils_task.yml"
+
