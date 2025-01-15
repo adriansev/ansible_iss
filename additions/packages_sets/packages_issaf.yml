@@ -1,5 +1,6 @@
 ---
 package_list:
+  - environment-modules.x86_64
   - systemd-devel
   - python3-six.noarch
   - python3-types-six.noarch
@@ -37,42 +38,87 @@ package_list:
   - python3-boto3.noarch
 # alien.py
   - python3-websockets
-  - boost1.78.x86_64
-  - boost1.78-devel.x86_64
-  - boost1.78-b2.x86_64
-  - boost1.78-build.noarch
-  - boost1.78-atomic.x86_64
-  - boost1.78-chrono.x86_64
-  - boost1.78-container.x86_64
-  - boost1.78-context.x86_64
-  - boost1.78-contract.x86_64
-  - boost1.78-coroutine.x86_64
-  - boost1.78-date-time.x86_64
-  - boost1.78-fiber.x86_64
-  - boost1.78-filesystem.x86_64
-  - boost1.78-graph-mpich.x86_64
-  - boost1.78-graph-openmpi.x86_64
-  - boost1.78-graph.x86_64
-  - boost1.78-iostreams.x86_64
-  - boost1.78-json.x86_64
-  - boost1.78-locale.x86_64
-  - boost1.78-log.x86_64
-  - boost1.78-math.x86_64
-  - boost1.78-nowide.x86_64
-  - boost1.78-numpy3.x86_64
-  - boost1.78-program-options.x86_64
-  - boost1.78-python3.x86_64
-  - boost1.78-random.x86_64
-  - boost1.78-regex.x86_64
-  - boost1.78-serialization.x86_64
-  - boost1.78-stacktrace.x86_64
-  - boost1.78-static.x86_64
-  - boost1.78-system.x86_64
-  - boost1.78-test.x86_64
-  - boost1.78-thread.x86_64
-  - boost1.78-timer.x86_64
-  - boost1.78-type_erasure.x86_64
-  - boost1.78-wave.x86_64
+  - boost
+  - boost-devel
+  - boost-atomic
+  - boost-b2
+  - boost-build
+  - boost-chrono
+  - boost-container
+  - boost-context
+  - boost-contract
+  - boost-coroutine
+  - boost-date-time
+  - boost-fiber
+  - boost-filesystem
+  - boost-graph
+  - boost-graph-mpich
+  - boost-graph-openmpi
+  - boost-iostreams
+  - boost-json
+  - boost-locale
+  - boost-log
+  - boost-math
+  - boost-mpich
+  - boost-mpich-devel
+  - boost-mpich-python3
+  - boost-nowide
+  - boost-numpy3
+  - boost-openmpi
+  - boost-openmpi-devel
+  - boost-openmpi-python3
+  - boost-program-options
+  - boost-python3
+  - boost-random
+  - boost-regex
+  - boost-serialization
+  - boost-stacktrace
+  - boost-system
+  - boost-test
+  - boost-thread
+  - boost-timer
+  - boost-type_erasure
+  - boost-wave
+  - boost1.78
+  - boost1.78-devel
+  - boost1.78-atomic
+  - boost1.78-b2
+  - boost1.78-build
+  - boost1.78-chrono
+  - boost1.78-container
+  - boost1.78-context
+  - boost1.78-contract
+  - boost1.78-coroutine
+  - boost1.78-date-time
+  - boost1.78-fiber
+  - boost1.78-filesystem
+  - boost1.78-graph
+  - boost1.78-graph-mpich
+  - boost1.78-graph-openmpi
+  - boost1.78-iostreams
+  - boost1.78-json
+  - boost1.78-locale
+  - boost1.78-log
+  - boost1.78-math
+  - boost1.78-mpich
+  - boost1.78-mpich-devel
+  - boost1.78-nowide
+  - boost1.78-numpy3
+  - boost1.78-openmpi
+  - boost1.78-openmpi-devel
+  - boost1.78-program-options
+  - boost1.78-python3
+  - boost1.78-random
+  - boost1.78-regex
+  - boost1.78-serialization
+  - boost1.78-stacktrace
+  - boost1.78-static
+  - boost1.78-system
+  - boost1.78-test
+  - boost1.78-thread
+  - boost1.78-timer
+  - boost1.78-type_erasure
+  - boost1.78-wave
   - swig.x86_64
   - readline.x86_64
   - readline-devel.x86_64
@@ -192,30 +238,6 @@ package_list:
   - git-clang-format.x86_64
   - python3-clang.x86_64
   - libomp.x86_64
-  - gcc-toolset-13.x86_64
-  - gcc-toolset-13-gcc.x86_64
-  - gcc-toolset-13-gcc-c++.x86_64
-  - gcc-toolset-13-gcc-gfortran.x86_64
-  - gcc-toolset-13-gdb.x86_64
-  - gcc-toolset-13-runtime.x86_64
-  - gcc-toolset-13-annobin-annocheck.x86_64
-  - gcc-toolset-13-annobin-plugin-gcc.x86_64
-  - gcc-toolset-13-gcc-plugin-annobin.x86_64
-  - gcc-toolset-13-gcc-plugin-devel.x86_64
-  - gcc-toolset-13-binutils-devel.x86_64
-  - gcc-toolset-13-binutils-gold.x86_64
-  - gcc-toolset-13-binutils.x86_64
-  - gcc-toolset-13-dwz.x86_64
-  - gcc-toolset-13-libasan-devel.x86_64
-  - gcc-toolset-13-libatomic-devel.x86_64
-  - gcc-toolset-13-libgccjit-devel.x86_64
-  - gcc-toolset-13-libgccjit.x86_64
-  - gcc-toolset-13-libitm-devel.x86_64
-  - gcc-toolset-13-liblsan-devel.x86_64
-  - gcc-toolset-13-libquadmath-devel.x86_64
-  - gcc-toolset-13-libstdc++-devel.x86_64
-  - gcc-toolset-13-libtsan-devel.x86_64
-  - gcc-toolset-13-libubsan-devel.x86_64
   - gcc.x86_64
   - gcc-c++.x86_64
   - gcc-gfortran.x86_64
@@ -234,6 +256,25 @@ package_list:
   - gmp-devel.x86_64
   - libmpc.x86_64
   - libmpc-devel.x86_64
+  - clang
+  - clang-devel
+  - clang-tools-extra
+  - git-clang-format
+  - clang-analyzer
+  - llvm-toolset.x86_64
+  - gcc-toolset-14.x86_64
+  - gcc-toolset-14-binutils-gold.x86_64
+  - gcc-toolset-14-binutils-gprofng.x86_64
+  - gcc-toolset-14-libasan-devel.x86_64
+  - gcc-toolset-14-libatomic-devel.x86_64
+  - gcc-toolset-14-libgccjit-devel.x86_64
+  - gcc-toolset-14-libgccjit.x86_64
+  - gcc-toolset-14-libitm-devel.x86_64
+  - gcc-toolset-14-liblsan-devel.x86_64
+  - gcc-toolset-14-libquadmath-devel.x86_64
+  - gcc-toolset-14-libstdc++-devel.x86_64
+  - gcc-toolset-14-libtsan-devel.x86_64
+  - gcc-toolset-14-libubsan-devel.x86_64
   - gtest
   - gtest-devel
   - graphviz.x86_64
@@ -392,7 +433,6 @@ package_list:
   - root-roofit.x86_64
   - root-roofit-batchcompute.x86_64
   - root-roofit-core.x86_64
-  - root-roofit-dataframe-helpers.x86_64
   - root-roofit-hs3.x86_64
   - root-roofit-jsoninterface.x86_64
   - root-roofit-more.x86_64
@@ -427,5 +467,85 @@ package_list:
   - root-xroofit.x86_64
   - python3-root.x86_64
   - python3-jupyroot.noarch
-
-
+  - openmpi.x86_64
+  - openmpi-devel.x86_64
+  - mpich.x86_64
+  - mpich-devel.x86_64
+  - hdf5-mpich.x86_64
+  - hdf5-mpich-devel.x86_64
+  - hdf5-mpich-static.x86_64
+  - hdf5-openmpi.x86_64
+  - hdf5-openmpi-devel.x86_64
+  - hdf5-openmpi-static.x86_64
+  - MUMPS.x86_64
+  - MUMPS-common.noarch
+  - MUMPS-devel.x86_64
+  - MUMPS-mpich.x86_64
+  - MUMPS-mpich-devel.x86_64
+  - MUMPS-openmpi.x86_64
+  - MUMPS-openmpi-devel.x86_64
+  - SuperLUMT.x86_64
+  - SuperLUMT-devel.x86_64
+  - SuperLUMT-common.noarch
+  - SuperLUMT-complex16.x86_64
+  - SuperLUMT-complex.x86_64
+  - SuperLUMT-double.x86_64
+  - SuperLUMT64.x86_64
+  - SuperLUMT64-devel.x86_64
+  - SuperLUMT64-complex16.x86_64
+  - SuperLUMT64-complex.x86_64
+  - SuperLUMT64-double.x86_64
+  - netcdf-cxx4-mpich-devel.x86_64
+  - netcdf-cxx4-mpich-static.x86_64
+  - netcdf-cxx4-mpich.x86_64
+  - netcdf-cxx4-openmpi-devel.x86_64
+  - netcdf-cxx4-openmpi-static.x86_64
+  - netcdf-cxx4-openmpi.x86_64
+  - netcdf-fortran-mpich-devel.x86_64
+  - netcdf-fortran-mpich-static.x86_64
+  - netcdf-fortran-mpich.x86_64
+  - netcdf-fortran-openmpi-devel.x86_64
+  - netcdf-fortran-openmpi-static.x86_64
+  - netcdf-fortran-openmpi.x86_64
+  - netcdf-mpich-devel.x86_64
+  - netcdf-mpich-static.x86_64
+  - netcdf-mpich.x86_64
+  - netcdf-openmpi-devel.x86_64
+  - netcdf-openmpi-static.x86_64
+  - netcdf-openmpi.x86_64
+  - ptscotch-mpich-devel-parmetis.x86_64
+  - ptscotch-mpich-devel.x86_64
+  - ptscotch-mpich.x86_64
+  - ptscotch-openmpi-devel-parmetis.x86_64
+  - ptscotch-openmpi-devel.x86_64
+  - ptscotch-openmpi.x86_64
+  - scalapack-common.x86_64
+  - scalapack-mpich-devel.x86_64
+  - scalapack-mpich-devel.x86_64
+  - scalapack-mpich-static.x86_64
+  - scalapack-mpich-static.x86_64
+  - scalapack-mpich.x86_64
+  - scalapack-mpich.x86_64
+  - scalapack-openmpi-devel.x86_64
+  - scalapack-openmpi-static.x86_64
+  - scalapack-openmpi.x86_64
+  - python3-h5py-mpich.x86_64
+  - python3-h5py-openmpi.x86_64
+  - python3-mpi4py-mpich.x86_64
+  - python3-mpich.x86_64
+  - python3-openmpi.x86_64
+  - libevent.x86_64
+  - libevent-devel.x86_64
+  - mvapich2.x86_64
+  - mvapich2-devel.x86_64
+  - pmix.x86_64
+  - pmix-devel.x86_64
+  - pmix-pmi.x86_64
+  - pmix-pmi-devel.x86_64
+  - pmix-tools.x86_64
+  - hwloc.x86_64
+  - hwloc-devel.x86_64
+  - hwloc-libs.x86_64
+  - numactl.x86_64
+  - numactl-devel.x86_64
+  - numactl-libs.x86_64

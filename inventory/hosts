@@ -32,12 +32,16 @@ mgm1.spacescience.ro
 mgm2.spacescience.ro
 mgm3.spacescience.ro
 
+nfs01  ansible_host=10.99.99.200
 
 # [all:vars]
 
 ############################################################
 ## Define functional groups
 ############################################################
+
+[nfs_servers]
+nfs01  ansible_host=10.99.99.200
 
 [vmhosts]
 vmhost1
