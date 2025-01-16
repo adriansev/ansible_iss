@@ -13,8 +13,15 @@ MD_DEV: MD_DEV of which the partition will be part of
 [[ -z "${DISK}" ]] && { echo "1st arg (dev disk) missing"; help; exit 1; }
 [[ -z "${MD}" ]] && { echo "2nd arg (md device name) missing;"; help; exit 1; }
 
-parted -s -a optimal "/dev/${DISK}" mklabel gpt
-parted -s -a optimal "/dev/${DISK}" mkpart "${MD}" 0% 100%
+echo "Preparing /dev/${DISK}"
 mdadm --zero-superblock "/dev/${DISK}1" 2>/dev/null
-parted "/dev/${DISK}" print free
+sgdisk --zap-all "/dev/${DISK}"
+partprobe "/dev/${DISK}"
+sgdisk --clear --mbrtogpt "/dev/${DISK}"
+sgdisk --set-alignment "/dev/${DISK}"
+sgdisk --new=0:0:0 "/dev/${DISK}"
+sgdisk --change-name=1:"${MD}" "/dev/${DISK}"
+sgdisk --print "/dev/${DISK}"
+echo
+
 

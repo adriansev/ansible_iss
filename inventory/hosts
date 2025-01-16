@@ -42,6 +42,7 @@ nfs01  ansible_host=10.99.99.200
 
 [nfs_servers]
 nfs01  ansible_host=10.99.99.200
+nfs02  ansible_host=10.10.9.35
 
 [vmhosts]
 vmhost1

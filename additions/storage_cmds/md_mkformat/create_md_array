@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 
-NAME="3"
+NAME="1"
 
 # list of devices
+###   DEFINE THE LIST OF DEVICES !!!
 # raid_comp="/dev/sda /dev/sdm /dev/sdn /dev/sdd /dev/sdc /dev/sdb /dev/sdf /dev/sde /dev/sdg /dev/sdh /dev/sdi /dev/sdj"
-# raid_comp="/dev/sdk /dev/sdl /dev/sdab /dev/sdad /dev/sdae /dev/sdp /dev/sdq /dev/sdo /dev/sdz /dev/sds /dev/sdv /dev/sdr"
-raid_comp="/dev/sdt /dev/sdu /dev/sdx /dev/sdw /dev/sdy /dev/sdai /dev/sdac /dev/sdak /dev/sdaa /dev/sdah /dev/sdal /dev/sdaj"
 
 [[ -z "${raid_comp}" ]] && { echo "raid components not defined"; exit 1; }
 
 MD_NAME="md${NAME}"
-RAID_NAME="xrootd${NAME}"
+RAID_NAME="data${NAME}"
 
 # get how many devices
 raid_comp_arr=(${raid_comp})
