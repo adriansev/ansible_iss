@@ -16,11 +16,13 @@ if [[ "${LEVEL}" == "raid6" ]]; then
   STRIDE=$(echo "scale=0; ${CHUNK_SIZE}/${BLOCK_SIZE}" | bc -l )
   DATA_DISKS=$(echo "scale=0; ${TOTAL_DISKS} - 2" | bc -l )
   STRIPE=$(echo "scale=0; ${DATA_DISKS} * ${STRIDE}" | bc -l )
-  RAID_OPTS="${EXTENDED_OPTIONS},stride=${STRIDE},stripe-width=${STRIPE}"
+  EXTENDED_OPTIONS="${EXTENDED_OPTIONS},stride=${STRIDE},stripe-width=${STRIPE}"
 fi
 
 echo "
-parted -s -a optimal /dev/${MD} mklabel gpt
-parted -s -a optimal /dev/${MD} mkpart ${MD} 0% 100%
+sgdisk --clear --mbrtogpt "/dev/${MD}"
+sgdisk --set-alignment "/dev/${MD}"
+sgdisk --new=0:0:0 "/dev/${MD}"
+sgdisk --change-name=1:"${MD}" "/dev/${MD}"
 mkfs.ext4 -L ${MD} -b "${BLOCK_SIZE}" ${EXTENDED_OPTIONS} /dev/${MD}p1
 "
