@@ -17,6 +17,19 @@
 
     profile: iss
 
+    mounts_list:
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data5.mount"
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data6.mount"
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data7.mount"
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data5.automount"
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data6.automount"
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data7.automount"
+
+    mounts_list_enable:
+      - "data5.mount"
+      - "data6.mount"
+      - "data7.mount"
+
   vars_files:
       - "{{ playbook_dir }}/../additions/ipset/ipset_issaf.yml"
       - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_issaf_wn.yml"
@@ -45,6 +58,7 @@
       - "tasks/pkg_nfs_task.yml"
       - "tasks/pkg_frontier_task.yml"
       - "tasks/users_task.yml"
+      - "tasks/mounts_task.yml"
       - "tasks/cfg_firewall_task.yml"
       - "tasks/cfg_cvmfs_task.yml"
       - "tasks/cfg_chrony_task.yml"

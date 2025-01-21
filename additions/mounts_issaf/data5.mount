@@ -1,0 +1,15 @@
+[Unit]
+Description=Mount NFS data5
+
+[Mount]
+What=10.99.99.200:/storage01
+Where=/data5
+Type=nfs4
+Options=bg,nofail,_netdev,rw,noatime,async,vers=4.2,proto=tcp,hard,retry=3,retrans=5,timeo=50,rsize=1048576,wsize=1048576,acregmin=15,acregmax=90,acdirmin=90,acdirmax=120,noresvport
+DirectoryMode=0755
+TimeoutSec=45
+LazyUnmount=true
+SloppyOptions=true
+
+[Install]
+WantedBy=multi-user.target
