@@ -1,0 +1,11 @@
+[Unit]
+Description=AutoMount /var/arc/sessions
+
+[Automount]
+Where=/var/arc/sessions
+DirectoryMode=0777
+TimeoutIdleSec=0
+
+[Install]
+WantedBy=multi-user.target
+

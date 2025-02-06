@@ -1,6 +1,6 @@
 ---
 - hosts: "{{ target | default('issaf.spacescience.ro') }}"
-  gather_facts: False
+  gather_facts: true
   vars:
     cvmfs_cache_size: "51200"
     cvmfs_cache_base: "/fastdata/cvmfs/cache"
@@ -21,14 +21,23 @@
       - "{{ playbook_dir }}/../additions/mounts_issaf/data5.mount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/data6.mount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/data7.mount"
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data8.mount"
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data9.mount"
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data10.mount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/data5.automount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/data6.automount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/data7.automount"
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data8.automount"
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data9.automount"
+      - "{{ playbook_dir }}/../additions/mounts_issaf/data10.automount"
 
     mounts_list_enable:
       - "data5.mount"
       - "data6.mount"
       - "data7.mount"
+      - "data8.mount"
+      - "data9.mount"
+      - "data10.mount"
 
   vars_files:
       - "{{ playbook_dir }}/../additions/ipset/ipset_issaf.yml"

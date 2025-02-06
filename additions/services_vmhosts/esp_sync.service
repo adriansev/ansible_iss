@@ -1,0 +1,13 @@
+[Unit]
+Description=Sync ESP1 to ESP2
+DefaultDependencies=no
+ConditionPathIsDirectory=/boot/efi/EFI/
+ConditionPathIsDirectory=/boot/efi2/EFI/
+After=final.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/rsync -aWc --delete /boot/efi/ /boot/efi2/
+
+[Install]
+WantedBy=multi-user.target

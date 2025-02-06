@@ -1,6 +1,6 @@
 ---
-- hosts: "{{ target | default('nfs01') }}"
-  gather_facts: False
+- hosts: "{{ target | default('nfs_servers') }}"
+  gather_facts: true
   vars:
     chrony_base_ip: "pub46"
     profile: iss

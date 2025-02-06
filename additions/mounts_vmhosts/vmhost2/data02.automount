@@ -1,0 +1,11 @@
+[Unit]
+Description=AutoMount NFS /data02
+
+[Automount]
+Where=/data02
+DirectoryMode=0755
+TimeoutIdleSec=0
+
+[Install]
+WantedBy=multi-user.target
+
