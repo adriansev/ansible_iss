@@ -1,5 +1,7 @@
 ---
 package_list:
+  - quota.x86_64
+  - quotatool.x86_64
   - environment-modules.x86_64
   - systemd-devel
   - python3-six.noarch
@@ -237,6 +239,7 @@ package_list:
   - clang-analyzer.noarch
   - git-clang-format.x86_64
   - python3-clang.x86_64
+  - rust-toolset.noarch
   - libomp.x86_64
   - gcc.x86_64
   - gcc-c++.x86_64
@@ -471,12 +474,19 @@ package_list:
   - openmpi-devel.x86_64
   - mpich.x86_64
   - mpich-devel.x86_64
+  - hdf5.x86_64
+  - hdf5-devel.x86_64
   - hdf5-mpich.x86_64
   - hdf5-mpich-devel.x86_64
-  - hdf5-mpich-static.x86_64
   - hdf5-openmpi.x86_64
   - hdf5-openmpi-devel.x86_64
-  - hdf5-openmpi-static.x86_64
+  - python3-h5py.x86_64
+  - python3-h5py-mpich.x86_64
+  - python3-h5py-openmpi.x86_64
+  - python3-tables.x86_64
+  - blosc.x86_64
+  - blosc-devel.x86_64
+  - python3-blosc.x86_64
   - MUMPS.x86_64
   - MUMPS-common.noarch
   - MUMPS-devel.x86_64
@@ -495,24 +505,26 @@ package_list:
   - SuperLUMT64-complex16.x86_64
   - SuperLUMT64-complex.x86_64
   - SuperLUMT64-double.x86_64
-  - netcdf-cxx4-mpich-devel.x86_64
-  - netcdf-cxx4-mpich-static.x86_64
+  - netcdf
+  - netcdf-devel
+  - netcdf-cxx4
+  - netcdf-cxx4-devel
   - netcdf-cxx4-mpich.x86_64
-  - netcdf-cxx4-openmpi-devel.x86_64
-  - netcdf-cxx4-openmpi-static.x86_64
+  - netcdf-cxx4-mpich-devel.x86_64
   - netcdf-cxx4-openmpi.x86_64
-  - netcdf-fortran-mpich-devel.x86_64
-  - netcdf-fortran-mpich-static.x86_64
-  - netcdf-fortran-mpich.x86_64
-  - netcdf-fortran-openmpi-devel.x86_64
-  - netcdf-fortran-openmpi-static.x86_64
-  - netcdf-fortran-openmpi.x86_64
-  - netcdf-mpich-devel.x86_64
-  - netcdf-mpich-static.x86_64
+  - netcdf-cxx4-openmpi-devel.x86_64
   - netcdf-mpich.x86_64
-  - netcdf-openmpi-devel.x86_64
-  - netcdf-openmpi-static.x86_64
+  - netcdf-mpich-devel.x86_64
   - netcdf-openmpi.x86_64
+  - netcdf-openmpi-devel.x86_64
+  - netcdf-fortran
+  - netcdf-fortran-devel
+  - netcdf-fortran-mpich.x86_64
+  - netcdf-fortran-mpich-devel.x86_64
+  - netcdf-fortran-openmpi.x86_64
+  - netcdf-fortran-openmpi-devel.x86_64
+  - python3-netcdf4
+  - netcdf4-python
   - ptscotch-mpich-devel-parmetis.x86_64
   - ptscotch-mpich-devel.x86_64
   - ptscotch-mpich.x86_64

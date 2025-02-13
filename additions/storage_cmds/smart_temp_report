@@ -1,0 +1,113 @@
+#!/usr/bin/env python3
+
+from datetime import datetime
+import os
+import sys
+import json
+import re
+import subprocess
+from typing import Union
+from rich.pretty import pprint
+from rich.console import Console
+from rich.table import Table
+
+def is_help(args: Union[str, list], clean_args: bool = False) -> bool:
+    if not args: return False
+    if isinstance(args, str): args = args.split()
+    help_opts = ('-h', '--h', '-help', '--help')
+    help_arg_present = any(opt in args for opt in help_opts)
+    if help_arg_present and clean_args:
+        for opt in help_opts: get_arg(args, opt)
+    return help_arg_present
+
+
+def unixtime2local(timestamp: Union[str, int], decimals: bool = True) -> str:
+    """Convert unix time to a nice custom format"""
+    timestr = str(timestamp)
+    if len(timestr) < 10: return ''
+    micros = None
+    millis = None
+    time_decimals = ''
+    if len(timestr) > 10:
+        time_decimals = timestr[10:]
+        if len(time_decimals) <= 3:
+            time_decimals = float(time_decimals.ljust(3, '0')) * 1000
+            millis = datetime.timedelta(milliseconds=int(time_decimals))
+        else:
+            time_decimals = float(time_decimals.ljust(6, '0')) *1000000
+            micros = datetime.timedelta(microseconds=int(time_decimals))
+
+    unixtime = timestr[:10]
+    utc_time = datetime.datetime.fromtimestamp(int(unixtime), datetime.timezone.utc)
+    local_time = utc_time.astimezone()
+    if decimals and millis:
+        return f'{(local_time + millis).strftime("%Y%m%d_%H%M%S")}.{time_decimals}'
+    if decimals and micros:
+        return (local_time + micros).strftime("%Y%m%d_%H%M%S.%f")
+    return local_time.strftime("%Y%m%d_%H%M%S")
+
+
+def smartctl_dict(args_smart: list) -> dict:
+    if not args_smart: return {}
+    status = exitcode = except_msg = ''
+    timeout = 5
+
+    args_def = ['smartctl', '--json=c']
+    args = args_def + args_smart
+
+    try:
+        status = subprocess.run(args, encoding = 'utf-8', errors = 'replace', shell = False, timeout = timeout, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    except subprocess.TimeoutExpired:
+        except_msg = f'Expired timeout: {timeout} for: {args}'
+    except FileNotFoundError:
+        except_msg = f"Command not found: {' '.join(args)}"
+    except Exception:
+        ex_type, ex_value, ex_traceback = sys.exc_info()
+        except_msg = f'Exception:: {ex_type} -> {ex_value}\n{ex_traceback}\n'
+
+    if except_msg or status.stderr:
+        msg_err = f'{except_msg}\n{status.stderr.strip()}'
+        print(msg_err, file = sys.stderr, flush = True)
+        return {}
+
+    return json.loads(status.stdout.strip())
+
+
+NOW = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+table = Table(title = f'Storage Temp {NOW}', box = None, pad_edge = False)
+table.add_column("Dev", no_wrap = True)
+table.add_column("Temp", no_wrap = True)
+table.add_column("Limit", no_wrap = True)
+
+devlist_output = smartctl_dict(['--scan-open'])
+devlist = []
+
+if 'devices' in devlist_output:
+    devlist = [x['name'] for x in devlist_output['devices'] ]
+
+for dev in devlist:
+    dev_info_output = smartctl_dict(['-x', dev])
+    ##model_name = f"{dev_info_output['model_name'].replace(' ','_')}/{dev_info_output['serial_number']}"
+    dev_name = dev_info_output['device']['name']
+    temp_dict = dev_info_output.get('temperature', None)
+    if not temp_dict: continue
+
+    temp = temp_dict['current']
+    op_limit_min = temp_dict.get('op_limit_min', '')
+    op_limit_max = temp_dict.get('op_limit_max', '')
+    drive_trip = temp_dict.get('drive_trip', '')
+
+    limits = ''
+    if op_limit_min or op_limit_max:
+        limits = f'op_limits: {op_limit_min}/{op_limit_max}'
+
+    if drive_trip:
+        limits = f'trip_temp: {drive_trip}'
+
+    table.add_row(f'{dev_name}',f'{temp}', f'{limits}')
+
+with open(f'/tmp/storage_temp.txt', 'w', encoding = "ascii", errors = "replace") as f:
+    console = Console(file = f)
+    console.print(table)
+

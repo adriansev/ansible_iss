@@ -18,6 +18,7 @@
     - iostat_md
     - list_storage
     - smartctl_dump
+    - smart_temp_report
 
 - name: Sync md format tools
   ansible.builtin.copy:
@@ -34,4 +35,17 @@
     - format_md_component
     - format_mdraid
     - select_disk_range
+
+- name: Add cron job for smart_temp_report
+  ansible.builtin.copy:
+    dest: "/etc/cron.d/smart_temp_report"
+    force: true
+    group: root
+    owner: root
+    mode: 0644
+    content: |
+        SHELL=/usr/bin/bash
+        PATH=/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+        MAILTO=root
+        */2 * * * * root /root/bin/smart_temp_report &> /tmp/smart_temp_report.log
 
