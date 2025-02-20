@@ -12,3 +12,12 @@
       - "tasks/pkg_kernelml_install_task.yml"
       - "tasks/pkg_gmond_task.yml"
 
+- name: Do chrony setup
+  ansible.builtin.import_playbook: cfg_chrony.yml
+
+- name: Do dnsmasq setup
+  ansible.builtin.import_playbook: cfg_dnsmasq.yml
+
+- name: Do lldp setup
+  ansible.builtin.import_playbook: cfg_lldpd.yml
+

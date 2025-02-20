@@ -5,6 +5,6 @@ group_details:
   - { name: 'auger', gid: 1002 }
 
 user_details:
-  - { name: 'ops', group: 'ops', uid: 1000, gid: 1000, shell: '/bin/bash', home: '/home/ops', groups: [], hash: '$6$e9RH6yal$GyXYCzks2Uv2RAAF6xwilEh.70aZy.m3PQUFBHd5qiO2xYHlcEmSOmNcSW0SzZvsHaaGLJljodEROtVLAtcLD0' }
-  - { name: 'dteam', group: 'dteam', uid: 1001, gid: 1001, shell: '/bin/bash', home: '/home/dteam', groups: [], hash: '$6$skFjbEHw$S9RlAbj4hQ2WuZcOO.1GCGiNs6aaI1LxgLFPdCns4vnJ1oyETUoA7MPKGi8Z94nRcP8YD7A5/YDlOTb7kVVXV.' }
-  - { name: 'auger', group: 'auger', uid: 1002, gid: 1002, shell: '/bin/bash', home: '/home/auger', groups: [], hash: '$6$WG8PGs7M$i1T5mZ4ZyA.HwyiLbWhhkfmCJ2nL.8.HqU53Wvoy.3zSSBhxHDu0oacc8BHnLLtI9Fg4KUimJlHhR/QztQaUY1' }
+  - { name: 'ops', group: 'ops', uid: 1000, gid: 1000, shell: '/bin/bash', home: '/home/ops', groups: [], hash: '$6$e9RH6yal$GyXYCzks2Uv2RAAF6xwilEh.70aZy.m3PQUFBHd5qiO2xYHlcEmSOmNcSW0SzZvsHaaGLJljodEROtVLAtcLD0', gecos: '' }
+  - { name: 'dteam', group: 'dteam', uid: 1001, gid: 1001, shell: '/bin/bash', home: '/home/dteam', groups: [], hash: '$6$skFjbEHw$S9RlAbj4hQ2WuZcOO.1GCGiNs6aaI1LxgLFPdCns4vnJ1oyETUoA7MPKGi8Z94nRcP8YD7A5/YDlOTb7kVVXV.', gecos: '' }
+  - { name: 'auger', group: 'auger', uid: 1002, gid: 1002, shell: '/bin/bash', home: '/home/auger', groups: [], hash: '$6$WG8PGs7M$i1T5mZ4ZyA.HwyiLbWhhkfmCJ2nL.8.HqU53Wvoy.3zSSBhxHDu0oacc8BHnLLtI9Fg4KUimJlHhR/QztQaUY1', gecos: '' }

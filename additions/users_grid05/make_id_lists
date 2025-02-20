@@ -4,11 +4,11 @@ import os
 import pwd
 import spwd
 import grp
-# import rich
+##from rich.pretty import pprint
 
 my_path = os.path.dirname(os.path.realpath(__file__))
 
-group_info = [{'gr_name': g.gr_name, 'gr_passwd': g.gr_passwd, 'gr_gid': g.gr_gid, 'gr_mem': g.gr_mem } for g in grp.getgrall() if g.gr_gid > 999]
+group_info = [{'gr_name': g.gr_name, 'gr_passwd': g.gr_passwd, 'gr_gid': g.gr_gid, 'gr_mem': g.gr_mem } for g in grp.getgrall() if g.gr_gid > 999 and g.gr_name != 'nobody']
 group_info_sorted = sorted(group_info, key = lambda t: int(t['gr_gid']))
 
 def get_user_additional_groups(user):
@@ -26,7 +26,9 @@ def get_user_sinfo(user):
 user_info_list = []
 for user_info in pwd.getpwall():
     if user_info.pw_uid < 1000: continue
+    if user_info.pw_name == 'nobody': continue
     user_dict = dict()
+
     for i in dir(user_info):
         if not i.startswith('pw_'): continue
         user_dict[i] = getattr(user_info, i)
@@ -35,9 +37,11 @@ for user_info in pwd.getpwall():
     for j in dir(user_sinfo):
         if not j.startswith('sp_'): continue
         user_dict[j] = getattr(user_sinfo, j)
-    user_info_list.append(user_dict)
-user_list_sorted = sorted(user_info_list, key = lambda t: int(t['pw_uid']))
 
+    user_info_list.append(user_dict)
+
+
+user_list_sorted = sorted(user_info_list, key = lambda t: int(t['pw_uid']))
 with open(f'{my_path}/user_group_info.yml', 'w') as yml:
     yml.write('---\n')
     yml.write('group_details:\n')
@@ -47,6 +51,5 @@ with open(f'{my_path}/user_group_info.yml', 'w') as yml:
     yml.write('user_details:\n')
     for u in user_list_sorted:
         add_groups = get_user_additional_groups(u["pw_name"])
-        yml.write(f'  - {{ name: \'{u["pw_name"]}\', group: \'{u["pw_name"]}\', uid: {u["pw_uid"]}, gid: {u["pw_gid"]}, shell: \'{u["pw_shell"]}\', home: \'{u["pw_dir"]}\', groups: { add_groups }, hash: \'{u["sp_pwdp"]}\' }}\n')
+        yml.write(f'  - {{ name: \'{u["pw_name"]}\', group: \'{u["pw_name"]}\', uid: {u["pw_uid"]}, gid: {u["pw_gid"]}, shell: \'{u["pw_shell"]}\', home: \'{u["pw_dir"]}\', groups: { add_groups }, hash: \'{u["sp_pwdp"]}\', gecos: \'{u["pw_gecos"]}\' }}\n')
 
-#rich.print(user_list_sorted)

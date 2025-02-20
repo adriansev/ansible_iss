@@ -18,6 +18,7 @@
     password: "{{ user_def.hash }}"
     home: "{{ user_def.home }}"
     shell: "{{ user_def.shell }}"
+    comment: "{{ user_def.gecos | default('') }}"
     state: present
     create_home: "{{ users_create_home | default('false') }}"
     update_password: always
