@@ -1,14 +1,7 @@
 ---
 - hosts: "{{ target | default('all') }}"
 
-  pre_tasks:
-  - include_tasks: tasks/00basic_req.yml
-
   tasks:
-  - include_tasks: tasks/00basic_tools.yml
-  - include_tasks: tasks/00basic_tools_hw.yml
-
-  post_tasks:
   - name: Get facts
     ansible.builtin.setup:
       gather_timeout: 30
@@ -25,10 +18,10 @@
         - '!MysqlFactCollector'
         - '!Icinga2FactCollector'
         - '!DockerFactCollector'
-  #  register: extd_facts
+    register: extd_facts
 
   # Print extended facts
-  #- name: Debug
+  # - name: Debug
   #  debug:
-  #    var: extd_facts.stdout
+  #    var: extd_facts
 

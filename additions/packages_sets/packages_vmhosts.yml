@@ -1,34 +1,58 @@
 ---
 package_list:
-  - libvirt
-  - libvirt
-  - libvirt-client-qemu
-  - libvirt-daemon
-  - libvirt-daemon-common
-  - libvirt-daemon-config-network
-  - libvirt-daemon-config-nwfilter
-  - libvirt-daemon-driver-interface
-  - libvirt-daemon-driver-network
-  - libvirt-daemon-driver-nodedev
-  - libvirt-daemon-driver-nwfilter
-  - libvirt-daemon-driver-qemu
-  - libvirt-daemon-driver-secret
-  - libvirt-daemon-driver-storage
-  - libvirt-daemon-driver-storage-core
-  - libvirt-daemon-driver-storage-disk
-  - libvirt-daemon-driver-storage-iscsi
-  - libvirt-daemon-driver-storage-logical
-  - libvirt-daemon-driver-storage-mpath
-  - libvirt-daemon-driver-storage-rbd
-  - libvirt-daemon-driver-storage-scsi
-  - libvirt-daemon-kvm
-  - libvirt-daemon-lock
-  - libvirt-daemon-log
-  - libvirt-daemon-plugin-lockd
-  - libvirt-daemon-plugin-sanlock
-  - libvirt-daemon-proxy
-  - libvirt-libs
-  - libvirt-nss
+  - virtiofsd
+  - ipxe-roms-qemu
+  - qemu-img.x86_64
+  - qemu-kvm-audio-pa.x86_64
+  - qemu-kvm-block-blkio.x86_64
+  - qemu-kvm-block-curl.x86_64
+  - qemu-kvm-block-rbd.x86_64
+  - qemu-kvm-common.x86_64
+  - qemu-kvm-core.x86_64
+  - qemu-kvm-device-display-virtio-gpu-pci.x86_64
+  - qemu-kvm-device-display-virtio-gpu.x86_64
+  - qemu-kvm-device-display-virtio-vga.x86_64
+  - qemu-kvm-device-usb-host.x86_64
+  - qemu-kvm-device-usb-redirect.x86_64
+  - qemu-kvm-tools.x86_64
+  - qemu-kvm-ui-egl-headless.x86_64
+  - qemu-kvm-ui-opengl.x86_64
+  - qemu-kvm.x86_64
+  - qemu-pr-helper.x86_64
+  - qemu-sanity-check.x86_64
+  - qemu-sanity-check-nodeps.x86_64
+  - libvirt-client-qemu.x86_64
+  - libvirt-client.x86_64
+  - libvirt-daemon-common.x86_64
+  - libvirt-daemon-config-network.x86_64
+  - libvirt-daemon-config-nwfilter.x86_64
+  - libvirt-daemon-driver-interface.x86_64
+  - libvirt-daemon-driver-network.x86_64
+  - libvirt-daemon-driver-nodedev.x86_64
+  - libvirt-daemon-driver-nwfilter.x86_64
+  - libvirt-daemon-driver-qemu.x86_64
+  - libvirt-daemon-driver-secret.x86_64
+  - libvirt-daemon-driver-storage-core.x86_64
+  - libvirt-daemon-driver-storage-disk.x86_64
+  - libvirt-daemon-driver-storage-iscsi.x86_64
+  - libvirt-daemon-driver-storage-logical.x86_64
+  - libvirt-daemon-driver-storage-mpath.x86_64
+  - libvirt-daemon-driver-storage-rbd.x86_64
+  - libvirt-daemon-driver-storage-scsi.x86_64
+  - libvirt-daemon-driver-storage.x86_64
+  - libvirt-daemon-kvm.x86_64
+  - libvirt-daemon-lock.x86_64
+  - libvirt-daemon-log.x86_64
+  - libvirt-daemon-plugin-lockd.x86_64
+  - libvirt-daemon-plugin-sanlock.x86_64
+  - libvirt-daemon-proxy.x86_64
+  - libvirt-daemon.x86_64
+  - libvirt-dbus-1.4.1-5.el9.x86_64
+  - libvirt-glib-4.0.0-3.el9.x86_64
+  - libvirt-libs.x86_64
+  - libvirt-nss.x86_64
+  - libvirt-ssh-proxy.x86_64
+  - libvirt.x86_64
   - python3-libvirt
   - cockpit
   - cockpit-files
@@ -39,4 +63,23 @@ package_list:
   - cockpit-system
   - cockpit-ws
   - cockpit-bridge
+  - virt-install.noarch
+  - virt-p2v.x86_64
+  - virt-v2v.x86_64
+  - virt-top.x86_64
+  - virt-win-reg.noarch
+  - guestfs-tools
+  - libguestfs-appliance
+  - libguestfs
+  - libguestfs-xfs
+  - libguestfs-winsupport
+  - libguestfs-rsync
+  - libguestfs-rescue
+  - libguestfs-inspect-icons
+  - libguestfs-bash-completion
+  - tuned
+  - tuned-utils
+  - tuned-profiles-cpu-partitioning
+  - ksmtuned
+
 

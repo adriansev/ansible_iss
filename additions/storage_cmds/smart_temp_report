@@ -65,6 +65,8 @@ def smartctl_dict(args_smart: list) -> dict:
         ex_type, ex_value, ex_traceback = sys.exc_info()
         except_msg = f'Exception:: {ex_type} -> {ex_value}\n{ex_traceback}\n'
 
+    status.stdout = status.stdout.replace('  Pending defect count:','')
+
     if except_msg or status.stderr:
         msg_err = f'{except_msg}\n{status.stderr.strip()}'
         print(msg_err, file = sys.stderr, flush = True)
@@ -84,10 +86,11 @@ devlist_output = smartctl_dict(['--scan-open'])
 devlist = []
 
 if 'devices' in devlist_output:
-    devlist = [x['name'] for x in devlist_output['devices'] ]
+    devlist = [f'-d {x["type"]} -x {x["name"]}' for x in devlist_output['devices'] ]
 
 for dev in devlist:
-    dev_info_output = smartctl_dict(['-x', dev])
+    arg_list = dev.split()
+    dev_info_output = smartctl_dict(arg_list)
     ##model_name = f"{dev_info_output['model_name'].replace(' ','_')}/{dev_info_output['serial_number']}"
     dev_name = dev_info_output['device']['name']
     temp_dict = dev_info_output.get('temperature', None)
