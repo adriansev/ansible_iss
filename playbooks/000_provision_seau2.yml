@@ -1,10 +1,11 @@
-- hosts: "{{ target | default('vmhosts') }}"
+- hosts: "{{ target | default('seau2.spacescience.ro') }}"
   gather_facts: False
   vars:
-    chrony_base_ip: "priv10"
+    chrony_base_ip: "pub85"
 
-    profile: virtual-host
-    tuned_daemon_mode: false
+    profile: iss
+
+    _eos_env_roles: "mgm mq fst"
 
     mdraid_is_enabled: "yes"
     mdraid_check_type: "check"
@@ -22,28 +23,27 @@
 
     ipset_tables:
       - accept_ip:
-        - "10.10.10.120"
-        - "10.10.10.181"
-        - "10.10.11.241"
-        - "10.10.11.243"
       - accept_ip6:
       - accept_net:
       - accept_net6:
       - accept_port_ip:
       - accept_port_ip6:
       - accept_port_net:
-        - "85.120.46.0/24,9090"
-        - "46.243.114.128/25,9090"
-        - "10.10.10.8/22,9090"
-        - "10.10.10.8/22,22"
       - accept_port_net6:
       - accept_port_tcp:
+        - "1094"
+        - "1095"
+        - "60000"
       - accept_port_udp:
 
+    cluster_user_list: seau2
+
   vars_files:
-      - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_iss.yml"
+      - "{{ playbook_dir }}/../additions/users_{{ cluster_user_list }}/user_group_info.yml"
+      - "{{ playbook_dir }}/../additions/users_{{ cluster_user_list }}/delete_users_groups.yml"
+      - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_alien_wn.yml"
       - "{{ playbook_dir }}/../additions/sysctl_lists/sysctl_generic.yml"
-      - "{{ playbook_dir }}/../additions/packages_sets/packages_vmhosts.yml"
+      - "{{ playbook_dir }}/../additions/root_tuning_list/tuning_generic.yml"
 
   tasks:
   - ansible.builtin.include_tasks:
@@ -53,21 +53,27 @@
     with_items:
       - "tasks/00basic_tools.yml"
       - "tasks/00basic_tools_hw.yml"
-      - "tasks/pkg_utils_task.yml"
       - "tasks/00storage_tools.yml"
       - "tasks/storage_cli.yml"
       - "tasks/mdraid_conf_task.yml"
       - "tasks/seatools_sync.yml"
-      - "tasks/cfg_smartd_task.yml"
       - "tasks/pkg_kernelml_install_task.yml"
-      - "tasks/pkg_drbd_task.yml"
+      - "tasks/pkg_igtfca_task.yml"
+      - "tasks/pkg_lsc_vomses_task.yml"
+      - "tasks/pkg_eos_mgm_task.yml"
+      - "tasks/pkg_eos_fst_task.yml"
       - "tasks/cfg_firewall_task.yml"
+      - "tasks/cfg_fail2ban_task.yml"
       - "tasks/cfg_chrony_task.yml"
       - "tasks/cfg_ssh_task.yml"
       - "tasks/cfg_lmsensors.yml"
+      - "tasks/cfg_smartd_task.yml"
       - "tasks/cfg_lldpd_task.yml"
       - "tasks/cfg_tuned_task.yml"
-      - "tasks/cfg_gmond_misc.yml"
       - "tasks/tune_sysctl_task.yml"
-      - "tasks/packages_task.yml"
+      - "tasks/tune_scripts_task.yml"
+      - "tasks/pkg_utils_task.yml"
+      - "tasks/users_task.yml"
+      - "tasks/cfg_eos_setup_task.yml"
+      - "tasks/cfg_eosmgm_setup_task.yml"
 

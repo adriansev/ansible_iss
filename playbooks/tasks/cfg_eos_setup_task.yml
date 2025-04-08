@@ -72,12 +72,12 @@
     - /var/spool/eos
     - /var/log/eos
 
-- name: eos_env configuration
+ - name: eos_env configuration
   ansible.builtin.template:
     src: "{{ playbook_dir }}/../additions/eos_setup/eos_env.j2"
-    dest: /etc/sysconfig/eos_env
+    dest: /etc/sysconfig/eos_env_ans
     owner: root
     group: root
     mode: '0644'
     force: true
-
+  ignore_errors: true

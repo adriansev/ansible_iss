@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# remove any old list that might exist from previous runs of this script
+#rm -rf /root/cn.zone
+
+# Pull the latest IP set for China
+curl -O http://www.ipdeny.com/ipblocks/data/countries/cn.zone
+
+# Add each IP address from the downloaded list into the ipset 'china'
+#for i in $(cat /root/cn.zone); do ipset add blacklist_net $i; done
+

@@ -1,0 +1,22 @@
+---
+iptables_v4_custom_table_setup: ""
+iptables_v6_custom_table_setup: ""
+ip_v4_filter_custom_rule_after_ipsets: ""
+ip_v6_filter_custom_rule_after_ipsets: ""
+
+ipset_tables:
+  - accept_ip:
+  - accept_ip6:
+  - accept_net:
+  - accept_net6:
+  - accept_port_ip:
+  - accept_port_ip6:
+  - accept_port_net:
+  - accept_port_net6:
+  - accept_port_tcp:
+    - "1094"
+    - "1095"
+    - "8000"
+    - "60000"
+  - accept_port_udp:
+

@@ -1,0 +1,10 @@
+---
+group_details:
+  - { name: 'ops', gid: 1000 }
+  - { name: 'dteam', gid: 1001 }
+  - { name: 'auger', gid: 1002 }
+
+user_details:
+  - { name: 'ops', group: 'ops', uid: 1000, gid: 1000, shell: '/bin/bash', home: '/home/ops', groups: [], hash: '$6$V3ANJDHj$KWEiyAxc42u5paS85Mz0vJlUEeDudPbNLzqJNifnbCIMgnNTaz0xmf.hFDHzQQXb0/zGMDTsV5lxIMAcTaKUm/', gecos: '' }
+  - { name: 'dteam', group: 'dteam', uid: 1001, gid: 1001, shell: '/bin/bash', home: '/home/dteam', groups: [], hash: '$6$S4yaNkI5$f3AX8g7ixdlgu2mNVhCdLqUvkW5zuTglLv756AkdKIQdqRB7R8yG9bHepDAsDb4LpHVrmxroPcm696AfLoSc6/', gecos: '' }
+  - { name: 'auger', group: 'auger', uid: 1002, gid: 1002, shell: '/bin/bash', home: '/home/auger', groups: [], hash: '$6$VYC/mTs8$S5uPaupPPavPnqs8A5C2uiUQn3wAImMLbACdnSw7vsmmdRa0E8Pw.93j9Z/a6EUag3dOCC3sFJgCHzKUBdYSa1', gecos: '' }

@@ -1,0 +1,8 @@
+
+
+CODE=""
+
+https://raw.githubusercontent.com/ipverse/rir-ip/master/country/${CODE}/ipv4-aggregated.txt
+https://raw.githubusercontent.com/ipverse/rir-ip/master/country/${CODE}/ipv6-aggregated.txt
+
+

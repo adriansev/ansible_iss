@@ -23,40 +23,40 @@ XRD_ROLES="{{ _eos_env_roles }}"
 #-------------------------------------------------------------------------------
 
 # The fully qualified hostname of current MGM
-EOS_MGM_HOST="mgm.spacescience.ro"
+EOS_MGM_HOST="{{ _eos_env_mgmhost }}"
 
 # The fully qualified hostname of target MGM
-# EOS_MGM_HOST_TARGET="mgm.spacescience.ro"
+# EOS_MGM_HOST_TARGET="{{ _eos_env_mgmhosttarget }}"
 
 # The EOS instance name N.B.! It MUST start with "eos" and then some alphanumeric characters
 # This is important since there are some special files and directories created inside the /eos/<instance_name> subtree
 # indispensable for the proper functioning of the instance.
-EOS_INSTANCE_NAME='eosalice'
+EOS_INSTANCE_NAME='"{{ _eos_env_instance }}"'
 
 # The EOS configuration to load after daemon start
 EOS_AUTOLOAD_CONFIG=default
 
 # The EOS broker URL ; FOR FST USAGE USE THE FQDN OF THE MQ!!!!!
-EOS_BROKER_URL="root://mgm.spacescience.ro:1097//eos/"
+EOS_BROKER_URL="root://{{ _eos_env_mgmhost }}:1097//eos/"
 
 # The EOS host geo location tag used to sort hosts into geographical (rack) locations
 # !!! REQUIRED !!! list of ":" separated tokens of up to 8 chars
-EOS_GEOTAG="ISS::ALICE"
+EOS_GEOTAG="{{ _eos_env_geotag }}"
 
 # The fully qualified hostname of MGM master1
-EOS_MGM_MASTER1="mgm.spacescience.ro"
+EOS_MGM_MASTER1="{{ _eos_env_mgm_master1 }}"
 
 # The fully qualified hostname of MGM master2
-EOS_MGM_MASTER2="mgm.spacescience.ro"
+EOS_MGM_MASTER2="{{ _eos_env_mgm_master2 }}"
 
 # The alias which selects master 1 or 2
-EOS_MGM_ALIAS="mgm.spacescience.ro"
+EOS_MGM_ALIAS="{{ _eos_env_mgm_alias }}"
 
 # In HA mode, presence of this env enables the redirection of the read traffic from the slaves to the master
 # EOS_HA_REDIRECT_READS=1
 
 # The mail notification in case of fail-over
-EOS_MAIL_CC="glite@spacescience.ro"
+EOS_MAIL_CC="{{ _eos_env_email }}"
 EOS_NOTIFY="mail -s $(date +%s)-$(hostname)-eos-notify $EOS_MAIL_CC"
 
 # Enable core dumps initiated internally

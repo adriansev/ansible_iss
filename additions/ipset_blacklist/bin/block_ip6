@@ -1,0 +1,1 @@
+ipset add blacklist_ip6 $1

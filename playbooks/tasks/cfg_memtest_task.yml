@@ -1,0 +1,16 @@
+---
+- name: Copy memtest efi
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/memtest/memtest64.efi"
+    dest: "/boot/efi/EFI/BOOT/"
+    mode: "0644"
+    owner: root
+    group: root
+    force: true
+
+- name: Create GRUB loadentry config
+  ansible.builtin.copy:
+    dest: "/boot/loader/entries/memtest.conf"
+    content: |
+        title  Memtest86+
+        efi    /BOOT/memtest64.efi dark

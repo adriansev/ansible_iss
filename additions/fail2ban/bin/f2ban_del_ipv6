@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+ipset del f2b-sshd6 ${1}

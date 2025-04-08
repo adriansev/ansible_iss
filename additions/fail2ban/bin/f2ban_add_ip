@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+ipset add f2b-sshd ${1}
+
