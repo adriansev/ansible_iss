@@ -51,6 +51,9 @@ fstofs.metalog /var/eos/md/
 fstofs.qdbcluster mgm1.spacescience.ro:7000 mgm2.spacescience.ro:7000 mgm3.spacescience.ro:7000
 fstofs.qdbpassword_file /etc/quarkdb.pass
 
+# Use gRPC?
+#fstofs.protowfusegrpc true
+
 fstofs.filemd_handler attr
 
 #-------------------------------------------------------------------------------
@@ -58,8 +61,8 @@ fstofs.filemd_handler attr
 #-------------------------------------------------------------------------------
 if exec xrootd
     xrd.protocol XrdHttp:8000 libXrdHttp.so
-    http.trace  false
     http.exthandler EosFstHttp /usr/lib64/libEosFstHttp.so none
+    http.trace  false
 
     # HOST CERTS REQUIRED
     http.exthandler  xrdtpc libXrdHttpTPC.so

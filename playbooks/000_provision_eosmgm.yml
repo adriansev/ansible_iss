@@ -6,6 +6,14 @@
     profile: iss
 
     _eos_env_roles: "mgm mq"
+    _eos_env_mgmhost: "mgm.spacescience.ro"
+    _eos_env_mgmhosttarget: "mgm.spacescience.ro"
+    _eos_env_instance: "eosalice"
+    _eos_env_geotag: "ISS::ALICE"
+    _eos_env_mgm_master1: "mgm.spacescience.ro"
+    _eos_env_mgm_master2: "mgm.spacescience.ro"
+    _eos_env_mgm_alias: "mgm.spacescience.ro"
+    _eos_env_email: "glite@spacescience.ro"
 
     mdraid_is_enabled: "yes"
     mdraid_check_type: "check"

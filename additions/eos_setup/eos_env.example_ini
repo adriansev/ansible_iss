@@ -1,27 +1,3 @@
-#-------------------------------------------------------------------------------
-# File: eos_env.example
-# Author: Ivan Arizanovic <ivan.arizanovic@comtrade.com>
-# Author: Branko Blagojevic <branko.blagojevic@comtrade.com>
-#-------------------------------------------------------------------------------
-
-# ************************************************************************
-# * EOS - the CERN Disk Storage System                                   *
-# * Copyright (C) 2018 CERN/Switzerland                                  *
-# *                                                                      *
-# * This program is free software: you can redistribute it and/or modify *
-# * it under the terms of the GNU General Public License as published by *
-# * the Free Software Foundation, either version 3 of the License, or    *
-# * (at your option) any later version.                                  *
-# *                                                                      *
-# * This program is distributed in the hope that it will be useful,      *
-# * but WITHOUT ANY WARRANTY; without even the implied warranty of       *
-# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        *
-# * GNU General Public License for more details.                         *
-# *                                                                      *
-# * You should have received a copy of the GNU General Public License    *
-# * along with this program.  If not, see <http://www.gnu.org/licenses/>.*
-# ************************************************************************
-
 # Should we run with another limit on the core file size other than the default?
 DAEMON_COREFILE_LIMIT=unlimited
 
@@ -216,39 +192,6 @@ EOS_NOTIFY="mail -s `date +%s`-`hostname`-eos-notify $EOS_MAIL_CC"
 # EOS_FST_POSIX_FALLOCATE=1
 
 #-------------------------------------------------------------------------------
-# Libmicrohttpd configuration
-#-------------------------------------------------------------------------------
-# HTTP server ports
-
-# MGM - by default libmicrohttpd is disabled i.e. 0. To enable it one needs
-# to set the following env variable to 1 and a non-zero value for the port.
-# EOS_MGM_ENABLE_LIBMICROHTTPD=0
-
-# MGM - set to 0 to disable libmicrohttpd implementation
-# EOS_MGM_HTTP_PORT=8000
-
-# FST - by default libmicrohttpd is disabled i.e. 0. To enable it one needs
-# to set the following env variable to 1 and a non-zero value for the port.
-# EOS_FST_ENABLE_LIBMICROHTTPD=0
-
-# FST - set to 0 to disable libmicrohttpd implementation
-# EOS_FST_HTTP_PORT=8001
-
-# HTTP uses by default one thread per connection
-# EOS_HTTP_THREADPOOL="threads"
-
-# Use EPOLL and 16 threads
-EOS_HTTP_THREADPOOL="epoll"
-EOS_HTTP_THREADPOOL_SIZE=16
-
-# Memory buffer size per connection
-# EOS_HTTP_CONNECTION_MEMORY_LIMIT=134217728 (default 128M)
-EOS_HTTP_CONNECTION_MEMORY_LIMIT=4194304
-
-# Timeout after which an idle connection is considered to be closed (default 2 min)
-# EOS_HTTP_CONNECTION_TIMEOUT=120
-
-#-------------------------------------------------------------------------------
 # GRPC Configuration
 #-------------------------------------------------------------------------------
 
@@ -259,6 +202,10 @@ EOS_HTTP_CONNECTION_MEMORY_LIMIT=4194304
 # EOS_MGM_GRPC_SSL_CERT
 # EOS_MGM_GRPC_SSL_KEY
 # EOS_MGM_GRPC_SSL_CA
+
+# If this is set then the GRPC server does not request a client certificate
+# from the user contacting it
+# EOS_MGM_GRPC_DONT_REQUEST_CLIENT_CERTIFICATE
 
 #-------------------------------------------------------------------------------
 # Configure GRPC server dedicated for access via Windows native client (EOS-wnc)

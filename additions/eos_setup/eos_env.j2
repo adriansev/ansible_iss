@@ -10,7 +10,8 @@ LD_PRELOAD=/usr/lib64/libjemalloc.so
 # Disable the KRB5 replay cache
 KRB5RCACHETYPE=none
 
-# What roles should the xroot daemon run for. For each role you can overwrite the default options using a dedicate sysconfig file e.g. /etc/sysconfig/xrd.<role>.
+# What roles should the xroot daemon run for. 
+# For each role you can overwrite the default options using a dedicate sysconfig file e.g. /etc/sysconfig/xrd.<role>.
 # The role based mechanism allows for multiple xrd's running with different options to be controlled via the same systemd script
 
 #-------------------------------------------------------------------------------
@@ -31,7 +32,7 @@ EOS_MGM_HOST="{{ _eos_env_mgmhost }}"
 # The EOS instance name N.B.! It MUST start with "eos" and then some alphanumeric characters
 # This is important since there are some special files and directories created inside the /eos/<instance_name> subtree
 # indispensable for the proper functioning of the instance.
-EOS_INSTANCE_NAME='"{{ _eos_env_instance }}"'
+EOS_INSTANCE_NAME="{{ _eos_env_instance }}"
 
 # The EOS configuration to load after daemon start
 EOS_AUTOLOAD_CONFIG=default
@@ -95,11 +96,11 @@ EOS_USE_SHARED_MUTEX=1
 # If variable defined then enable the use of xrootd connection pool
 # i.e. create/share different physical connections for transfers to the same destination xrootd server. By default this is disabled.
 # This applies both in context of the MGM server when it comes to TPC jobs and also on the FST server for FST to FST transfers.
-# EOS_XRD_USE_CONNECTION_POOL=1
+EOS_XRD_USE_CONNECTION_POOL=1
 
 # When xrootd connection pool is enabled, one can control the maximum number of physical connection that can be established with the destination server.
 # The min value is 1 and the max 1024. By default this 1024.
-# EOS_XRD_CONNECTION_POOL_SIZE=64
+EOS_XRD_CONNECTION_POOL_SIZE=128
 
 #-------------------------------------------------------------------------------
 # FST Configuration
@@ -109,7 +110,7 @@ EOS_USE_SHARED_MUTEX=1
 EOS_FST_NO_SSS_ENFORCEMENT=1
 
 # Network interface to monitor (default eth0)
-EOS_FST_NETWORK_INTERFACE="{{ ansible_default_ipv4["interface"] }}"
+EOS_FST_NETWORK_INTERFACE="{{ ansible_facts["default_ipv4"]["interface"] }}"
 
 # Specify in seconds how often FSTs should query for new delete operations
 EOS_FST_DELETE_QUERY_INTERVAL=300
@@ -119,11 +120,11 @@ EOS_FST_DELETE_QUERY_INTERVAL=300
 
 # If variable defined then enable the use of xrootd connection pool i.e. create/share different physical connections for queries done from the FST
 # to the MGM in the CallManager method. By default this is disabled.
-# EOS_FST_CALL_MANAGER_XRD_POOL=1
+EOS_FST_CALL_MANAGER_XRD_POOL=1
 
 # If CallManager xrootd connection pool is enabled one can set the maxium size of the pool of connections.
 # The min value is 1, the max value is 32. By default the value is 10.
-# EOS_FST_CALL_MANAGER_XRD_POOL_SIZE=16
+EOS_FST_CALL_MANAGER_XRD_POOL_SIZE=16
 
 # If variable defined use asynchronous (double-buffered) reading in TPCs - By default it is undefined = disabled
 # EOS_FST_TPC_READASYNC=1
@@ -142,7 +143,7 @@ EOS_FST_DELETE_QUERY_INTERVAL=300
 # EOS_FST_ENABLE_STACKTRACE=1
 
 # Enable async writes between replicas - this can improve the performance for FSTs with long latency.
-# EOS_FST_REPLICA_ASYNC_WRITE=1
+EOS_FST_REPLICA_ASYNC_WRITE=1
 
 # If this variable is present then deletion requests coming from the Fsck engine are actually
 # performed as a move on the file system mount in a special directory called .eosdeletions. By default disabled.
@@ -172,37 +173,6 @@ EOS_FST_DELETE_QUERY_INTERVAL=300
 EOS_FST_POSIX_FALLOCATE=1
 
 #-------------------------------------------------------------------------------
-# Libmicrohttpd configuration
-#-------------------------------------------------------------------------------
-# HTTP server ports
-
-# MGM - by default libmicrohttpd is disabled i.e. 0. To enable it one needs to set the following env variable to 1 and a non-zero value for the port.
-EOS_MGM_ENABLE_LIBMICROHTTPD=0
-
-# MGM - set to 0 to disable libmicrohttpd implementation
-EOS_MGM_HTTP_PORT=0
-
-# FST - by default libmicrohttpd is disabled i.e. 0. To enable it one needs to set the following env variable to 1 and a non-zero value for the port.
-EOS_FST_ENABLE_LIBMICROHTTPD=0
-
-# FST - set to 0 to disable libmicrohttpd implementation
-EOS_FST_HTTP_PORT=0
-
-# HTTP uses by default one thread per connection
-# EOS_HTTP_THREADPOOL="threads"
-
-# Use EPOLL and 16 threads
-EOS_HTTP_THREADPOOL="epoll"
-EOS_HTTP_THREADPOOL_SIZE=16
-
-# Memory buffer size per connection
-# EOS_HTTP_CONNECTION_MEMORY_LIMIT=134217728 (default 128M)
-EOS_HTTP_CONNECTION_MEMORY_LIMIT=4194304
-
-# Timeout after which an idle connection is considered to be closed (default 2 min)
-EOS_HTTP_CONNECTION_TIMEOUT=30
-
-#-------------------------------------------------------------------------------
 # GRPC Configuration
 #-------------------------------------------------------------------------------
 
@@ -213,6 +183,9 @@ EOS_HTTP_CONNECTION_TIMEOUT=30
 # EOS_MGM_GRPC_SSL_CERT
 # EOS_MGM_GRPC_SSL_KEY
 # EOS_MGM_GRPC_SSL_CA
+
+# If this is set then the GRPC server does not request a client certificate from the user contacting it
+# EOS_MGM_GRPC_DONT_REQUEST_CLIENT_CERTIFICATE
 
 #-------------------------------------------------------------------------------
 # REST API dedicated GRPC service
@@ -225,6 +198,7 @@ EOS_MGM_ENABLE_REST_API=1
 # Set the port for the internal GRPC server handling the REST API requests. Default value is 500054.
 EOS_MGM_REST_GRPC_PORT=50054
 
+
 #-------------------------------------------------------------------------------
 # FUSEX Configuration
 #-------------------------------------------------------------------------------
@@ -234,11 +208,6 @@ EOS_MGM_REST_GRPC_PORT=50054
 
 # Maximum number of 'listable' children
 # EOS_MGM_FUSEX_MAX_CHILDREN=32768
-
-#-------------------------------------------------------------------------------
-# QuarkDB Configuration
-#-------------------------------------------------------------------------------
-EOS_USE_QDB_MASTER=1
 
 #-------------------------------------------------------------------------------
 # MGM TTY Console Broadcast Configuration
@@ -287,7 +256,7 @@ EOS_MGM_STATVFS_DEFAULT_SPACE="default"
 # MGM Directory Listing Cache configuration
 
 # set to 0 to disable listing cache for 'xrdfs ls' and 'eos ls', or a number with the number of dirs to cache
-# EOS_MGM_LISTING_CACHE=1024
+EOS_MGM_LISTING_CACHE=2048
 
 # ------------------------------------------------------------------
 # MGM OIDC configuration
@@ -316,4 +285,3 @@ EOS_MGM_DEVICES_PUBLISHING_INTERVAL=900
 # MGM SciToken Cache
 # ------------------------------------------------------------------
 XDG_CACHE_HOME=/var/tmp/
-
