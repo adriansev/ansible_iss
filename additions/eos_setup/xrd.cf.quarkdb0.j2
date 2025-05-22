@@ -2,8 +2,8 @@ if exec xrootd
   xrd.port 7000
   xrd.protocol redis:7000 /usr/lib64/libXrdQuarkDB.so
   redis.mode raft
-  redis.database /var/lib/quarkdb/qdb0
-  redis.password_file /etc/quarkdb.pass
-  redis.myself {{ ansible_fqdn }}:7000
+  redis.database {{ _eos_qdb_dbdir }}
+  redis.password_file {{ _eos_qdb_passfile }}
+  redis.myself {{ ansible_facts["fqdn"] }}:7000
 fi
 

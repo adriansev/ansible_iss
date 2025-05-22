@@ -1,4 +1,7 @@
 ---
+- name: include pkg_eos_mgm_task.yml
+  ansible.builtin.include_tasks: pkg_eos_mgm_task.yml
+
 - name: mkdir /etc/systemd/system/xrootd@quarkdb0.service.d
   ansible.builtin.file:
     path: /etc/systemd/system/xrootd@quarkdb0.service.d
@@ -16,7 +19,7 @@
 - name: QuarkDB configuration
   ansible.builtin.template:
     src: "{{ playbook_dir }}/../additions/eos_setup/xrd.cf.quarkdb0.j2"
-    dest: /etc/xrd.cf.quarkdb0_ans
+    dest: /etc/xrd.cf.quarkdb0
     owner: root
     group: root
     mode: '0644'
@@ -27,14 +30,33 @@
   ansible.builtin.file:
     owner: daemon
     group: daemon
-    mode: 'u=rwX,g=rwX,o=rX'
+    mode: 'u=rwX,g=rX,o=rX'
     recurse: true
     state: directory
     path : "{{ qdb_common_dirs }}"
   loop_control:
     loop_var: qdb_common_dirs
   with_items:
+    - /var/lib/quarkdb
     - /var/log/quarkdb
     - /var/spool/quarkdb
-    - /var/lib/quarkdb
+
+- name: EOS MGM configuration
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/eos_setup/xrd.cf.mgm.j2"
+    dest: /etc/xrd.cf.mgm
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+  ignore_errors: true
+
+- name: alicetokenacc config
+  ansible.builtin.copy:
+    dest: /etc/grid-security/xrootd/
+    src: "{{ playbook_dir }}/../additions/eos_setup/TkAuthz.Authorization"
+    owner: daemon
+    group: daemon
+    mode: '0600'
+    force: true
 

@@ -6,31 +6,6 @@
     - repo_epel_task.yml
     - repo_elrepo_task.yml
 
-- name: Install system management and monitoring tools - EL7
-  ansible.builtin.yum:
-    name:
-      - coreutils
-      - util-linux
-      - procps-ng
-      - sysstat
-      - cronie
-      - crontabs
-      - cronie-anacron
-      - iproute
-      - ipset
-      - ipset-service
-      - rsync
-      - iotop
-      - blktrace
-      - ethtool
-      - lsof
-    state: present
-    update_cache: false
-    enablerepo: "epel"
-  register: systools_el7
-  when: systools_el7 is undefined and ( ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7' )
-  tags: packages
-
 - name: Ensure the crb repository is enabled
   community.general.dnf_config_manager:
     name: crb
@@ -153,3 +128,4 @@
     content: |
         TZ=':/etc/localtime'
         export TZ
+

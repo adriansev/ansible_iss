@@ -1,7 +1,4 @@
 ---
-
-
-
 - name: Copy tuning appling script
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/../additions/root_bin/apply_tuning"

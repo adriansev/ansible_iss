@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+rpm -qa | grep kernel- | sort
+

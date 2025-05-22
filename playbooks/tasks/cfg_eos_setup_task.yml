@@ -1,5 +1,5 @@
 ---
-- name: Sync eos common files
+- name: EOS common files
   ansible.builtin.copy:
     dest: /etc/
     src: "{{ playbook_dir }}/../additions/eos_setup/{{ eos_common_files }}"
@@ -12,16 +12,23 @@
   with_items:
     - quarkdb.pass
     - eos.keytab
-    - xrd.cf.fst
-    - xrd.cf.mgm
-    - xrd.cf.mq
+
+- name: EOS eos_env configuration
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/eos_setup/eos_env.j2"
+    dest: /etc/sysconfig/eos_env
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+  ignore_errors: true
 
 - name: mkdir EOS directories
   ansible.builtin.file:
     owner: daemon
     group: daemon
-    mode: 'u=rwX,g=rwX,o=rX'
-    recurse: true
+    mode: 'u=rwX,g=rX,o=rX'
+    recurse: false
     state: directory
     path : "{{ eos_common_dirs }}"
   loop_control:
@@ -48,12 +55,12 @@
 
 - name: EOS default acl permissions
   ansible.posix.acl:
-    path: "{{ eos_common_dirs_def_acl }}"
     entity: daemon
     etype: user
     permissions: rw
     state: present
     default: true
+    path: "{{ eos_common_dirs_def_acl }}"
   loop_control:
     loop_var: eos_common_dirs_def_acl
   with_items:
@@ -76,12 +83,3 @@
 #  debug:
 #    msg: "{{ ansible_facts | to_nice_json }}"
 
-- name: eos_env configuration
-  ansible.builtin.template:
-    src: "{{ playbook_dir }}/../additions/eos_setup/eos_env.j2"
-    dest: /etc/sysconfig/eos_env
-    owner: root
-    group: root
-    mode: '0644'
-    force: true
-  ignore_errors: true

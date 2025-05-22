@@ -2,7 +2,7 @@
 - name: Import GPG-KEY-EUGridPMA-RPM-4
   ansible.builtin.rpm_key:
     state: present
-    key: https://repository.egi.eu/sw/production/cas/1/current/GPG-KEY-EUGridPMA-RPM-3
+    key: https://repository.egi.eu/sw/production/cas/1/current/GPG-KEY-EUGridPMA-RPM-4
 
 - name: EGI IGTF repo install
   ansible.builtin.yum_repository:
@@ -10,8 +10,8 @@
     description: EGI-trustanchors
     file: EGI-trustanchors
     baseurl: https://repository.egi.eu/sw/production/cas/1/current/
-    gpgkey: https://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-3
-    gpgcheck: true
+    gpgkey: https://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-4
+    gpgcheck: false
     enabled: true
     state: present
     owner: root

@@ -1,0 +1,29 @@
+---
+- name: include pkg_eos_fst_task.yml
+  ansible.builtin.include_tasks: pkg_eos_fst_task.yml
+
+- name: mkdir EOS FST storage dirs
+  ansible.builtin.file:
+    owner: daemon
+    group: daemon
+    mode: 'u=rwX,g=rX,o=rX'
+    recurse: false
+    state: directory
+    path : "{{ eos_common_dirs }}"
+  loop_control:
+    loop_var: eos_common_dirs
+  with_items:
+    - /storage01
+    - /storage02
+    - /storage03
+
+- name: EOS FST configuration
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../additions/eos_setup/xrd.cf.fst.j2"
+    dest: /etc/xrd.cf.fst
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+  ignore_errors: true
+

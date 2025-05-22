@@ -1,19 +1,33 @@
 - hosts: "{{ target | default('eos_mgm') }}"
-  gather_facts: False
+  gather_facts: True
   vars:
     chrony_base_ip: "pub85"
 
     profile: iss
 
-    _eos_env_roles: "mgm mq"
+    _eos_env_roles: "mgm"
     _eos_env_mgmhost: "mgm.spacescience.ro"
     _eos_env_mgmhosttarget: "mgm.spacescience.ro"
-    _eos_env_instance: "eosalice"
-    _eos_env_geotag: "ISS::ALICE"
+    _eos_env_mgm_alias: "mgm.spacescience.ro"
     _eos_env_mgm_master1: "mgm.spacescience.ro"
     _eos_env_mgm_master2: "mgm.spacescience.ro"
-    _eos_env_mgm_alias: "mgm.spacescience.ro"
+    _eos_env_instance: "eosalice"
+    _eos_env_geotag: "ISS::ALICE"
     _eos_env_email: "glite@spacescience.ro"
+    _eos_site_name: "ALICE::ISS::EOS"
+    _eos_qdb_list: "mgm1.spacescience.ro:7000 mgm2.spacescience.ro:7000 mgm3.spacescience.ro:7000"
+    _eos_qdb_dbdir: "/var/lib/quarkdb/qdb0"
+    _eos_qdb_passfile: "/etc/quarkdb.pass"
+    _eos_mgm_xrd_port: "1094"
+    _eos_fst_xrd_port: "1095"
+    _eos_mgm_http_port: "1094"
+    _eos_fst_http_port: "1095"
+    _eos_monitor_dst: "alien.spacescience.ro:9930"
+
+    _mlsensor_vobox: "alien.spacescience.ro:8884"
+    _mlsensor_se_name: "ALICE::ISS::EOS"
+    _mlsensor_cluster_name_suffix: "_manager_xrootd_Services"
+    _mlsensor_xrd_port_list: "1094"
 
     mdraid_is_enabled: "yes"
     mdraid_check_type: "check"
@@ -23,7 +37,6 @@
     mdraid_max_concurrent: ""
     mdraid_check_time_cron: "0 0 1 * *"
     mdraid_check_time_systemd: "*-*-01 00:00:00"
-
 
   vars_files:
       - "{{ playbook_dir }}/../additions/ipset/ipset_eos.yml"
@@ -45,7 +58,6 @@
       - "tasks/pkg_kernelml_install_task.yml"
       - "tasks/pkg_igtfca_task.yml"
       - "tasks/pkg_lsc_vomses_task.yml"
-      - "tasks/pkg_eos_mgm_task.yml"
       - "tasks/cfg_firewall_task.yml"
       - "tasks/cfg_chrony_task.yml"
       - "tasks/cfg_ssh_task.yml"
@@ -59,7 +71,5 @@
       - "tasks/pkg_utils_task.yml"
       - "tasks/cfg_eos_setup_task.yml"
       - "tasks/cfg_eosmgm_setup_task.yml"
+      - "tasks/cfg_mlsensor_task.yml"
 
-
-- name: Install mlsensor
-  ansible.builtin.import_playbook: pkg_mlsensor.yml

@@ -1,21 +1,4 @@
 ---
-- name: Install hardware management and monitoring tools - EL7
-  ansible.builtin.yum:
-    name:
-      - lm_sensors
-      - dmidecode
-      - pciutils
-      - lshw
-      - smartmontools
-      - ipmitool
-      - nvme-cli
-    state: present
-    update_cache: false
-    enablerepo: "epel"
-  register: install_hwtools_el7
-  when: install_hwtools_el7 is undefined and ( (ansible_facts['distribution'] == 'CentOS') and (ansible_facts['distribution_major_version'] == '7') )
-  tags: packages
-
 - name: Install hardware management and monitoring tools - EL9
   ansible.builtin.dnf:
     name:
@@ -26,6 +9,11 @@
       - smartmontools
       - ipmitool
       - nvme-cli
+      - freeipmi
+      - freeipmi-bmc-watchdog
+      - freeipmi-ipmidetectd
+      - freeipmi-ipmiseld
+      - ipmievd
     state: present
     update_cache: false
   register: install_hwtools_el9
@@ -42,6 +30,11 @@
       - smartmontools
       - ipmitool
       - nvme-cli
+      - freeipmi
+      - freeipmi-bmc-watchdog
+      - freeipmi-ipmidetectd
+      - freeipmi-ipmiseld
+      - ipmievd
     state: present
     install_recommends: false
     update_cache: false

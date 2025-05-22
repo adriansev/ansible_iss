@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+dnf clean all --enablerepo=*
+dnf update -y
+
+grub2-mkconfig -o /boot/grub2/grub.cfg --update-bls-cmdline
+

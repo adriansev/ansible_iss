@@ -21,6 +21,7 @@
     loop_var: _linger_user
   loop: "{{ _linger_users_list }}"
 
+# https://github.com/systemd/systemd/issues/18293#issuecomment-1240300312
 - name: Add to user@.service the delegation of cgroup modules
   ansible.builtin.copy:
     dest: "/etc/systemd/system/user@.service.d/delegate.conf"
