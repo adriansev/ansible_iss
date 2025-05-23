@@ -1,0 +1,28 @@
+##########################################
+##########################################
+Host *
+Compression yes
+ControlMaster auto
+ControlPath /tmp/ans_%i_%C.sshsock
+ControlPersist 600
+VerifyHostKeyDNS no
+CheckHostIP no
+ServerAliveInterval 10
+ServerAliveCountMax 5
+TCPKeepAlive no
+ConnectionAttempts 3
+ForwardAgent no
+ForwardX11 no
+ForwardX11Timeout 0
+ForwardX11Trusted no
+PreferredAuthentications publickey
+IdentitiesOnly yes
+IdentityFile ~/.ssh/id_ed25519
+StrictHostKeyChecking=accept-new
+GSSAPIAuthentication no
+
+
+Match final all
+# Follow system-wide Crypto Policy, if defined:
+Include /etc/crypto-policies/back-ends/openssh.config
+
