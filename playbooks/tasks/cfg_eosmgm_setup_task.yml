@@ -54,7 +54,7 @@
 - name: alicetokenacc config
   ansible.builtin.copy:
     dest: /etc/grid-security/xrootd/
-    src: "{{ playbook_dir }}/../additions/eos_setup/TkAuthz.Authorization"
+    src: "{{ playbook_dir }}/../additions/eos_setup/grid-security_xrootd/TkAuthz.Authorization"
     owner: daemon
     group: daemon
     mode: '0600'
