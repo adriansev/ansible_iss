@@ -13,7 +13,6 @@ galaxy_cache
 ansible_collections
 inventory.json
 additions_work/**
-additions/users_alien/*.yml
-additions/users_issaf/*.yml
+additions/users_cfg/*/*.yml
 additions/seagate_seachest/bin/**
 
