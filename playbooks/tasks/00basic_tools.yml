@@ -79,7 +79,7 @@
     name: crond
     state: started
     enabled: true
-  when: ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora' or ansible_facts['distribution'] == 'CentOS'
+  when: ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora'
 
 - name: Enable and start cron - Ubuntu
   ansible.builtin.systemd:
@@ -115,7 +115,7 @@
     content: |
         pathmunge $HOME/bin
         pathmunge $HOME/.local/bin
-  when: ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora' or ansible_facts['distribution'] == 'CentOS'
+  when: ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora'
 
 - name: Set TZ default value
   ansible.builtin.copy:

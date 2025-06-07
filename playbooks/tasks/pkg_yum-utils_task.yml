@@ -1,26 +1,7 @@
 ---
-- name: Install yum utils EL7
-  ansible.builtin.yum:  # noqa: fqcn[action-core]
-    name: [yum-utils, yum-plugin-fastestmirror, yum-plugin-priorities, yum-plugin-protectbase]
-    state: present
-    update_cache: false
-  register: yum_utils_install_el7
-  when: yum_utils_install_el7 is undefined and ( ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7' )
-
-- name: Yum prefer IPv4 - EL7
-  community.general.ini_file:
-    path: /etc/yum.conf
-    section: main
-    option: ip_resolve
-    value: 4
-    no_extra_spaces: true
-    mode: "0644"
-  register: yum_prefer_ipv4_el7
-  when: yum_prefer_ipv4_el7 is undefined and ( ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7' )
-
 - name: Install yum utils EL9/Fedora
   ansible.builtin.dnf:
-    name: [yum, dnf-utils, dnf-plugins-core]
+    name: [yum, dnf-utils, dnf-plugins-core, dnf-plugin-config-manager]
     state: present
     update_cache: false
   register: yum_utils_install_el9

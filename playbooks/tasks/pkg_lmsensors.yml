@@ -1,11 +1,4 @@
 ---
-- name: Install lm_sensors EL7
-  ansible.builtin.yum:
-    name: lm_sensors
-    state: present
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
-  tags: packages
-
 - name: Install lm_sensors EL9
   ansible.builtin.dnf:
     name: lm_sensors

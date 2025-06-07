@@ -1,34 +1,9 @@
 ---
-- name: Install ganglia-gmond - EL7
-  ansible.builtin.yum:
-    name: [ 'ganglia', 'ganglia-gmond', 'python2-ganglia-gmond' ]
-    state: present
-    update_cache: false
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
-
 - name: Install ganglia-gmond - EL9
   ansible.builtin.dnf:
     name: [ 'ganglia', 'ganglia-gmond' ]
     state: present
     update_cache: false
   when: ( ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9' ) or ansible_facts[ 'distribution' ] == 'Fedora'
-
-- name: Gmond customize systemd unit - create dir
-  ansible.builtin.file:
-    path: /etc/systemd/system/gmond.service.d/
-    state: directory
-
-- name: Gmond customize systemd unit
-  ansible.builtin.copy:
-    dest: /etc/systemd/system/gmond.service.d/
-    src: "{{ playbook_dir }}/../additions/gmond_conf/gmond.service.d/override.conf"
-    mode: 0644
-    owner: root
-    group: root
-    backup: false
-    force: true
-
-- name: Reload systemd
-  ansible.builtin.systemd_service:
-    daemon_reload: true
+  tags: packages
 

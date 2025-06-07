@@ -5,15 +5,6 @@
 - name: Include repo_epel_task.yml
   ansible.builtin.include_tasks: repo_epel_task.yml
 
-- name: Install rpmfusion repository EL7
-  ansible.builtin.dnf:
-    name:
-      - https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
-      - https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-7.noarch.rpm
-    state: present
-  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
-  tags: repo
-
 - name: Install rpmfusion repository EL9
   ansible.builtin.dnf:
     name:

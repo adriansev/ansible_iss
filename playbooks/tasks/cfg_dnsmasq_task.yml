@@ -1,10 +1,6 @@
 ---
-- name: Install dnsmasq Alma9
-  ansible.builtin.dnf:
-    name: dnsmasq
-    state: present
-  when: ( ansible_facts['distribution'] == 'AlmaLinux' and ansible_facts['distribution_major_version'] == '9' ) or ansible_facts['distribution'] == 'Fedora'
-  tags: packages
+- name: include pkg_dnsmasq_task.yml
+  ansible.builtin.include_tasks: pkg_dnsmasq_task.yml
 
 - name: Dnsmasq remotes 85
   ansible.builtin.copy:

@@ -1,5 +1,6 @@
 ---
-- include_tasks: pkg_gmond_task.yml
+- name: include cfg_gmond_task.yml
+  ansible.builtin.include_tasks: cfg_gmond_task.yml
 
 - name: Create gmond conf.d dir
   ansible.builtin.file:

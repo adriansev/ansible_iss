@@ -8,16 +8,6 @@
     mode: '0644'
     force: true
 
-- name: Raid-check timing (cron) - EL7
-  ansible.builtin.template:
-    src: "{{ playbook_dir }}/../additions/storage_cmds/cron_raid-check.j2"
-    dest: /etc/cron.d/raid-check
-    owner: root
-    group: root
-    mode: '0644'
-    force: true
-  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
-
 - name: Smartd loggind directory
   ansible.builtin.file:
     path: /etc/systemd/system/raid-check.timer.d/

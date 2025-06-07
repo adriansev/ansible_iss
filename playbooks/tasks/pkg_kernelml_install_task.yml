@@ -1,19 +1,6 @@
 ---
 - include_tasks: repo_elrepo_task.yml
 
-- name: Install kernel-ml
-  ansible.builtin.yum:
-    name:
-      - kernel-ml.x86_64
-      - kernel-ml-devel.x86_64
-      - kernel-ml-tools.x86_64
-      - kernel-ml-tools-libs.x86_64
-      - kernel-ml-tools-libs-devel.x86_64
-    state: present
-    enablerepo: "elrepo,elrepo-kernel,elrepo-extras"
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
-  tags: packages
-
 - name: Install kernel-ml EL9
   ansible.builtin.dnf:
     name:
@@ -36,10 +23,6 @@
 
 - name: Set grub timeout to 2
   ansible.builtin.lineinfile: path="/etc/default/grub" regexp='GRUB_TIMEOUT="(.*)"' line='GRUB_TIMEOUT=2'
-
-#- name: Re-create grub conf - EL7
-#  ansible.builtin.command: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
-#  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
 
 #- name: Re-create grub conf - EL9
 #  ansible.builtin.command: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg --update-bls-cmdline

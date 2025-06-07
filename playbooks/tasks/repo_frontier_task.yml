@@ -13,9 +13,3 @@
   when: ansible_facts['distribution'] == 'AlmaLinux'
   tags: repo
 
-- name: Install Frontier repository EL7
-  ansible.builtin.yum:
-    name: http://frontier.cern.ch/dist/rpms/RPMS/noarch/frontier-release-1.2-1.noarch.rpm
-    state: present
-  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
-  tags: repo

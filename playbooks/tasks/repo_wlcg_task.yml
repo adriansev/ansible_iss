@@ -7,13 +7,6 @@
     state: present
     key: http://linuxsoft.cern.ch/wlcg/RPM-GPG-KEY-wlcg
 
-##- name: Install WLCG repository EL7
-##  ansible.builtin.yum:
-##    name: http://linuxsoft.cern.ch/wlcg/centos7/x86_64/wlcg-repo-1.0.0-1.el7.noarch.rpm
-##    state: present
-##  when: ansible_facts[ 'distribution' ] == 'CentOS' and ansible_facts[ 'distribution_major_version' ] == '7'
-##  tags: repo
-
 - name: Install WLCG repository EL9
   ansible.builtin.dnf:
     name: http://linuxsoft.cern.ch/wlcg/el9/x86_64/wlcg-repo-1.0.0-1.el9.noarch.rpm

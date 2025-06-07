@@ -2,15 +2,6 @@
 - name: Import repo_influxdata_task.yml
   ansible.builtin.include_tasks: repo_influxdata_task.yml
 
-- name: Install influxdb2 EL7
-  ansible.builtin.yum:
-    name:
-      - telegraf
-    state: present
-    enablerepo: "influxdata"
-  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
-  tags: packages
-
 - name: Install influxdb2 EL9
   ansible.builtin.dnf:
     name:

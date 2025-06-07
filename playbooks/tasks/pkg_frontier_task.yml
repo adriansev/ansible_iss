@@ -23,7 +23,7 @@
       export SQUID_CLEAN_CACHE_ON_START=false
 
 - name: Install Frontier packages
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: frontier-squid
     state: present
     enablerepo: "cern-frontier"

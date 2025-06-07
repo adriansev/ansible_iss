@@ -5,16 +5,6 @@
 - name: Include pkg_munge_task.yml
   ansible.builtin.include_tasks: pkg_munge_task.yml
 
-- name: Install slurmd - EL7
-  ansible.builtin.yum:
-    name:
-      - slurm-slurmd
-      - slurm-contribs
-    state: present
-    update_cache: false
-    enablerepo: "epel"
-  when: ansible_facts[ 'distribution' ] == 'CentOS'
-
 - name: Install slurmd - EL9
   ansible.builtin.dnf:
     name:

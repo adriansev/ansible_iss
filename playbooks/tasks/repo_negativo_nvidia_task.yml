@@ -14,25 +14,7 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_facts['ansible_distribution'] == 'CentOS'
-  tags: repo
-
-- name: Negativo epel-nvidia source
-  ansible.builtin.yum_repository:
-    name: epel-nvidia-source
-    description: negativo17 - Nvidia - Source
-    file: /etc/yum.repos.d/epel-nvidia.repo
-    baseurl: https://negativo17.org/repos/nvidia/epel-$releasever/SRPMS
-    gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
-    gpgcheck: true
-    enabled: false
-    metadata_expire: 21600
-    skip_if_unavailable: true
-    state: present
-    owner: root
-    group: root
-    mode: 0644
-  when: ansible_facts['ansible_distribution'] == 'CentOS'
+  when: ansible_facts['ansible_distribution'] == 'AlmaLinux'
   tags: repo
 
 - name: Negativo fedora-nvidia
@@ -44,24 +26,6 @@
     gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
     gpgcheck: true
     enabled: true
-    metadata_expire: 21600
-    skip_if_unavailable: true
-    state: present
-    owner: root
-    group: root
-    mode: 0644
-  when: ansible_facts['ansible_distribution'] == 'Fedora'
-  tags: repo
-
-- name: Negativo fedora-nvidia source
-  ansible.builtin.yum_repository:
-    name: fedora-nvidia-source
-    description: negativo17 - Nvidia - Source
-    file: /etc/yum.repos.d/fedora-nvidia.repo
-    baseurl: https://negativo17.org/repos/nvidia/fedora-$releasever/SRPMS
-    gpgkey: https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
-    gpgcheck: true
-    enabled: false
     metadata_expire: 21600
     skip_if_unavailable: true
     state: present
