@@ -44,6 +44,5 @@ ipset_tables:
   - accept_port_tcp:
     - "1094"
     - "1095"
-    - "60000"
   - accept_port_udp:
 

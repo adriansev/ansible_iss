@@ -1,0 +1,16 @@
+---
+sysctl_list:
+  - "{{ playbook_dir }}/../additions/sysctl.d/60-memory.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/70-mtu.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/72-packet_tuning.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/82-ipv4.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/82-ipv6.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/82-netcore.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/84-fs.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/84-kernel.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/99-delayacct.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/99-inotify.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/99-security.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/80-network_buffers_gen.conf"
+  - "{{ playbook_dir }}/../additions/sysctl.d/90-frontend-forward.conf"
+

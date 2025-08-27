@@ -10,7 +10,7 @@
     state: present
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
   tags: repo
 
@@ -25,7 +25,6 @@
     state: present
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
   tags: repo
-

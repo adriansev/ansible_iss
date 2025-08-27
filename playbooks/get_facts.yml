@@ -1,5 +1,6 @@
 ---
-- hosts: "{{ target | default('all') }}"
+- name: Get facts
+  hosts: "{{ target | default('all') }}"
 
   tasks:
   - name: Get facts
@@ -9,6 +10,7 @@
         - 'all'
         - '!facter'
         - '!ohai'
+    register: std_facts
 
   - name: Gather extended facts
     deltabg.extended_facts.extended_facts:
@@ -24,4 +26,3 @@
   # - name: Debug
   #  debug:
   #    var: extd_facts
-

@@ -5,7 +5,7 @@
 - name: Install sbdii packages
   ansible.builtin.dnf:
     name:
-      - ui
+#      - ui
       - apel-client
       - apel-parsers
       - apel-ssm

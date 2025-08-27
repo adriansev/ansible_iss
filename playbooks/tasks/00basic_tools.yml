@@ -129,3 +129,37 @@
         TZ=':/etc/localtime'
         export TZ
 
+- name: include pkg_ipmi_task.yml
+  ansible.builtin.include_tasks: pkg_ipmi_task.yml
+
+- name: Install hardware management and monitoring tools - EL9
+  ansible.builtin.dnf:
+    name:
+      - lm_sensors
+      - dmidecode
+      - pciutils
+      - lshw
+      - smartmontools
+      - nvme-cli
+    state: present
+    update_cache: false
+  register: install_hwtools_el9
+  when: ansible_facts'[virtualization_role'] != 'guest' and install_hwtools_el9 is undefined and ( (ansible_facts['distribution'] == 'AlmaLinux') or (ansible_facts['distribution'] == 'Fedora') )
+  tags: packages
+
+- name: Install hardware management and monitoring tools - Ubuntu
+  ansible.builtin.apt:
+    name:
+      - lm-sensors
+      - dmidecode
+      - pciutils
+      - lshw
+      - smartmontools
+      - nvme-cli
+    state: present
+    install_recommends: false
+    update_cache: false
+  register: install_hwtools_ubuntu
+  when: ansible_facts'[virtualization_role'] != 'guest' and install_hwtools_ubuntu is undefined and ansible_facts['distribution'] == 'Ubuntu'
+  tags: packages
+

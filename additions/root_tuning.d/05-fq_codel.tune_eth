@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+echo "$(basename ${0} .tune_eth) - START"
+
+# enable fq_codel
+tc qdisc add dev ${1} root fq_codel
+
+echo "$(basename ${0} .tune_eth) - END"
+

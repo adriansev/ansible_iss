@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+
+echo "$(basename ${0} .tune) - START"
+
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+
+echo "$(basename ${0} .tune) - END"
+

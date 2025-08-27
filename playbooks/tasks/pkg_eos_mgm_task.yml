@@ -1,19 +1,23 @@
 ---
-- include_tasks: repo_eos_task.yml
+- name: Include repo_eos_task.yml
+  ansible.builtin.include_tasks: repo_eos_task.yml
 
 - name: Install EOS packages EL9
   ansible.builtin.dnf:
-    name: [ 'eos-server', 'eos-client', 'jemalloc', 'jemalloc-devel', 'eos-grpc', 'eos-grpc-plugins', 'eos-grpc-gateway', 'eos-quarkdb', 'eos-ns-inspect', 'eos-mgm-monitoring', 'alicetokenacc']
+    name:
+      - 'clustershell'
+      - 'eos-server'
+      - 'eos-client'
+      - 'jemalloc'
+      - 'jemalloc-devel'
+      - 'eos-grpc'
+      - 'eos-grpc-plugins'
+      - 'eos-grpc-gateway'
+      - 'eos-quarkdb'
+      - 'eos-ns-inspect'
+      - 'eos-mgm-monitoring'
+      - 'alicetokenacc'
     state: present
     enablerepo: "eos-diopside, eos-diopside-dep"
   tags: packages
-  when: ansible_facts['distribution'] == 'AlmaLinux'
-
-- name: Install EOS packages Fedora
-  ansible.builtin.dnf:
-    name: [ 'eos-server', 'eos-client', 'jemalloc', 'jemalloc-devel', 'eos-grpc', 'eos-grpc-plugins', 'eos-grpc-gateway', 'eos-quarkdb', 'eos-ns-inspect', 'eos-mgm-monitoring', 'alicetokenacc']
-    state: present
-    enablerepo: "eos-diopside, eos-diopside-dep"
-  tags: packages
-  when: ansible_facts['distribution'] == 'Fedora'
-
+  when: ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora'

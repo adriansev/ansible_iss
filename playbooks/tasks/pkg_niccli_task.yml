@@ -1,0 +1,17 @@
+---
+- name: Copy niccli rpm file to server
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../additions/broadcom_net/niccli.rpm"
+    dest: /tmp/niccli.rpm
+    mode: '0644'
+
+- name: Install niccli rpm
+  ansible.builtin.dnf:
+    name: /tmp/niccli.rpm
+    disable_gpg_check: true
+    state: latest
+
+- name: Remove niccli rpm
+  ansible.builtin.file:
+    path: /tmp/niccli.rpm
+    state: absent

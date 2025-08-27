@@ -1,0 +1,63 @@
+- hosts: "{{ target | default('gw2.spacescience.ro') }}"
+  gather_facts: True
+  vars:
+    chrony_base_ip: "pub46"
+
+    profile: virtual-guest
+    tuned_daemon_mode: false
+
+    iptables_v4_custom_table_setup: | #
+        *nat
+        -A POSTROUTING --source 10.10.8.0/22 -j MASQUERADE
+        COMMIT
+
+    ip_v4_filter_custom_rule_after_ipsets: | #
+        -A FORWARD -m physdev --physdev-is-bridged -j ACCEPT
+        -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED,SNAT,DNAT -j ACCEPT
+        -A FORWARD -p icmp -j ACCEPT
+        -A FORWARD -s 10.10.8.0/22 -m conntrack --ctstate NEW -j ACCEPT
+        -A FORWARD -s 10.10.8.0/22 -m state --state NEW -j ACCEPT
+
+
+    iptables_v6_custom_table_setup: ""
+    ip_v6_filter_custom_rule_after_ipsets: ""
+
+    ipset_tables:
+      - accept_ip:
+      - accept_ip6:
+      - accept_net:
+        - "10.10.8.0/22"
+      - accept_net6:
+      - accept_port_ip:
+      - accept_port_ip6:
+      - accept_port_net:
+      - accept_port_net6:
+      - accept_port_tcp:
+        - "60000"
+      - accept_port_udp:
+
+  vars_files:
+      - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_gw.yml"
+      - "{{ playbook_dir }}/../additions/sysctl_lists/sysctl_gw.yml"
+      - "{{ playbook_dir }}/../additions/root_tuning_list/tuning_gw.yml"
+
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/00basic_tools.yml"
+      - "tasks/pkg_utils_task.yml"
+      - "tasks/pkg_kernelml_install_task.yml"
+      - "tasks/cfg_chrony_task.yml"
+      - "tasks/cfg_ssh_task.yml"
+      - "tasks/cfg_lldpd_task.yml"
+      - "tasks/cfg_tuned_task.yml"
+      - "tasks/tune_sysctl_task.yml"
+      - "tasks/tune_scripts_task.yml"
+
+
+## removed ca vor fi customizari locale
+##      - "tasks/cfg_firewall_task.yml"

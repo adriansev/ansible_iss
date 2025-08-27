@@ -1,0 +1,20 @@
+---
+- name: Sync users alice4
+  hosts: alice4
+  gather_facts: false
+  vars:
+    users_create_home: true
+    cluster_user_list: alice4
+
+  vars_files:
+    - "{{ playbook_dir }}/../additions/users_cfg/{{ cluster_user_list }}/user_group_info.yml"
+    - "{{ playbook_dir }}/../additions/users_cfg/{{ cluster_user_list }}/delete_users_groups.yml"
+
+  tasks:
+    - name: Include tasks
+      ansible.builtin.include_tasks:
+        file: "{{ task_item }}"
+      loop_control:
+        loop_var: task_item
+      with_items:
+        - "tasks/users_task.yml"
