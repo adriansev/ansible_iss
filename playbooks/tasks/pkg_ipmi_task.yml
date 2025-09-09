@@ -11,7 +11,7 @@
     state: present
     update_cache: false
   register: install_hwtools_el9
-  when: ansible_facts['ipmi'] and ( (ansible_facts['distribution'] == 'AlmaLinux') or (ansible_facts['distribution'] == 'Fedora') )
+  when: (ansible_facts['ipmi'] | bool) and ( ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora' )
   tags: packages
 
 - name: Install IPMI tools - Ubuntu
@@ -27,7 +27,7 @@
     install_recommends: false
     update_cache: false
   register: install_hwtools_ubuntu
-  when: ansible_facts['ipmi'] and ansible_facts['distribution'] == 'Ubuntu'
+  when: (ansible_facts['ipmi'] | bool) and ansible_facts['distribution'] == 'Ubuntu'
   tags: packages
 
 - name: Copy ipmicfg executable
@@ -38,5 +38,5 @@
     group: root
     mode: '0770'
     force: true
-  when: ansible_facts['ipmi']
+  when: (ansible_facts['ipmi'] | bool)
   tags: packages

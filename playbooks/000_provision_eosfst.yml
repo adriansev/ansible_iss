@@ -51,7 +51,6 @@
       loop_var: task_item
     with_items:
       - "tasks/00basic_tools.yml"
-      - "tasks/00basic_tools_hw.yml"
       - "tasks/00storage_tools.yml"
       - "tasks/storage_cli.yml"
       - "tasks/mdraid_conf_task.yml"
