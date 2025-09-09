@@ -46,6 +46,9 @@ mgmofs.targetport {{ _eos_fst_xrd_port }}
 
 mgmofs.centraldrain true
 
+###########################################################
+## ALICETOKENACC
+
 mgmofs.authlib /usr/lib64/libXrdAliceTokenAcc.so
 mgmofs.authorize 1
 
@@ -55,8 +58,7 @@ alicetokenacc.truncateprefix /eos/alice/grid
 alicetokenacc.noauthzhost    localhost
 alicetokenacc.noauthzhost    localhost.localdomain
 alicetokenacc.noauthzhost    sev.spacescience.ro
-alicetokenacc.noauthzhost    46.243.114.230
-alicetokenacc.noauthzhost    2001:b30:4210::aa
+alicetokenacc.noauthzhost    monitor.spacescience.ro
 
 ###########################################################
 #mgmofs.trace all debug

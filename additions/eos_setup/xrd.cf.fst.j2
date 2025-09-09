@@ -6,9 +6,11 @@ set MGM={{ _eos_env_mgm_alias }}
 set myName = {{ _eos_site_name }}
 all.sitename $myName
 
+xrd.network keepalive
+xrd.port {{ _eos_fst_xrd_port }}
+
 xrootd.fslib -2 libXrdEosFst.so
 xrootd.async off nosf
-xrd.network keepalive
 xrootd.redirect $(MGM):1094 chksum
 
 # Specify when threads are created, how many can be created, and when they should be destroyed.
@@ -32,7 +34,6 @@ all.manager localhost 2131
 #ofs.trace open
 
 ###########################################################
-xrd.port {{ _eos_fst_xrd_port }}
 ofs.persist off
 ofs.osslib libEosFstOss.so
 ofs.tpc pgm /opt/eos/xrootd/bin/xrdcp
@@ -43,18 +44,18 @@ fstofs.broker root://{{ _eos_env_mgmhost }}:1097//eos/
 fstofs.autoboot true
 fstofs.quotainterval 10
 fstofs.metalog /var/eos/md/
+fstofs.filemd_handler attr
+
 #fstofs.authdir /var/eos/auth/
 #fstofs.trace client
-###########################################################
 
 # QuarkDB cluster info needed by FSCK to perform the namespace scan
 fstofs.qdbcluster {{ _eos_qdb_list }}
 fstofs.qdbpassword_file {{ _eos_qdb_passfile }}
 
+###########################################################
 # Use gRPC?
 #fstofs.protowfusegrpc true
-
-fstofs.filemd_handler attr
 
 #-------------------------------------------------------------------------------
 # Configuration for XrdHttp http(s) service

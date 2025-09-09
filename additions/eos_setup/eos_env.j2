@@ -1,16 +1,19 @@
-# Make sure that EOS-xrootd libs can be directly found
-LD_LIBRARY_PATH=/opt/eos/xrootd/lib64
+EOS_XROOTD=/opt/eos/xrootd/
+EOS_XRDCP=${EOS_XROOTD}/bin/xrdcp
 
-# Should we run with another limit on the core file size other than the default?
-DAEMON_COREFILE_LIMIT=unlimited
+# Make sure that EOS-xrootd libs can be directly found
+LD_LIBRARY_PATH=${EOS_XROOTD}/lib64:/opt/eos/grpc/lib64
 
 # Preload jemalloc
 LD_PRELOAD=/usr/lib64/libjemalloc.so
 
+# Should we run with another limit on the core file size other than the default?
+DAEMON_COREFILE_LIMIT=unlimited
+
 # Disable the KRB5 replay cache
 KRB5RCACHETYPE=none
 
-# What roles should the xroot daemon run for. 
+# What roles should the xroot daemon run for.
 # For each role you can overwrite the default options using a dedicate sysconfig file e.g. /etc/sysconfig/xrd.<role>.
 # The role based mechanism allows for multiple xrd's running with different options to be controlled via the same systemd script
 
@@ -87,11 +90,17 @@ EOS_NS_ACCOUNTING=1
 # Use std::shared_timed_mutex for the RWMutex implementation - uncomment to enable.
 EOS_USE_SHARED_MUTEX=1
 
+# Disable stack trace via GDB
+EOS_NO_STACKTRACE=1
+
 # By default statvfs reports the total space if the path deepness is < 4; If you want to report only quota accouting you can define
 # EOS_MGM_STATVFS_ONLY_QUOTA=1
 
 # If you only want to report the space acacounting you can define
 # EOS_MGM_STATVFS_ONLY_SPACE=1
+
+# allow to have two FSTs on the same physical node in the ame group
+## EOS_ALLOW_SAME_HOST_IN_GROUP=1
 
 # If variable defined then enable the use of xrootd connection pool
 # i.e. create/share different physical connections for transfers to the same destination xrootd server. By default this is disabled.
@@ -104,7 +113,27 @@ EOS_XRD_CONNECTION_POOL_SIZE=128
 
 EOS_USE_MQ_ON_QDB=1
 
+#-------------------------------------------------------------------------------
+# HTTPD Configuration
+#-------------------------------------------------------------------------------
+# HTTP server ports
+
 EOS_MGM_HTTP_PORT={{ _eos_mgm_http_port }}
+
+# HTTP uses by default one thread per connection
+# EOS_HTTP_THREADPOOL=threads
+
+# Use EPOLL and 16 threads
+EOS_HTTP_THREADPOOL=epoll
+EOS_HTTP_THREADPOOL_SIZE=16
+
+# Memory buffer size per connection
+# EOS_HTTP_CONNECTION_MEMORY_LIMIT=134217728 (default 128M)
+EOS_HTTP_CONNECTION_MEMORY_LIMIT=4194304
+
+# Timeout after which an idle connection is considered to be closed (default 2 min)
+# EOS_HTTP_CONNECTION_TIMEOUT=120
+
 
 #-------------------------------------------------------------------------------
 # FST Configuration
