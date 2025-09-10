@@ -1,44 +1,6 @@
 ---
-- name: mkdir /root/ipset_sync
-  ansible.builtin.file:
-    path: /root/ipset_sync
-    state: directory
-
-- name: copy ipset template definition
-  ansible.builtin.copy:
-    src: "{{ playbook_dir }}/../additions/ipset/ipset_sets_def"
-    dest: /root/ipset_sync/
-    owner: root
-    group: root
-    mode: '0600'
-    force: true
-
-- name: ipset rules
-  ansible.builtin.template:
-    src: "{{ playbook_dir }}/../additions/ipset/ipset.j2"
-    dest: /root/ipset_sync/ipset.ansible
-    owner: root
-    group: root
-    mode: '0600'
-    force: true
-  register: _ipset_rules_update
-
-- name: ipset should be started
-  ansible.builtin.systemd:
-    name: ipset
-    state: started
-    enabled: true
-
-- name: create ipset sets
-  ansible.builtin.command: "ipset -exist -file /root/ipset_sync/ipset_sets_def restore"
-
-- name: apply ipset content
-  ansible.builtin.command: "ipset -exist -file /root/ipset_sync/ipset.ansible restore"
-
-- name: restart ipset
-  ansible.builtin.systemd:
-    name: ipset
-    state: restarted
+- name: Include cfg_ipset_task.yml
+  include_tasks: cfg_ipset_task.yml
 
 - name: Iptables v4
   ansible.builtin.template:
