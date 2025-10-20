@@ -10,7 +10,7 @@
         - 'all'
         - '!facter'
         - '!ohai'
-    register: std_facts
+#    register: std_facts
 
   - name: Gather extended facts
     deltabg.extended_facts.extended_facts:
@@ -20,7 +20,7 @@
         - '!MysqlFactCollector'
         - '!Icinga2FactCollector'
         - '!DockerFactCollector'
-    register: extd_facts
+#    register: extd_facts
 
   # Print extended facts
   # - name: Debug

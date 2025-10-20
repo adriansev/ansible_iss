@@ -1,7 +1,8 @@
 ---
-- include_tasks: pkg_tuned_task.yml
+- name: Include pkg_tuned_task.yml
+  ansible.builtin.include_tasks: pkg_tuned_task.yml
 
-- name: add ISS tuning profile
+- name: Add ISS tuning profile
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/../additions/tuned/iss"
     dest: /etc/tuned/
@@ -10,14 +11,12 @@
     mode: '0644'
     force: true
 
-- name: tuned role
+- name: Set tuned role
   vars:
     daemon: "{{ tuned_daemon_mode | default('true') }}"
     reapply_sysctl: true
     use_recommended_profile: false
     enable_recommend: false
     dynamic_tuning: false
-
-  include_role:
+  ansible.builtin.include_role:
     name: linux-system-roles.tuned
-

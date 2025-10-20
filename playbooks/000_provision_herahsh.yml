@@ -1,0 +1,49 @@
+- hosts: "{{ target | default('herahsh.spacescience.ro') }}"
+  gather_facts: False
+  vars:
+    chrony_base_ip: "pub46"
+
+    profile: virtual-guest
+    tuned_daemon_mode: false
+
+    iptables_v4_custom_table_setup: ""
+    iptables_v6_custom_table_setup: ""
+    ip_v4_filter_custom_rule_after_ipsets: ""
+    ip_v6_filter_custom_rule_after_ipsets: ""
+
+    ipset_tables:
+      - accept_ip:
+      - accept_ip6:
+      - accept_net:
+      - accept_net6:
+      - accept_port_ip:
+      - accept_port_ip6:
+      - accept_port_net:
+      - accept_port_net6:
+      - accept_port_tcp:
+        - "60000"
+      - accept_port_udp:
+
+  vars_files:
+      - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_isscloud.yml"
+      - "{{ playbook_dir }}/../additions/sysctl_lists/sysctl_generic.yml"
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/00basic_tools.yml"
+      - "tasks/pkg_utils_task.yml"
+      - "tasks/pkg_kernelml_install_task.yml"
+      - "tasks/cfg_firewall_task.yml"
+      - "tasks/cfg_chrony_task.yml"
+      - "tasks/cfg_ssh_task.yml"
+      - "tasks/cfg_lldpd_task.yml"
+      - "tasks/cfg_tuned_task.yml"
+      - "tasks/tune_sysctl_task.yml"
+      - "tasks/cfg_fail2ban_task.yml"
+
+
+##      - "tasks/cfg_gmond_misc.yml"

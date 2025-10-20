@@ -22,6 +22,7 @@ indico.spacescience.ro
 hr.spacescience.ro
 gw2.spacescience.ro
 ns.spacescience.ro
+herahsh.spacescience.ro
 
 r3bsuit.spacescience.ro
 luxe.spacescience.ro
@@ -45,6 +46,15 @@ mgm3.spacescience.ro
 nfs01  ansible_host=10.99.99.200 ansible_ssh_extra_args=' -J root@issaf.spacescience.ro '
 nfs02  ansible_host=10.99.99.201 ansible_ssh_extra_args=' -J root@issaf.spacescience.ro '
 
+## LISA
+ceph1.lisa  ansible_host=10.10.180.31
+ceph2.lisa  ansible_host=10.10.180.32
+ceph3.lisa  ansible_host=10.10.180.33
+wn1.lisa    ansible_host=10.10.180.41
+wn2.lisa    ansible_host=10.10.180.42
+wn3.lisa    ansible_host=10.10.180.43
+wn4.lisa    ansible_host=10.10.180.44
+
 
 # [all:vars]
 
@@ -55,6 +65,21 @@ nfs02  ansible_host=10.99.99.201 ansible_ssh_extra_args=' -J root@issaf.spacesci
 [nfs_servers]
 nfs01  ansible_host=10.99.99.200 ansible_ssh_extra_args=' -J root@issaf.spacescience.ro '
 nfs02  ansible_host=10.99.99.201 ansible_ssh_extra_args=' -J root@issaf.spacescience.ro '
+
+[lisa_wn]
+wn1.lisa
+wn2.lisa
+wn3.lisa
+wn4.lisa
+
+[lisa_ceph]
+ceph1.lisa
+ceph2.lisa
+ceph3.lisa
+
+[lisa_cluster:children]
+lisa_wn
+lisa_ceph
 
 [vmhosts]
 vmhost1
