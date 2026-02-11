@@ -6,8 +6,8 @@
     cluster_user_list: issaf
 
   vars_files:
-      - "{{ playbook_dir }}/../additions/users_{{ cluster_user_list }}/user_group_info.yml"
-      - "{{ playbook_dir }}/../additions/users_{{ cluster_user_list }}/delete_users_groups.yml"
+      - "{{ playbook_dir }}/../additions/users_cfg/{{ cluster_user_list }}/user_group_info.yml"
+      - "{{ playbook_dir }}/../additions/users_cfg/{{ cluster_user_list }}/delete_users_groups.yml"
 
   tasks:
   - ansible.builtin.include_tasks:

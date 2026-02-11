@@ -18,6 +18,7 @@
     path: /etc/yum.repos.d/UMD-5.repo
     section: UMD-5-release
     option: exclude
-    value: "*nordugrid-*,eos-*,htcondor-*,cvmfs-*,xrootd-*,*gfal2*,davix*,srm*,globus-*"
+    value: "*nordugrid-*,eos-*,htcondor-*,*cvmfs-*,xrootd-*,*gfal2*,davix*,srm*,globus-*"
     create: false
     no_extra_spaces: true
+

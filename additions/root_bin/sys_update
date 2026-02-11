@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 dnf clean all --enablerepo=*
-dnf update -y
+dnf update -y --allowerasing --skip-broken --nobest
 
 grub2-mkconfig -o /boot/grub2/grub.cfg --update-bls-cmdline
 

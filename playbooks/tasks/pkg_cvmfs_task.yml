@@ -4,9 +4,9 @@
 
 - name: Install CVMFS packages and dependencies
   ansible.builtin.dnf:
-    name: [ 'autofs', 'cvmfs', 'cvmfs-config-default' ]
+    name: ['autofs', 'cvmfs']
     state: present
     enablerepo: "cernvm,cernvm-config"
-    disablerepo: "UMD*"
+    disablerepo: "UMD*,wlcg"
   tags: packages
 

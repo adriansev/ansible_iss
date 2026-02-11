@@ -14,6 +14,15 @@
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux'
   tags: repo
 
+- name: Repo WLCG - exclude packages
+  community.general.ini_file:
+    path: /etc/yum.repos.d/wlcg-el9.repo
+    section: wlcg
+    option: exclude
+    value: "*cvmfs*"
+    create: false
+    no_extra_spaces: true
+
 # - name: Print output
 #   ansible.builtin.debug:
 #     msg: "{{ ansible_facts[ 'distribution' ] }}"

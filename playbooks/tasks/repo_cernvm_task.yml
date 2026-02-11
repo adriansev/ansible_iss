@@ -2,7 +2,10 @@
 - name: Import CernVM RPM key
   ansible.builtin.rpm_key:
     state: present
-    key: https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM
+    key: "{{ item }}"
+  loop:
+    - https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM
+    - https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM-2048
   tags: rpmkey
 
 - name: Install CVMFS repository

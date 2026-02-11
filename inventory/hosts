@@ -37,6 +37,8 @@ vmhost2   ansible_host=10.10.11.243
 alice2    ansible_host=10.10.11.26
 alice4    ansible_host=10.10.11.28
 
+backup01  ansible_host=10.10.8.233
+
 alien.spacescience.ro
 
 mgm1.spacescience.ro
@@ -44,7 +46,6 @@ mgm2.spacescience.ro
 mgm3.spacescience.ro
 
 nfs01  ansible_host=10.99.99.200 ansible_ssh_extra_args=' -J root@issaf.spacescience.ro '
-nfs02  ansible_host=10.99.99.201 ansible_ssh_extra_args=' -J root@issaf.spacescience.ro '
 
 ## LISA
 ceph1.lisa  ansible_host=10.10.180.31
@@ -64,7 +65,6 @@ wn4.lisa    ansible_host=10.10.180.44
 
 [nfs_servers]
 nfs01  ansible_host=10.99.99.200 ansible_ssh_extra_args=' -J root@issaf.spacescience.ro '
-nfs02  ansible_host=10.99.99.201 ansible_ssh_extra_args=' -J root@issaf.spacescience.ro '
 
 [lisa_wn]
 wn1.lisa
