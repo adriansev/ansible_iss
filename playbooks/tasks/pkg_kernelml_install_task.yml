@@ -5,9 +5,7 @@
   ansible.builtin.dnf:
     name:
       - kernel-ml.x86_64
-      - kernel-ml-devel.x86_64
       - kernel-ml-core.x86_64
-      - kernel-ml-devel-matched.x86_64
       - kernel-ml-modules.x86_64
       - kernel-ml-modules-extra.x86_64
       - kernel-ml-tools.x86_64
@@ -27,3 +25,8 @@
 #- name: Re-create grub conf - EL9
 #  ansible.builtin.command: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg --update-bls-cmdline
 #  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
+
+
+## NOT NEEDED
+##      - kernel-ml-devel.x86_64
+##      - kernel-ml-devel-matched.x86_64

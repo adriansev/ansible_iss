@@ -5,7 +5,7 @@
     description: InfluxData Repository - Stable
     file: influxdata
     baseurl: https://repos.influxdata.com/stable/$basearch/main
-    gpgkey: https://repos.influxdata.com/influxdata-archive_compat.key
+    gpgkey: https://repos.influxdata.com/influxdata-archive.key
     gpgcheck: true
     enabled: true
     state: present
@@ -13,3 +13,4 @@
     group: root
     mode: 0644
   tags: repo
+  ignore_errors: true

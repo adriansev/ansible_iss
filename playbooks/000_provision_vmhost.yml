@@ -55,7 +55,6 @@
       - "tasks/00basic_tools_hw.yml"
       - "tasks/pkg_utils_task.yml"
       - "tasks/00storage_tools.yml"
-      - "tasks/storage_cli.yml"
       - "tasks/mdraid_conf_task.yml"
       - "tasks/seatools_sync.yml"
       - "tasks/cfg_smartd_task.yml"

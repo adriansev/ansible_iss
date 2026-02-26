@@ -1,6 +1,0 @@
----
-- hosts: "{{ target | default('all') }}"
-  gather_facts: False
-  tasks:
-  - include_tasks: tasks/storage_cli.yml
-
