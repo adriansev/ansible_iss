@@ -1,6 +1,6 @@
 ---
 - name: Include cfg_ipset_task.yml
-  include_tasks: cfg_ipset_task.yml
+  ansible.builtin.include_tasks: cfg_ipset_task.yml
 
 - name: Iptables v4
   ansible.builtin.template:

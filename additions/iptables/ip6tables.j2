@@ -10,7 +10,32 @@
 # DEFAULT ACCEPTS
 -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
-# REMOVE INVALID FLAGS COMBINATIONS
+# IPV6 PROTOCOL ESSENTIALS no source restriction, before INVALID drop
+# NDP
+-A INPUT -p ipv6-icmp --icmpv6-type neighbour-solicitation -j ACCEPT
+-A INPUT -p ipv6-icmp --icmpv6-type neighbour-advertisement -j ACCEPT
+-A INPUT -p ipv6-icmp --icmpv6-type router-solicitation -j ACCEPT
+-A INPUT -p ipv6-icmp --icmpv6-type router-advertisement -j ACCEPT
+
+# MLD
+-A INPUT -p ipv6-icmp --icmpv6-type 130 -j ACCEPT
+-A INPUT -p ipv6-icmp --icmpv6-type 131 -j ACCEPT
+-A INPUT -p ipv6-icmp --icmpv6-type 132 -j ACCEPT
+-A INPUT -p ipv6-icmp --icmpv6-type 143 -j ACCEPT
+
+# PMTUD and diagnostics source 2001:b30:4210::/48 acceptable here since these are unicast error responses, not multicast
+-A INPUT -p ipv6-icmp --icmpv6-type destination-unreachable -j ACCEPT
+-A INPUT -p ipv6-icmp --icmpv6-type packet-too-big -j ACCEPT
+-A INPUT -p ipv6-icmp --icmpv6-type time-exceeded -j ACCEPT
+-A INPUT -p ipv6-icmp --icmpv6-type parameter-problem -j ACCEPT
+
+# MALFORMED TCP explicit, more precise than INVALID
+-A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+-A INPUT -p tcp --tcp-flags ALL ALL -j DROP
+-A INPUT -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+-A INPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
+
+# INVALID DROP now safe, NDP/MLD already accepted above
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 
 ## WHITELISTING - first accept all what was specified to be accepted
@@ -45,7 +70,6 @@
 {{ ip_v6_filter_custom_rule_after_ipsets }}
 
 # DROP EVERYTHING ELSE
--A INPUT -j DROP
--A FORWARD -j DROP
+# Defaults are set above. Remove drop here so other systems can add rules under this point (like kubernetes)
 COMMIT
 

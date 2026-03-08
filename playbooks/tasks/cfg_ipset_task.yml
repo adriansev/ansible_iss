@@ -29,18 +29,6 @@
     mode: '0600'
     force: true
   register: _ipset_rules_update
-  vars:
-    ipset_tables:
-      - accept_ip:
-      - accept_ip6:
-      - accept_net:
-      - accept_net6:
-      - accept_port_ip:
-      - accept_port_ip6:
-      - accept_port_net:
-      - accept_port_net6:
-      - accept_port_tcp:
-      - accept_port_udp:
 
 - name: Ipset should be started
   ansible.builtin.systemd:

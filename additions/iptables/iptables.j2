@@ -45,7 +45,6 @@
 {{ ip_v4_filter_custom_rule_after_ipsets }}
 
 # DROP EVERYTHING ELSE
--A INPUT -j DROP
--A FORWARD -j DROP
+# Defaults are set above. Remove drop here so other systems can add rules under this point (like kubernetes)
 COMMIT
 
