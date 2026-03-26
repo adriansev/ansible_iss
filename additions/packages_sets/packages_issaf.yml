@@ -3,7 +3,18 @@ package_list:
   - quota.x86_64
   - quotatool.x86_64
   - environment-modules.x86_64
+  - conda
   - systemd-devel
+  - python3-devel
+  - python3.13.x86_64
+  - python3.13-devel.x86_64
+  - python3.13-flit-core.noarch
+  - python3.13-freethreading.x86_64
+  - python3.13-packaging.noarch
+  - python3.13-pip.noarch
+  - python3.13-pip-wheel.noarch
+  - python3.13-setuptools.noarch
+  - python3.13-setuptools-wheel.noarch
   - python3-six.noarch
   - python3-types-six.noarch
   - python3-rich
@@ -219,6 +230,10 @@ package_list:
   - cmake-data.noarch
   - cmake-rpm-macros.noarch
   - extra-cmake-modules.noarch
+  - cmake-gui.x86_64
+  - cmakelang.noarch
+  - c4project.noarch
+  - leatherman.x86_64
   - python3-cmake-build-extension.noarch
   - glibc.x86_64
   - glibc-common.x86_64
@@ -265,19 +280,22 @@ package_list:
   - git-clang-format
   - clang-analyzer
   - llvm-toolset.x86_64
-  - gcc-toolset-14.x86_64
-  - gcc-toolset-14-binutils-gold.x86_64
-  - gcc-toolset-14-binutils-gprofng.x86_64
-  - gcc-toolset-14-libasan-devel.x86_64
-  - gcc-toolset-14-libatomic-devel.x86_64
-  - gcc-toolset-14-libgccjit-devel.x86_64
-  - gcc-toolset-14-libgccjit.x86_64
-  - gcc-toolset-14-libitm-devel.x86_64
-  - gcc-toolset-14-liblsan-devel.x86_64
-  - gcc-toolset-14-libquadmath-devel.x86_64
-  - gcc-toolset-14-libstdc++-devel.x86_64
-  - gcc-toolset-14-libtsan-devel.x86_64
-  - gcc-toolset-14-libubsan-devel.x86_64
+  - gcc-toolset-15-runtime.x86_64
+  - gcc-toolset-15-binutils.x86_64
+  - gcc-toolset-15-binutils-gold.x86_64
+  - gcc-toolset-15-binutils-gprofng.x86_64
+  - gcc-toolset-15-gcc.x86_64
+  - gcc-toolset-15-gcc-c++.x86_64
+  - gcc-toolset-15-gcc-gfortran.x86_64
+  - gcc-toolset-15-gcc-plugin-annobin.x86_64
+  - gcc-toolset-15-libasan-devel.x86_64
+  - gcc-toolset-15-libatomic-devel.x86_64
+  - gcc-toolset-15-libitm-devel.x86_64
+  - gcc-toolset-15-liblsan-devel.x86_64
+  - gcc-toolset-15-libquadmath-devel.x86_64
+  - gcc-toolset-15-libstdc++-devel.x86_64
+  - gcc-toolset-15-libtsan-devel.x86_64
+  - gcc-toolset-15-libubsan-devel.x86_64
   - gtest
   - gtest-devel
   - graphviz.x86_64
@@ -531,16 +549,28 @@ package_list:
   - ptscotch-openmpi-devel-parmetis.x86_64
   - ptscotch-openmpi-devel.x86_64
   - ptscotch-openmpi.x86_64
+  - openblas.x86_64
+  - openblas-devel.x86_64
+  - openblas-openmp.x86_64
+  - openblas-openmp64.x86_64
+  - openblas-serial.x86_64
+  - openblas-serial64.x86_64
+  - openblas-threads.x86_64
+  - openblas-threads64.x86_64
+  - openblas-threads64_.x86_64
+  - lapack.x86_64
+  - lapack-devel.x86_64
+  - lapack64.x86_64
+  - blas.x86_64
+  - blas-devel.x86_64
+  - clblast.x86_64
+  - clblast-devel.x86_64
+  - clblast-tuners.x86_64
   - scalapack-common.x86_64
-  - scalapack-mpich-devel.x86_64
-  - scalapack-mpich-devel.x86_64
-  - scalapack-mpich-static.x86_64
-  - scalapack-mpich-static.x86_64
   - scalapack-mpich.x86_64
-  - scalapack-mpich.x86_64
-  - scalapack-openmpi-devel.x86_64
-  - scalapack-openmpi-static.x86_64
+  - scalapack-mpich-devel.x86_64
   - scalapack-openmpi.x86_64
+  - scalapack-openmpi-devel.x86_64
   - python3-h5py-mpich.x86_64
   - python3-h5py-openmpi.x86_64
   - python3-mpi4py-mpich.x86_64
