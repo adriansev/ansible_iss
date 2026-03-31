@@ -365,6 +365,8 @@ package_list:
   - python3-pyarrow-devel.x86_64
   - parquet-libs.x86_64
   - parquet-libs-devel.x86_64
+  - xerces-c.x86_64
+  - xerces-c-devel.x86_64
   - tbb.x86_64
   - tbb-devel.x86_64
   - python3-tbb.x86_64
@@ -591,3 +593,47 @@ package_list:
   - numactl.x86_64
   - numactl-devel.x86_64
   - numactl-libs.x86_64
+  - libX11
+  - libX11-common
+  - libX11-devel
+  - libX11-xcb
+  - libXau
+  - libXau-devel
+  - libXaw
+  - libXaw-devel
+  - libXcomposite
+  - libXcomposite-devel
+  - libXcursor
+  - libXcursor-devel
+  - libXdamage
+  - libXdamage-devel
+  - libXext
+  - libXext-devel
+  - libXfixes
+  - libXfixes-devel
+  - libXft
+  - libXft-devel
+  - libXi
+  - libXi-devel
+  - libXinerama
+  - libXinerama-devel
+  - libXmu
+  - libXmu-devel
+  - libXp
+  - libXp-devel
+  - libXpm
+  - libXpm-devel
+  - libXrandr
+  - libXrandr-devel
+  - libXrender
+  - libXrender-devel
+  - libXres
+  - libXres-devel
+  - libXt
+  - libXt-devel
+  - libXtst
+  - libXtst-devel
+  - libXv
+  - libXv-devel
+  - libXxf86vm
+  - libXxf86vm-devel
