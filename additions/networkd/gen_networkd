@@ -1,0 +1,415 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+IFACE=""
+MAC=""
+MAC_SOURCE=""
+USE_NM=0
+NM_CONN=""
+MTU=""
+
+IPV4_METHOD=""    # dhcp | static | ignore
+IPV4_ADDRS=()
+IPV4_GW=""
+IPV4_DNS=()
+
+IPV6_METHOD=""    # slaac | dhcpv6 | static | ignore
+IPV6_ADDRS=()
+IPV6_GW=""
+IPV6_DNS=()
+
+OUTPUT_FILE=""
+
+# .............................................................................
+# Utilities
+# .............................................................................
+log()  { printf '[*] %s\n' "$*"; }
+warn() { printf '[WARN] %s\n' "$*" >&2; }
+die()  { printf '[ERROR] %s\n' "$*" >&2; exit 1; }
+trim() { local v="$*"; v="${v#"${v%%[![:space:]]*}"}"; v="${v%"${v##*[![:space:]]}"}"; printf '%s' "$v"; }
+
+is_link_local_v6() {
+    local addr="${1,,}"
+    [[ "$addr" == fe80* ]] && return 0 || return 1
+}
+
+# .............................................................................
+# 1. Resolve interface
+# .............................................................................
+resolve_interface() {
+    if [[ -n "${1:-}" ]]; then
+        IFACE="$1"
+        ip link show "$IFACE" &>/dev/null || die "Interface '$IFACE' not found."
+    else
+        IFACE=$(ip route show default 2>/dev/null | awk '/^default/ {print $5; exit}')
+        [[ -n "$IFACE" ]] || die "No default route interface detected. Pass one explicitly: $0 <INTERFACE>"
+    fi
+    log "Interface         : $IFACE"
+}
+
+# .............................................................................
+# 2. MAC detection . permanent MAC preferred
+# .............................................................................
+detect_mac() {
+    local curr perm=""
+    curr=$(cat /sys/class/net/"$IFACE"/address 2>/dev/null | tr '[:upper:]' '[:lower:]')
+
+    if command -v ethtool &>/dev/null; then
+        local raw
+        raw=$(ethtool -P "$IFACE" 2>/dev/null | awk '{print tolower($NF)}')  #'
+        [[ -n "$raw" && "$raw" != "00:00:00:00:00:00" ]] && perm="$raw"
+    fi
+
+    if [[ -n "$perm" ]]; then
+        MAC="$perm"
+        MAC_SOURCE="permanent (ethtool -P)"
+    else
+        MAC="$curr"
+        MAC_SOURCE="current (/sys/class/net) . ethtool absent or returned all-zeros"
+    fi
+    log "MAC address       : $MAC  [$MAC_SOURCE]"
+}
+
+# .............................................................................
+# 3. Config source detection
+# .............................................................................
+detect_config_source() {
+    if command -v nmcli &>/dev/null && systemctl is-active --quiet NetworkManager 2>/dev/null; then
+        USE_NM=1
+        log "Config source     : NetworkManager (nmcli)"
+    else
+        USE_NM=0
+        if ! command -v nmcli &>/dev/null; then
+            log "Config source     : ip(8) fallback (nmcli not found)"
+        else
+            log "Config source     : ip(8) fallback (NetworkManager not active)"
+        fi
+    fi
+}
+
+# .............................................................................
+# 4. MTU detection
+#    NM  : reads 802-3-ethernet.mtu; 0 = auto . not emitted.
+#    ip  : reads /sys/class/net/<IFACE>/mtu; omitted when value is 1500.
+# .............................................................................
+detect_mtu() {
+    if [[ $USE_NM -eq 1 ]]; then
+        local nm_mtu
+        nm_mtu=$(nmcli --escape no -g 802-3-ethernet.mtu con show "$NM_CONN" 2>/dev/null | xargs || true)
+        if [[ -n "$nm_mtu" && "$nm_mtu" =~ ^[0-9]+$ && "$nm_mtu" -gt 0 ]]; then
+            MTU="$nm_mtu"
+            log "MTU               : $MTU (NM profile, explicit)"
+        else
+            log "MTU               : auto/unset in NM profile . MTUBytes omitted"
+        fi
+    else
+        local sys_mtu
+        sys_mtu=$(cat /sys/class/net/"$IFACE"/mtu 2>/dev/null || true)
+        if [[ -n "$sys_mtu" && "$sys_mtu" =~ ^[0-9]+$ && "$sys_mtu" -ne 1500 ]]; then
+            MTU="$sys_mtu"
+            log "MTU               : $MTU (sysfs, non-default . emitting)"
+        else
+            log "MTU               : ${sys_mtu:-unknown} (default 1500 . MTUBytes omitted)"
+        fi
+    fi
+}
+
+# .............................................................................
+# 5. NM . resolve active connection
+# .............................................................................
+nm_resolve_connection() {
+    NM_CONN=$(nmcli --escape no -t -g GENERAL.CONNECTION device show "$IFACE" 2>/dev/null | head -1)
+    [[ -z "$NM_CONN" || "$NM_CONN" == "--" ]] && die "No active NM connection on interface $IFACE."
+    log "NM connection     : $NM_CONN"
+}
+
+# .............................................................................
+# 6. NM . IPv4
+# .............................................................................
+nm_detect_ipv4() {
+    local method
+    method=$(nmcli --escape no -g ipv4.method con show "$NM_CONN" 2>/dev/null)
+    log "IPv4 method (NM)  : $method"
+
+    case "$method" in
+        auto)
+            IPV4_METHOD="dhcp"
+            ;;
+        manual)
+            IPV4_METHOD="static"
+            local raw
+
+            raw=$(nmcli --escape no -g ipv4.addresses con show "$NM_CONN" 2>/dev/null || true)
+            if [[ -n "$raw" && "$raw" != "--" ]]; then
+                IFS=',' read -ra _p <<< "$raw"
+                for a in "${_p[@]}"; do
+                    a=$(trim "$a"); [[ -n "$a" ]] && IPV4_ADDRS+=("$a")
+                done
+            fi
+            [[ ${#IPV4_ADDRS[@]} -eq 0 ]] && die "ipv4.method=manual but no addresses in NM profile '$NM_CONN'."
+
+            raw=$(nmcli --escape no -g ipv4.gateway con show "$NM_CONN" 2>/dev/null || true)
+            raw=$(trim "$raw")
+            [[ -n "$raw" && "$raw" != "--" ]] && IPV4_GW="$raw"
+
+            raw=$(nmcli --escape no -g ipv4.dns con show "$NM_CONN" 2>/dev/null || true)
+            if [[ -n "$raw" && "$raw" != "--" ]]; then
+                IFS=',' read -ra _p <<< "$raw"
+                for d in "${_p[@]}"; do
+                    d=$(trim "$d"); [[ -n "$d" ]] && IPV4_DNS+=("$d")
+                done
+            fi
+            ;;
+        disabled|ignore)
+            IPV4_METHOD="ignore"
+            ;;
+        *)
+            warn "Unhandled ipv4.method '$method'; treating as DHCP."
+            IPV4_METHOD="dhcp"
+            ;;
+    esac
+}
+
+# .............................................................................
+# 7. NM . IPv6
+# .............................................................................
+nm_detect_ipv6() {
+    local method
+    method=$(nmcli --escape no -g ipv6.method con show "$NM_CONN" 2>/dev/null)
+    log "IPv6 method (NM)  : $method"
+
+    case "$method" in
+        auto)
+            IPV6_METHOD="slaac"
+            ;;
+        dhcp)
+            IPV6_METHOD="dhcpv6"
+            ;;
+        manual)
+            IPV6_METHOD="static"
+            local raw
+
+            raw=$(nmcli --escape no -g ipv6.addresses con show "$NM_CONN" 2>/dev/null || true)
+            if [[ -n "$raw" && "$raw" != "--" ]]; then
+                IFS=',' read -ra _p <<< "$raw"
+                for a in "${_p[@]}"; do
+                    a=$(trim "$a")
+                    is_link_local_v6 "$a" && continue
+                    [[ -n "$a" ]] && IPV6_ADDRS+=("$a")
+                done
+            fi
+
+            raw=$(nmcli --escape no -g ipv6.gateway con show "$NM_CONN" 2>/dev/null || true)
+            raw=$(trim "$raw")
+            if [[ -n "$raw" && "$raw" != "--" ]]; then
+                is_link_local_v6 "$raw" && warn "IPv6 GW $raw is link-local; skipping." \
+                    || IPV6_GW="$raw"
+            fi
+
+            raw=$(nmcli --escape no -g ipv6.dns con show "$NM_CONN" 2>/dev/null || true)
+            if [[ -n "$raw" && "$raw" != "--" ]]; then
+                IFS=',' read -ra _p <<< "$raw"
+                for d in "${_p[@]}"; do
+                    d=$(trim "$d")
+                    is_link_local_v6 "$d" && continue
+                    [[ -n "$d" ]] && IPV6_DNS+=("$d")
+                done
+            fi
+            ;;
+        ignore|disabled|link-local)
+            IPV6_METHOD="ignore"
+            ;;
+        *)
+            warn "Unhandled ipv6.method '$method'; disabling IPv6."
+            IPV6_METHOD="ignore"
+            ;;
+    esac
+}
+
+# .............................................................................
+# 8. ip(8) fallback . IPv4
+# .............................................................................
+ip_detect_ipv4() {
+    local dhcp_found=0
+
+    local ifcfg="/etc/sysconfig/network-scripts/ifcfg-${IFACE}"
+    if [[ -f "$ifcfg" ]]; then
+        local bp
+        bp=$(grep -i '^BOOTPROTO=' "$ifcfg" 2>/dev/null \
+             | head -1 | cut -d= -f2 | tr -d '"' | tr '[:upper:]' '[:lower:]' | xargs || true)
+        log "ifcfg             : $ifcfg  (BOOTPROTO=${bp:-<not set>})"
+        [[ "$bp" == "dhcp" ]] && dhcp_found=1
+    fi
+
+    if [[ $dhcp_found -eq 0 ]]; then
+        pgrep -a dhclient 2>/dev/null | grep -qF "$IFACE" && { log "DHCP detection    : dhclient active on $IFACE"; dhcp_found=1; } || true
+        pgrep -a dhcpcd   2>/dev/null | grep -qF "$IFACE" && { log "DHCP detection    : dhcpcd active on $IFACE";   dhcp_found=1; } || true
+    fi
+
+    if [[ $dhcp_found -eq 0 ]]; then
+        local lf
+        for lf in "/var/lib/dhclient/dhclient-${IFACE}.leases" "/var/lib/dhclient/dhclient.leases" "/var/lib/dhcpcd/${IFACE}.lease"; do
+            [[ -f "$lf" ]] && grep -qF "$IFACE" "$lf" 2>/dev/null && { log "DHCP detection    : lease file $lf"; dhcp_found=1; break; }
+        done
+    fi
+
+    if [[ $dhcp_found -eq 1 ]]; then
+        IPV4_METHOD="dhcp"
+        log "IPv4 method       : dhcp"
+        return
+    fi
+
+    IPV4_METHOD="static"
+    log "IPv4 method       : static"
+
+    mapfile -t IPV4_ADDRS < <( ip -4 -o addr show dev "$IFACE" 2>/dev/null | awk '{print $4}' | grep -v '^169\.254\.' )
+    IPV4_GW=$(ip route show default dev "${IFACE}" 2>/dev/null | awk '/^default/ {print $3; exit}' || true)
+
+    if [[ -f /etc/resolv.conf ]]; then
+        mapfile -t IPV4_DNS < <( grep '^nameserver' /etc/resolv.conf 2>/dev/null | awk '{print $2}' | grep -v ':' )
+    fi
+
+    log "Addresses         : ${IPV4_ADDRS[*]:-<none>}"
+    log "Gateway           : ${IPV4_GW:-<none>}"
+    log "DNS               : ${IPV4_DNS[*]:-<none>}"
+    [[ ${#IPV4_ADDRS[@]} -eq 0 ]] && warn "No IPv4 addresses found on $IFACE. Interface may be down."
+}
+
+# .............................................................................
+# 9. ip(8) fallback . IPv6
+# .............................................................................
+ip_detect_ipv6() {
+    local all_v6=()
+    mapfile -t all_v6 < <( ip -6 -o addr show dev "$IFACE" scope global 2>/dev/null | awk '{print $4}' )
+
+    if [[ ${#all_v6[@]} -eq 0 ]]; then
+        IPV6_METHOD="ignore"
+        log "IPv6              : no global-scope addresses . ignore"
+        return
+    fi
+
+    local has_dyn=0
+    while IFS= read -r line; do
+        echo "$line" | grep -qw 'dynamic' && has_dyn=1 && break
+    done < <(ip -6 -o addr show dev "$IFACE" scope global 2>/dev/null)
+
+    local accept_ra
+    accept_ra=$(cat /proc/sys/net/ipv6/conf/"$IFACE"/accept_ra 2>/dev/null || echo 0)
+
+    local dhcpv6=0; local lf
+    for lf in "/var/lib/dhclient/dhclient6-${IFACE}.leases" "/var/lib/dhcpcd/${IFACE}.lease6" "/var/lib/dhcp/dhclient6.${IFACE}.leases"; do
+        [[ -f "$lf" ]] && { log "DHCPv6 detection  : lease file $lf"; dhcpv6=1; break; }
+    done
+
+    if [[ $dhcpv6 -eq 1 ]]; then
+        IPV6_METHOD="dhcpv6"
+        log "IPv6 method       : dhcpv6"
+    elif [[ $has_dyn -eq 1 && $accept_ra -ge 1 ]]; then
+        IPV6_METHOD="slaac"
+        log "IPv6 method       : slaac (dynamic + accept_ra=$accept_ra)"
+    elif [[ $has_dyn -eq 1 ]]; then
+        IPV6_METHOD="slaac"
+        warn "Dynamic IPv6 present but accept_ra=$accept_ra; assuming SLAAC."
+    else
+        IPV6_METHOD="static"
+        log "IPv6 method       : static"
+
+        for a in "${all_v6[@]}"; do
+            is_link_local_v6 "$a" && continue
+            IPV6_ADDRS+=("$a")
+        done
+
+        IPV6_GW=$(ip -6 route show default dev "$IFACE" 2>/dev/null | awk '/^default/ {print $3; exit}' || true)
+        [[ -n "$IPV6_GW" ]] && is_link_local_v6 "$IPV6_GW" && warn "IPv6 default gateway $IPV6_GW is link-local . retained (valid in [Route])."
+
+        if [[ -f /etc/resolv.conf ]]; then
+            mapfile -t IPV6_DNS < <( grep '^nameserver' /etc/resolv.conf 2>/dev/null | awk '{print $2}' | grep ':' | grep -iv '^fe80' )
+        fi
+
+        log "IPv6 addresses    : ${IPV6_ADDRS[*]:-<none>}"
+        log "IPv6 gateway      : ${IPV6_GW:-<none>}"
+        log "IPv6 DNS          : ${IPV6_DNS[*]:-<none>}"
+    fi
+}
+
+# .............................................................................
+# 10. Write 10-<IFACE>.network
+# .............................................................................
+write_networkd_file() {
+    local out="10-${IFACE}.network"
+
+    local dhcp_val="no"
+    if   [[ "$IPV4_METHOD" == "dhcp" && "$IPV6_METHOD" == "dhcpv6" ]]; then dhcp_val="yes"
+    elif [[ "$IPV4_METHOD" == "dhcp"   ]]; then dhcp_val="ipv4"
+    elif [[ "$IPV6_METHOD" == "dhcpv6" ]]; then dhcp_val="ipv6"
+    fi
+
+    {
+        printf "# Generated by gen_networkd.sh on %s\n" "$(date -Iseconds)"
+        printf "# Source : %s\n\n" \
+               "$([[ $USE_NM -eq 1 ]] \
+                   && echo "NetworkManager (profile: $NM_CONN)" \
+                   || echo "ip(8) / ifcfg heuristics")"
+
+        # .. [Match] ..........................................................
+        printf "[Match]\n"
+        printf "MACAddress=%s\n\n" "$MAC"
+
+        # .. [Link] . only when MTU explicitly set ............................
+        if [[ -n "$MTU" ]]; then
+            printf "[Link]\n"
+            printf "MTUBytes=%s\n\n" "$MTU"
+        fi
+
+        # .. [Network] ........................................................
+        printf "[Network]\n"
+        printf "DHCP=%s\n" "$dhcp_val"
+        printf "LinkLocalAddressing=no\n"
+        printf "IPv6AcceptRA=no\n"
+
+        # DNS . static configurations only; deduplicated
+        local _dns_seen=()
+        emit_dns() {
+            local d="$1" already=0 seen
+            for seen in "${_dns_seen[@]+"${_dns_seen[@]}"}";  #"
+                do
+                    [[ "$seen" == "$d" ]] && already=1 && break
+                done
+            if [[ $already -eq 0 ]]; then
+                printf "DNS=%s\n" "$d"
+                _dns_seen+=("$d")
+            fi
+        }
+        [[ "$IPV4_METHOD" == "static" ]] && for d in "${IPV4_DNS[@]+${IPV4_DNS[@]}}"; do emit_dns "$d"; done
+        [[ "$IPV6_METHOD" == "static" ]] && for d in "${IPV6_DNS[@]+${IPV6_DNS[@]}}"; do emit_dns "$d"; done
+
+        # .. [Address] blocks .................................................
+        [[ "$IPV4_METHOD" == "static" ]] && for a in "${IPV4_ADDRS[@]+${IPV4_ADDRS[@]}}"; do printf "\n[Address]\nAddress=%s\n" "$a"; done
+        [[ "$IPV6_METHOD" == "static" ]] && for a in "${IPV6_ADDRS[@]+${IPV6_ADDRS[@]}}"; do printf "\n[Address]\nAddress=%s\n" "$a"; done
+
+        # .. [Route] blocks ...................................................
+        [[ "$IPV4_METHOD" == "static" && -n "$IPV4_GW" ]] && printf "\n[Route]\nGateway=%s\n" "$IPV4_GW"
+        [[ "$IPV6_METHOD" == "static" && -n "$IPV6_GW" ]] && printf "\n[Route]\nGateway=%s\n" "$IPV6_GW"
+
+    } > "${out}"
+    OUTPUT_FILE=$(realpath "${out}")
+}
+
+resolve_interface "${1:-}"
+detect_mac
+detect_config_source
+if [[ $USE_NM -eq 1 ]]; then
+    nm_resolve_connection
+    nm_detect_ipv4
+    nm_detect_ipv6
+else
+    ip_detect_ipv4
+    ip_detect_ipv6
+fi
+
+detect_mtu
+write_networkd_file
+
+mkdir -p /etc/systemd/network/
+cp "${OUTPUT_FILE}" /etc/systemd/network/
+

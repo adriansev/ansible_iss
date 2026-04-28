@@ -3,9 +3,12 @@
   gather_facts: False
   vars:
     host_src_data_sync: "alien.spacescience.ro"
+
+    cluster_user_list: alien
+
   vars_files:
-      - "{{ playbook_dir }}/../additions/data_sync_alien/data_list.yml"
-      - "{{ playbook_dir }}/../additions/data_sync_alien/data_list_exclusive.yml"
+      - "{{ playbook_dir }}/../additions/data_sync/{{ cluster_user_list }}/data_list.yml"
+      - "{{ playbook_dir }}/../additions/data_sync/{{ cluster_user_list }}/data_list_exclusive.yml"
 
   tasks:
   - ansible.builtin.include_tasks:

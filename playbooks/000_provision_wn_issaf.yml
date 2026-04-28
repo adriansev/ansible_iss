@@ -21,9 +21,6 @@
       - "{{ playbook_dir }}/../additions/mounts_issaf/data5.mount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/data6.mount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/data7.mount"
-      - "{{ playbook_dir }}/../additions/mounts_issaf/data8.mount"
-      - "{{ playbook_dir }}/../additions/mounts_issaf/data9.mount"
-      - "{{ playbook_dir }}/../additions/mounts_issaf/data10.mount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/fastdata.mount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/software.mount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/home.automount"
@@ -37,9 +34,6 @@
       - "{{ playbook_dir }}/../additions/mounts_issaf/data5.automount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/data6.automount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/data7.automount"
-      - "{{ playbook_dir }}/../additions/mounts_issaf/data8.automount"
-      - "{{ playbook_dir }}/../additions/mounts_issaf/data9.automount"
-      - "{{ playbook_dir }}/../additions/mounts_issaf/data10.automount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/fastdata.automount"
       - "{{ playbook_dir }}/../additions/mounts_issaf/software.automount"
     mounts_list_enable:
@@ -51,9 +45,6 @@
       - "data5.mount"
       - "data6.mount"
       - "data7.mount"
-      - "data8.mount"
-      - "data9.mount"
-      - "data10.mount"
       - "fastdata.mount"
       - "software.mount"
       - "share-apps.mount"
@@ -62,9 +53,11 @@
 
     host_src_data_sync: "issaf.spacescience.ro"
 
+    profile: iss
+
     users_create_home: false
 
-    profile: iss
+    cluster_user_list: issaf
 
   vars_files:
       - "{{ playbook_dir }}/../additions/ipset/ipset_issaf_wn.yml"
@@ -73,8 +66,11 @@
       - "{{ playbook_dir }}/../additions/root_tuning_list/tuning_generic.yml"
       - "{{ playbook_dir }}/../additions/users_issaf/user_group_info.yml"
       - "{{ playbook_dir }}/../additions/users_issaf/delete_users_groups.yml"
-      - "{{ playbook_dir }}/../additions/data_sync_issaf/data_list.yml"
-      - "{{ playbook_dir }}/../additions/data_sync_issaf/data_list_exclusive.yml"
+      - "{{ playbook_dir }}/../additions/users_cfg/{{ cluster_user_list }}/user_group_info.yml"
+      - "{{ playbook_dir }}/../additions/users_cfg/{{ cluster_user_list }}/delete_users_groups.yml"
+      - "{{ playbook_dir }}/../additions/data_sync/{{ cluster_user_list }}/data_list.yml"
+      - "{{ playbook_dir }}/../additions/data_sync/{{ cluster_user_list }}/data_list_exclusive.yml"
+
 
   tasks:
   - ansible.builtin.include_tasks:
@@ -83,7 +79,6 @@
       loop_var: task_item
     with_items:
       - "tasks/00basic_tools.yml"
-      - "tasks/00basic_tools_hw.yml"
       - "tasks/pkg_kernelml_install_task.yml"
       - "tasks/pkg_igtfca_task.yml"
       - "tasks/pkg_lsc_vomses_task.yml"

@@ -1,12 +1,15 @@
 ---
-- hosts: "{{ target | default('wn_issaf') }}"
-  gather_facts: False
+- name: Sync data list from issaf to WNs
+  hosts: "{{ target | default('wn_issaf') }}"
+  gather_facts: false
+
   vars:
     host_src_data_sync: "issaf.spacescience.ro"
+    cluster_user_list: issaf
 
   vars_files:
-      - "{{ playbook_dir }}/../additions/data_sync_issaf/data_list.yml"
-      - "{{ playbook_dir }}/../additions/data_sync_issaf/data_list_exclusive.yml"
+    - "{{ playbook_dir }}/../additions/data_sync/{{ cluster_user_list }}/data_list.yml"
+    - "{{ playbook_dir }}/../additions/data_sync/{{ cluster_user_list }}/data_list_exclusive.yml"
 
   tasks:
   - ansible.builtin.include_tasks:

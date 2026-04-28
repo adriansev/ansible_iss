@@ -2,20 +2,13 @@
 - name: Import Nordugrid key
   ansible.builtin.rpm_key:
     state: present
-    key: http://download.nordugrid.org/RPM-GPG-KEY-nordugrid-6
+    key: http://download.nordugrid.org/RPM-GPG-KEY-nordugrid-7
 
 - name: Install Nordugrid repository EL9
   ansible.builtin.dnf:
-    name: https://download.nordugrid.org/packages/nordugrid-release/releases/6.1/rocky/9/x86_64/nordugrid-release-6.1-1.el9.noarch.rpm
+    name: https://download.nordugrid.org/packages/nordugrid-release/releases/7/rocky/9/x86_64/nordugrid-release-7-1.el9.noarch.rpm
     state: present
   when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
-  tags: repo
-
-- name: Install Nordugrid repository Fedora
-  ansible.builtin.dnf:
-    name: https://download.nordugrid.org/packages/nordugrid-release/releases/6.1/fedora/38/x86_64/nordugrid-release-6.1-1.fc38.noarch.rpm
-    state: present
-  when: ansible_facts[ 'distribution' ] == 'Fedora'
   tags: repo
 
 - name: Check existence of epel.repo

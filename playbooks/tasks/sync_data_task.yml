@@ -1,8 +1,8 @@
 ---
 - name: Sync frontend data to hosts
   ansible.posix.synchronize:
-    src:  "{{  sync_item.src }}"
-    dest: "{{  sync_item.dst }}"
+    src: "{{ sync_item.src }}"
+    dest: "{{ sync_item.dst }}"
     links: true
     archive: true
     checksum: true
@@ -11,6 +11,8 @@
       - "-AW"
       - "--exclude=.git"
       - "--filter='-x security.selinux'"
+  vars:
+    ansible_private_key_file: "/root/.ssh/id_ed25519"
   loop_control:
     loop_var: sync_item
   loop: "{{ copy_list }}"
@@ -18,8 +20,8 @@
 
 - name: Sync frontend data to hosts exclusive content
   ansible.posix.synchronize:
-    src:  "{{  sync_item_ex.src }}"
-    dest: "{{  sync_item_ex.dst }}"
+    src: "{{ sync_item_ex.src }}"
+    dest: "{{ sync_item_ex.dst }}"
     delete: true
     links: true
     archive: true
@@ -29,6 +31,8 @@
       - "-AW"
       - "--exclude=.git"
       - "--filter='-x security.selinux'"
+  vars:
+    ansible_private_key_file: "/root/.ssh/id_ed25519"
   loop_control:
     loop_var: sync_item_ex
   loop: "{{ copy_list_exclusive }}"

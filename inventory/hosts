@@ -20,7 +20,7 @@ isscloud.spacescience.ro
 www2.spacescience.ro
 indico.spacescience.ro
 hr.spacescience.ro
-gw2.spacescience.ro
+gw1.spacescience.ro
 ns.spacescience.ro
 herahsh.spacescience.ro
 astronomy.spacescience.ro
@@ -60,6 +60,8 @@ wn4.lisa    ansible_host=10.10.180.44
 
 
 # [all:vars]
+
+ansible_private_key_file=/root/.ssh/id_ed25519
 
 ############################################################
 ## Define functional groups

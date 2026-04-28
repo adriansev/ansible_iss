@@ -22,6 +22,8 @@
 
     users_create_home: false
 
+    cluster_user_list: alien
+
     profile: alien
 
     tuning_list:
@@ -38,10 +40,10 @@
       - "{{ playbook_dir }}/../additions/ipset/ipset_alien_wn.yml"
       - "{{ playbook_dir }}/../additions/ipset_blacklist/blacklist_alien_wn.yml"
       - "{{ playbook_dir }}/../additions/sysctl_lists/sysctl_generic.yml"
-      - "{{ playbook_dir }}/../additions/users_alien/user_group_info_wn.yml"
-      - "{{ playbook_dir }}/../additions/users_alien/delete_users_groups.yml"
-      - "{{ playbook_dir }}/../additions/data_sync_alien/data_list.yml"
-      - "{{ playbook_dir }}/../additions/data_sync_alien/data_list_exclusive.yml"
+      - "{{ playbook_dir }}/../additions/users_cfg/{{ cluster_user_list }}/user_group_info.yml"
+      - "{{ playbook_dir }}/../additions/users_cfg/{{ cluster_user_list }}/delete_users_groups.yml"
+      - "{{ playbook_dir }}/../additions/data_sync/{{ cluster_user_list }}/data_list.yml"
+      - "{{ playbook_dir }}/../additions/data_sync/{{ cluster_user_list }}/data_list_exclusive.yml"
 
   tasks:
   - ansible.builtin.include_tasks:
