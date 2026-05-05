@@ -1,0 +1,129 @@
+---
+# NVIDIA Driver Installation — AlmaLinux 9 / ELRepo kernel-ml / NVIDIA H200
+# Variant II (Compile Driver Source via DKMS)
+# Source: https://wiki.almalinux.org/series/system/SystemSeriesA03R9.html#variant-ii
+#
+# Hardware target : NVIDIA H200 (Hopper GH200)
+#                   Open kernel module only — no closed-source support for this GPU.
+#                   Minimum supported driver: 525.x | Recommended: 550+
+#
+# Assumptions:
+#   - Host is ALREADY booted into kernel-ml (ELRepo mainline kernel).
+#     This task does NOT install kernel-ml itself. Add that separately if needed.
+#   - Secure Boot is DISABLED. DKMS modules are unsigned.
+#   - Architecture: x86_64.
+#   - ansible_become: true set at play level, or adjust per-task as needed.
+
+- name: nvidia | Include pkg_nvidia_elrepo_task.yml
+  ansible.builtin.include_tasks: pkg_nvidia_elrepo_task.yml
+
+# ---------------------------------------------------------------------------
+# Phase 2 — kernel-ml build packages
+#
+# kernel-ml-devel must match the currently booted kernel-ml version exactly,
+# otherwise DKMS compilation will fail at the next step.
+# ---------------------------------------------------------------------------
+
+- name: nvidia | Collect running kernel version
+  ansible.builtin.command:
+    cmd: uname -r
+  register: running_kernel
+  changed_when: false
+
+- name: nvidia | Fail early if not running kernel-ml
+  ansible.builtin.fail:
+    msg: >
+      Running kernel '{{ running_kernel.stdout }}' does not appear to be an
+      ELRepo kernel-ml kernel (expected '.ml.' in version string).
+      Boot into kernel-ml before running this task list.
+  when: "'ml' not in running_kernel.stdout"
+
+- name: nvidia | Install kernel-ml build packages matching running kernel
+  ansible.builtin.dnf:
+    name:
+      - "kernel-ml-devel-{{ running_kernel.stdout }}"
+      - "kernel-ml-modules-{{ running_kernel.stdout }}"
+      - "kernel-ml-modules-extra-{{ running_kernel.stdout }}"
+      - kernel-headers
+    state: present
+  become: true
+  # Pinning to the exact running kernel version avoids the case where a newer
+  # kernel-ml-devel is pulled in that does not match uname -r, which would
+  # cause DKMS to compile against the wrong tree and fail silently at boot.
+
+# ---------------------------------------------------------------------------
+# Phase 3 — Blacklist and unload Nouveau (inline dracut, no handler)
+#
+# Done BEFORE installing the NVIDIA driver so that DKMS does not race against
+# a live nouveau module during compilation, and the initramfs produced by
+# the driver's post-install scriptlet already reflects the blacklist.
+# ---------------------------------------------------------------------------
+
+- name: nvidia | Deploy nouveau blacklist configuration
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/nouveau-blacklist.conf
+    content: |
+      blacklist nouveau
+      options nouveau modeset=0
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  register: nouveau_blacklist_written
+
+- name: nvidia | Rebuild initramfs to embed nouveau blacklist (all kernels)
+  ansible.builtin.command:
+    cmd: dracut -f --regenerate-all
+  become: true
+  when: nouveau_blacklist_written.changed
+  # Runs only when the blacklist file was actually written or changed.
+
+- name: nvidia | Unload nouveau module if currently loaded
+  ansible.builtin.command:
+    cmd: rmmod nouveau
+  become: true
+  register: rmmod_nouveau
+  failed_when: rmmod_nouveau.rc not in [0, 1]
+  changed_when: rmmod_nouveau.rc == 0
+  # rc=1 is expected and non-fatal when nouveau is not loaded at all
+  # (e.g., a fresh boot without any GPU driver, or already blacklisted).
+  # rc != 0 and rc != 1 would indicate an unexpected rmmod failure.
+
+# ---------------------------------------------------------------------------
+# Phase 4 — NVIDIA DKMS driver
+# ---------------------------------------------------------------------------
+
+- name: nvidia | Install NVIDIA driver via latest-dkms module stream
+  ansible.builtin.dnf:
+    name: "@nvidia-driver:latest-dkms"
+    state: present
+  become: true
+  # For H200 (Hopper/open-kernel-only GPU), this installs the open kernel
+  # module variant automatically — the closed-source module does not support
+  # Hopper. DKMS compiles immediately against the running kernel-ml.
+
+# ---------------------------------------------------------------------------
+# Phase 5 — DKMS build verification (pre-reboot)
+# ---------------------------------------------------------------------------
+
+- name: nvidia | Check DKMS status for NVIDIA modules
+  ansible.builtin.command:
+    cmd: dkms status nvidia
+  register: nvidia_dkms_status
+  changed_when: false
+  become: true
+
+- name: nvidia | Assert NVIDIA DKMS module reports installed status
+  ansible.builtin.assert:
+    that:
+      - "'installed' in nvidia_dkms_status.stdout"
+    fail_msg: |
+      DKMS build did not complete successfully.
+      dkms status output: {{ nvidia_dkms_status.stdout }}
+
+      Diagnosis steps:
+        1. uname -r                          — confirm running kernel
+        2. rpm -q kernel-ml-devel            — confirm devel version matches uname -r
+        3. dkms build nvidia/<ver> -k $(uname -r)  — manually trigger build
+        4. journalctl -b | grep -i dkms      — check build logs
+    success_msg: "DKMS status: {{ nvidia_dkms_status.stdout }}"

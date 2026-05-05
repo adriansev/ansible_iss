@@ -1,0 +1,64 @@
+---
+# NVIDIA Driver Installation — AlmaLinux 9 / ELRepo kernel-ml / NVIDIA H200
+# Variant II (Compile Driver Source via DKMS)
+# Source: https://wiki.almalinux.org/series/system/SystemSeriesA03R9.html#variant-ii
+#
+# Hardware target : NVIDIA H200 (Hopper GH200)
+#                   Open kernel module only — no closed-source support for this GPU.
+#                   Minimum supported driver: 525.x | Recommended: 550+
+#
+# Assumptions:
+#   - Host is ALREADY booted into kernel-ml (ELRepo mainline kernel).
+#     This task does NOT install kernel-ml itself. Add that separately if needed.
+#   - Secure Boot is DISABLED. DKMS modules are unsigned.
+#   - Architecture: x86_64.
+#   - ansible_become: true set at play level, or adjust per-task as needed.
+
+# ---------------------------------------------------------------------------
+# Phase 1 — Repositories
+# ---------------------------------------------------------------------------
+
+- name: nvidia | Enable CRB repository
+  ansible.builtin.command:
+    cmd: dnf config-manager --set-enabled crb
+  changed_when: false
+  become: true
+
+- name: nvidia | Install EPEL 9 release
+  ansible.builtin.dnf:
+    name: epel-release
+    state: present
+  become: true
+
+- name: nvidia | Import ELRepo GPG key
+  ansible.builtin.rpm_key:
+    key: https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+    state: present
+  become: true
+
+- name: nvidia | Install ELRepo release package
+  ansible.builtin.dnf:
+    name: https://www.elrepo.org/elrepo-release-9.el9.elrepo.noarch.rpm
+    state: present
+  become: true
+
+- name: nvidia | Enable elrepo-kernel sub-repository
+  ansible.builtin.command:
+    cmd: dnf config-manager --set-enabled elrepo-kernel
+  changed_when: false
+  become: true
+
+- name: nvidia | Add NVIDIA CUDA repository
+  ansible.builtin.get_url:
+    url: https://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo
+    dest: /etc/yum.repos.d/cuda-rhel9.repo
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: nvidia | Refresh DNF cache after all repo changes
+  ansible.builtin.dnf:
+    update_cache: true
+  become: true
+

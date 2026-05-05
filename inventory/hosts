@@ -57,6 +57,8 @@ wn1.lisa    ansible_host=10.10.180.41
 wn2.lisa    ansible_host=10.10.180.42
 wn3.lisa    ansible_host=10.10.180.43
 wn4.lisa    ansible_host=10.10.180.44
+wn5.lisa    ansible_host=10.10.180.45
+
 
 
 # [all:vars]

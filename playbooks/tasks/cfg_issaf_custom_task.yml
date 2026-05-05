@@ -1,0 +1,14 @@
+---
+- name: Check if libtinfo.so.6 exists
+  ansible.builtin.stat:
+    path: /usr/lib64/libtinfo.so.6
+  register: libtinfo6_stat
+
+- name: Create libtinfo.so.5 symlink pointing to libtinfo.so.6
+  ansible.builtin.file:
+    src: /usr/lib64/libtinfo.so.6
+    dest: /usr/lib64/libtinfo.so.5
+    state: link
+    force: false
+  when: libtinfo6_stat.stat.exists
+

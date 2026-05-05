@@ -1,0 +1,309 @@
+---
+# CUDA Development Environment — AlmaLinux 9 / NVIDIA H200 (Hopper, sm_90)
+#
+# Prerequisites (handled by nvidia_driver_elrepo.yml, which must run first):
+#   - NVIDIA driver installed and functional (nvidia-smi works)
+#   - cuda-rhel9.repo present in /etc/yum.repos.d/
+#   - CRB and EPEL repos enabled
+#
+# Package groups installed:
+#   1. System build tools
+#   2. CUDA toolkit core       — nvcc, runtime, headers, linker libs
+#   3. CUDA math libraries     — cuBLAS, cuFFT, cuSPARSE, cuSolver, cuRAND
+#   4. Deep learning stack     — cuDNN 9, NCCL, TensorRT
+#   5. Profiling & debugging   — Nsight Compute, Nsight Systems, NVTX, cuda-gdb
+#   6. H200 / NVSwitch stack   — nvidia-fabricmanager, GDRCopy
+#
+# Source for cuDNN package names:
+#   https://docs.nvidia.com/deeplearning/cudnn/installation/latest/linux.html
+#   (RHEL and Rocky Network Installation section)
+
+# ---------------------------------------------------------------------------
+# Phase 1 — Verify driver prerequisite
+# ---------------------------------------------------------------------------
+
+- name: CUDA | Verify NVIDIA driver is functional before installing CUDA stack
+  ansible.builtin.command:
+    cmd: nvidia-smi
+  changed_when: false
+  failed_when: false
+  register: cuda_preflight_smi
+
+- name: CUDA | Fail if nvidia-smi is not working
+  ansible.builtin.fail:
+    msg: >
+      nvidia-smi returned rc={{ cuda_preflight_smi.rc }}.
+      The NVIDIA driver must be installed and functional before running this task.
+      Run nvidia_driver_elrepo.yml first.
+  when: cuda_preflight_smi.rc != 0
+
+- name: CUDA | Verify NVIDIA CUDA repository is configured
+  ansible.builtin.stat:
+    path: /etc/yum.repos.d/cuda-rhel9.repo
+  register: cuda_repo_stat
+
+- name: CUDA | Fail if CUDA repo is not present
+  ansible.builtin.fail:
+    msg: >
+      /etc/yum.repos.d/cuda-rhel9.repo not found.
+      The CUDA repository must be configured before running this task.
+      Run nvidia_driver_elrepo.yml first.
+  when: not cuda_repo_stat.stat.exists
+
+- name: CUDA | Refresh DNF cache
+  ansible.builtin.dnf:
+    update_cache: true
+  become: true
+
+# ---------------------------------------------------------------------------
+# Phase 2 — System build tools
+# ---------------------------------------------------------------------------
+
+- name: CUDA | Install system build tools
+  ansible.builtin.dnf:
+    name:
+      - gcc
+      - gcc-c++
+      - make
+      - cmake
+      - pkg-config
+      - zlib
+    state: present
+  become: true
+  # gcc/g++ are required by nvcc as the host compiler.
+  # cmake is the standard build system for most CUDA projects.
+  # zlib is an explicit prerequisite for cuDNN per official NVIDIA docs.
+
+# ---------------------------------------------------------------------------
+# Phase 3 — CUDA toolkit core
+#
+# cuda-toolkit is the unversioned meta-package that always resolves to the
+# latest available CUDA toolkit version in the configured repo. It pulls in:
+#   nvcc, cuda-cudart, cuda-cudart-devel, cuda-nvcc, cuda-crt, cuda-nvtx,
+#   cuda-libraries, cuda-nvml-devel, and the full set of command-line tools.
+#
+# cuda-libraries-devel adds development headers for all bundled math libs.
+# ---------------------------------------------------------------------------
+
+- name: CUDA | Install CUDA toolkit core
+  ansible.builtin.dnf:
+    name:
+      - cuda-toolkit
+      - cuda-toolkit-config-common.noarch
+    state: present
+
+# ---------------------------------------------------------------------------
+# Phase 4 — CUDA math library development headers
+#
+# cuda-libraries-devel covers most of these, but individual -devel packages
+# are listed explicitly to guarantee headers are present even if the
+# meta-package dependency tree changes across CUDA releases.
+# ---------------------------------------------------------------------------
+- name: CUDA | Get version of CUDA toolkit
+  ansible.builtin.dnf:
+    list: cuda-toolkit
+  register: cuda_toolkit_version_dnf
+
+- name: CUDA | Register version of CUDA toolkit - list format
+  ansible.builtin.set_fact:
+    cuda_toolkit_version_list: "{{ cuda_toolkit_version_dnf.results | selectattr('yumstate','equalto','installed') | map(attribute='version') | list | first | split ('.') }}"
+
+- name: CUDA | Register facts version of CUDA toolkit
+  ansible.builtin.set_fact:
+    cuda_toolkit_version: "{{ cuda_toolkit_version_list[0:2] | join('-')  }}"
+    cuda_toolkit_version_maj: "{{ cuda_toolkit_version_list[0] }}"
+
+- name: CUDA | Install CUDA math library development headers
+  ansible.builtin.dnf:
+    name:
+      - cublas.x86_64
+      - cublasmp.x86_64
+      - cublasmp0.x86_64
+      - libcublas-{{ cuda_toolkit_version }}.x86_64
+      - libcublas-devel-{{ cuda_toolkit_version }}.x86_64
+      - cufftmp.x86_64
+      - cufftmp0.x86_64
+      - libcufft-{{ cuda_toolkit_version }}.x86_64
+      - libcufft-devel-{{ cuda_toolkit_version }}.x86_64
+      - libcurand-{{ cuda_toolkit_version }}.x86_64
+      - libcurand-devel-{{ cuda_toolkit_version }}.x86_64
+      - cusolvermp.x86_64
+      - cusolvermp0.x86_64
+      - libcusolver-{{ cuda_toolkit_version }}.x86_64
+      - libcusolver-devel-{{ cuda_toolkit_version }}.x86_64
+      - libcusolvermp0-cuda-{{ cuda_toolkit_version_maj }}.x86_64
+      - libcusolvermp0-devel-cuda-{{ cuda_toolkit_version_maj }}.x86_64
+      - cusparselt.x86_64
+      - libcusparselt-devel.x86_64
+      - cusparselt0.x86_64
+      - libcusparselt0.x86_64
+      - libcusparse-{{ cuda_toolkit_version }}.x86_64
+      - libcusparse-devel-{{ cuda_toolkit_version }}.x86_64
+      - libcusparselt0-cuda-{{ cuda_toolkit_version_maj }}.x86_64
+      - libcusparselt0-devel-cuda-{{ cuda_toolkit_version_maj }}.x86_64
+    state: present
+  become: true
+
+# ---------------------------------------------------------------------------
+# Phase 5 — Deep learning stack
+#
+# cuDNN:
+#   cudnn9-cuda-12 is the official per-CUDA meta-package per NVIDIA docs.
+#   It installs both runtime (libcudnn9-cuda-12) and dev (libcudnn9-devel-cuda-12).
+#   --allowerasing is explicitly required by NVIDIA's RHEL install instructions
+#   to handle potential conflicts with previously installed cuDNN packages.
+#
+# NCCL:
+#   Essential for H200 multi-GPU collective communications over NVLink.
+#   libnccl-devel provides headers for building NCCL-aware applications.
+#
+# TensorRT:
+#   libnvinfer / libnvinfer-devel: core TensorRT inference engine + headers.
+#   libnvonnxparsers-devel: ONNX model parser headers (required for most
+#   production inference pipelines).
+#   libnvparsers-devel: Caffe/UFF parser headers.
+#   libnvinfer-plugin-devel: built-in plugin library headers.
+# ---------------------------------------------------------------------------
+
+- name: CUDA | Install cuDNN 9 for CUDA 12
+  ansible.builtin.dnf:
+    name:
+      - cudnn9.x86_64
+      - cudnn9-jit.x86_64
+      - libcudnn9-cuda-{{ cuda_toolkit_version_maj }}.x86_64
+      - libcudnn9-devel-cuda-{{ cuda_toolkit_version_maj }}.x86_64
+      - libcudnn9-headers-cuda-{{ cuda_toolkit_version_maj }}.x86_64
+      - libcudnn9-jit-cuda-{{ cuda_toolkit_version_maj }}.x86_64
+      - libcudnn9-jit-devel-cuda-{{ cuda_toolkit_version_maj }}.x86_64
+    state: present
+    allowerasing: true
+  become: true
+  # allowerasing=true mirrors the --allowerasing flag in NVIDIA's official
+  # RHEL install docs. Required when any older cuDNN variant is already present.
+
+- name: CUDA | Install NCCL runtime and development libraries
+  ansible.builtin.dnf:
+    name:
+      - libnccl
+      - libnccl-devel
+    state: present
+  become: true
+
+- name: CUDA | Install TensorRT inference engine and development headers
+  ansible.builtin.dnf:
+    name:
+      - libnvinfer-bin.x86_64
+      - libnvinfer-devel.x86_64
+      - libnvinfer-dispatch-devel.x86_64
+      - libnvinfer-headers-devel.x86_64
+      - libnvinfer-headers-plugin-devel.x86_64
+      - libnvinfer-headers-python-plugin-devel.x86_64
+      - libnvinfer-lean-devel.x86_64
+      - libnvinfer-plugin-devel.x86_64
+      - libnvinfer-safe-headers-devel.x86_64
+      - python3-libnvinfer.x86_64
+      - python3-libnvinfer-devel.x86_64
+      - python3-libnvinfer-dispatch.x86_64
+      - python3-libnvinfer-lean.x86_64
+      - libnvonnxparsers-devel.x86_64
+    state: present
+  become: true
+
+# ---------------------------------------------------------------------------
+# Phase 6 — Profiling, debugging, and developer tools
+# ---------------------------------------------------------------------------
+
+- name: CUDA | Install CUDA profiling and debugging tools
+  ansible.builtin.dnf:
+    name:
+      - cuda-gdb-{{ cuda_toolkit_version }}.x86_64              # CUDA-aware GDB debugger
+      - cuda-nsight-{{ cuda_toolkit_version }}.x86_64
+      - cuda-nsight-compute-{{ cuda_toolkit_version }}.x86_64   # Nsight Compute — GPU kernel profiler
+      - cuda-nsight-systems-{{ cuda_toolkit_version }}.x86_64   # Nsight Systems — system-wide timeline profiler
+      - cuda-sanitizer-{{ cuda_toolkit_version }}.x86_64        # cuda-memcheck replacement (race, memory errors)
+    state: present
+
+# ---------------------------------------------------------------------------
+# Phase 8 — Post-installation environment configuration
+# ---------------------------------------------------------------------------
+
+- name: CUDA | Deploy CUDA environment profile script
+  ansible.builtin.copy:
+    dest: /etc/profile.d/cuda.sh
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      # CUDA environment — deployed by Ansible
+      # Adjust CUDA_HOME path if a specific version is required
+      export CUDA_HOME=/usr/local/cuda
+      export PATH=${CUDA_HOME}/bin${PATH:+:${PATH}}
+      export LD_LIBRARY_PATH=${CUDA_HOME}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+- name: CUDA | Deploy CUDA linker cache configuration
+  ansible.builtin.copy:
+    dest: /etc/ld.so.conf.d/cuda.conf
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      /usr/local/cuda/lib64
+  register: cuda_ldconf_written
+
+- name: CUDA | Rebuild linker cache after CUDA library path registration
+  ansible.builtin.command:
+    cmd: ldconfig
+  when: cuda_ldconf_written.changed
+
+# ---------------------------------------------------------------------------
+# Phase 9 — Verification
+# ---------------------------------------------------------------------------
+
+- name: CUDA | Verify nvcc is available and report version
+  ansible.builtin.command:
+    cmd: nvcc --version
+  register: nvcc_version
+  changed_when: false
+  failed_when: nvcc_version.rc != 0
+
+- name: CUDA | Display nvcc version
+  ansible.builtin.debug:
+    var: nvcc_version.stdout_lines
+
+- name: CUDA | Verify cuDNN headers are present
+  ansible.builtin.stat:
+    path: /usr/include/cudnn.h
+  register: cudnn_header_stat
+
+- name: CUDA | Fail if cuDNN development headers are missing
+  ansible.builtin.fail:
+    msg: >
+      /usr/include/cudnn.h not found after installing cudnn9-cuda-12.
+      Check 'dnf list installed | grep cudnn' on the target host.
+  when: not cudnn_header_stat.stat.exists
+
+- name: CUDA | Verify NCCL headers are present
+  ansible.builtin.stat:
+    path: /usr/include/nccl.h
+  register: nccl_header_stat
+
+- name: CUDA | Fail if NCCL development headers are missing
+  ansible.builtin.fail:
+    msg: >
+      /usr/include/nccl.h not found after installing libnccl-devel.
+      Check 'dnf list installed | grep nccl' on the target host.
+  when: not nccl_header_stat.stat.exists
+
+- name: CUDA | Report NVLink bridge link state
+  ansible.builtin.command:
+    cmd: nvidia-smi nvlink --status
+  register: nvlink_status
+  changed_when: false
+  failed_when: false
+  # Non-fatal: shows NVLink link state across the bridge between PCIe H200 GPUs.
+  # If all links report as inactive, check physical bridge seating and power state.
+  # nvidia-fabricmanager is NOT applicable here — it is for NVSwitch (SXM) only.
+
+- name: CUDA | Display NVLink status
+  ansible.builtin.debug:
+    var: nvlink_status.stdout_lines
