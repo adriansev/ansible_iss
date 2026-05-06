@@ -113,6 +113,14 @@
     cuda_toolkit_version: "{{ cuda_toolkit_version_list[0:2] | join('-')  }}"
     cuda_toolkit_version_maj: "{{ cuda_toolkit_version_list[0] }}"
 
+- name: CUDA | Install CUDA tools
+  ansible.builtin.dnf:
+    name:
+      - cuda-nvrtc-{{ cuda_toolkit_version }}.x86_64
+      - cuda-nvrtc-devel-{{ cuda_toolkit_version }}.x86_64
+      - cuda-nvml-devel-{{ cuda_toolkit_version }}.x86_64
+      - cuda-cccl-{{ cuda_toolkit_version }}.x86_64
+
 - name: CUDA | Install CUDA math library development headers
   ansible.builtin.dnf:
     name:
