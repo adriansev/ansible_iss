@@ -1,0 +1,62 @@
+---
+- name: Import Wazuh GPG signing key
+  ansible.builtin.rpm_key:
+    key: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+    state: present
+
+- name: "[RPM] Deploy Wazuh YUM repository (disabled by default)"
+  # Repo is deployed with enabled=0. The install task uses enablerepo: wazuh
+  # explicitly, so this file never needs to be toggled. Fully idempotent on
+  # re-runs . no spurious changes after the initial deployment.
+  when: ansible_facts[ 'os_family' ] == "RedHat"
+  ansible.builtin.copy:
+    dest: /etc/yum.repos.d/wazuh.repo
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      [wazuh]
+      gpgcheck=1
+      gpgkey=https://packages.wazuh.com/key/GPG-KEY-WAZUH
+      enabled=0
+      name=EL-$releasever - Wazuh
+      baseurl=https://packages.wazuh.com/4.x/yum/
+      priority=1
+
+- name: "DEB Install prerequisites"
+  ansible.builtin.apt: [ 'gnupg', 'apt-transport-https']
+    state: present
+    update_cache: true
+  when: ansible_facts[ 'os_family' ] == "Debian"
+
+- name: "DEB Download Wazuh GPG key"
+  when: ansible_facts[ 'os_family' ] == "Debian"
+  ansible.builtin.get_url:
+    url: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+    dest: /tmp/wazuh-key.asc
+    mode: '0644'
+    force: false
+
+- name: "[DEB] Dearmor GPG key into signed-by keyring"
+  # gpg --dearmor converts the ASCII-armored key to the binary format required
+  # by the signed-by apt directive. 'creates' makes this idempotent.
+  when: ansible_facts[ 'os_family' ] == "Debian"
+  ansible.builtin.shell:
+    cmd: >
+      gpg --dearmor < /tmp/wazuh-key.asc > /usr/share/keyrings/wazuh.gpg
+      && chmod 644 /usr/share/keyrings/wazuh.gpg
+    creates: /usr/share/keyrings/wazuh.gpg
+
+- name: "[DEB] Deploy Wazuh apt repository"
+  when: ansible_facts[ 'os_family' ] == "Debian"
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/wazuh.list
+    owner: root
+    group: root
+    mode: '0644'
+    content: "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main\n"
+
+- name: "[DEB] Update apt cache after repo deployment"
+  when: ansible_facts[ 'os_family' ] == "Debian"
+  ansible.builtin.apt:
+    update_cache: true

@@ -1,0 +1,66 @@
+---
+- name: Include repo_nordugrid_task.yml
+  ansible.builtin.include_tasks: repo_nordugrid_task.yml
+
+- name: Install arcce-wn EL9
+  ansible.builtin.dnf:
+    name:
+      - bash-completion
+      - python-argcomplete
+      - nordugrid-arc
+      - nordugrid-arc-arcctl
+      - nordugrid-arc-arcctl-service
+      - nordugrid-arc-arc-exporter
+      - nordugrid-arc-arex
+      - nordugrid-arc-arex-lrms-contrib
+      - nordugrid-arc-client
+      - nordugrid-arc-community-rtes
+      - nordugrid-arc-hed
+      - nordugrid-arc-infosys-ldap
+      - nordugrid-arc-monitor
+      - nordugrid-arc-plugins-gfal
+      - nordugrid-arc-plugins-globus
+      - nordugrid-arc-plugins-globus-common
+      - nordugrid-arc-plugins-gridftp
+      - nordugrid-arc-plugins-lcas-lcmaps
+      - nordugrid-arc-plugins-needed
+      - nordugrid-arc-plugins-python
+      - nordugrid-arc-plugins-xrootd
+      - nordugrid-arc-wn
+      - python3-nordugrid-arc
+    state: present
+    enablerepo: "epel,nordugrid,nordugrid-updates"
+    disablerepo: "UMD*"
+  when: ansible_facts[ 'distribution' ] == 'AlmaLinux' and ansible_facts[ 'distribution_major_version' ] == '9'
+  tags: packages
+
+- name: Install arcce-wn Fedora
+  ansible.builtin.dnf:
+    name:
+      - bash-completion
+      - python-argcomplete
+      - nordugrid-arc
+      - nordugrid-arc-arcctl
+      - nordugrid-arc-arcctl-service
+      - nordugrid-arc-arc-exporter
+      - nordugrid-arc-arex
+      - nordugrid-arc-arex-lrms-contrib
+      - nordugrid-arc-client
+      - nordugrid-arc-community-rtes
+      - nordugrid-arc-hed
+      - nordugrid-arc-infosys-ldap
+      - nordugrid-arc-monitor
+      - nordugrid-arc-plugins-gfal
+      - nordugrid-arc-plugins-globus
+      - nordugrid-arc-plugins-globus-common
+      - nordugrid-arc-plugins-gridftp
+      - nordugrid-arc-plugins-lcas-lcmaps
+      - nordugrid-arc-plugins-needed
+      - nordugrid-arc-plugins-python
+      - nordugrid-arc-plugins-xrootd
+      - nordugrid-arc-wn
+      - python3-nordugrid-arc
+    state: present
+    enablerepo: "nordugrid,nordugrid-updates"
+  when: ansible_facts[ 'distribution' ] == 'Fedora'
+  tags: packages

@@ -3,7 +3,9 @@ package_list:
   - quota.x86_64
   - quotatool.x86_64
   - environment-modules.x86_64
-  - conda
+  - conda.noarch
+  - python3-conda.noarch
+  - python3-conda-package-handling.x86_64
   - systemd-devel
   - python3-devel
   - python3.13.x86_64

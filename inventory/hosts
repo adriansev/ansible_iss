@@ -19,7 +19,6 @@ sbdii.spacescience.ro
 isscloud.spacescience.ro
 www2.spacescience.ro
 indico.spacescience.ro
-hr.spacescience.ro
 gw1.spacescience.ro
 ns.spacescience.ro
 herahsh.spacescience.ro
@@ -32,6 +31,7 @@ luxe.spacescience.ro
 sev.spacescience.ro
 monitor.spacescience.ro
 issaf.spacescience.ro
+sec.spacescience.ro
 
 durocern1 ansible_host=46.243.114.2 ansible_port=2201
 vmhost1   ansible_host=10.10.11.241
@@ -47,7 +47,8 @@ mgm1.spacescience.ro
 mgm2.spacescience.ro
 mgm3.spacescience.ro
 
-nfs01  ansible_host=10.99.99.200 ansible_ssh_extra_args=' -J root@issaf.spacescience.ro '
+nfs01  ansible_host=10.99.99.200
+## ansible_ssh_extra_args=' -J root@issaf.spacescience.ro ' ansible_ssh_private_key_file=/root/.ssh/id_ed25519
 
 ## LISA
 ceph1.lisa  ansible_host=10.10.180.31
@@ -60,17 +61,16 @@ wn4.lisa    ansible_host=10.10.180.44
 wn5.lisa    ansible_host=10.10.180.45
 
 
-
-# [all:vars]
-
-ansible_private_key_file=/root/.ssh/id_ed25519
+[all:vars]
+# ansible_ssh_private_key_file=/root/.ssh/id_ed25519
 
 ############################################################
 ## Define functional groups
 ############################################################
 
 [nfs_servers]
-nfs01  ansible_host=10.99.99.200 ansible_ssh_extra_args=' -J root@issaf.spacescience.ro '
+nfs01  ansible_host=10.99.99.200
+## ansible_ssh_private_key_file=/root/.ssh/id_ed25519
 
 [lisa_wn]
 wn1.lisa
@@ -141,7 +141,8 @@ wn_alien
 #########################################################################
 #########################################################################
 [wn_issaf:vars]
-ansible_ssh_extra_args = ' -J root@issaf.spacescience.ro '
+##ansible_ssh_extra_args = ' -J root@issaf.spacescience.ro '
+ansible_ssh_private_key_file = /root/.ssh/id_ed25519
 
 [wn_issaf]
 
@@ -155,9 +156,6 @@ wn_issaf
 #########################################################################
 #########################################################################
 # MISC grouping by attributes
-
-[areca_raid]
-fst15.spacescience.ro
 
 [lsi]
 fst01.spacescience.ro
@@ -175,6 +173,10 @@ fst12.spacescience.ro
 fst13.spacescience.ro
 fst14.spacescience.ro
 fst16.spacescience.ro
+fst17.spacescience.ro
+fst18.spacescience.ro
+fst19.spacescience.ro
+fst20.spacescience.ro
 seau2.spacescience.ro
 issaf.spacescience.ro
 

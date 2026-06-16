@@ -5,13 +5,14 @@
     state: enabled
   when: ansible_facts['distribution'] == 'AlmaLinux'
 
-- name: Install epel and elrepo repositories, IPMI packages
+- name: Install epel and elrepo repositories, IPMI packages, configure postfix
   ansible.builtin.include_tasks: "{{ item }}"
   with_items:
     - pkg_yum-utils_task.yml
     - repo_epel_task.yml
     - repo_elrepo_task.yml
     - pkg_ipmi_task.yml
+    - cfg_postfix.yml
 
 - name: Install system management and monitoring tools - EL9
   ansible.builtin.dnf:
@@ -118,17 +119,17 @@
         pathmunge $HOME/.local/bin
   when: ansible_facts['distribution'] == 'AlmaLinux' or ansible_facts['distribution'] == 'Fedora'
 
-- name: Set TZ default value
-  ansible.builtin.copy:
-    dest: /etc/profile.d/set_tz.sh
-    mode: "0644"
-    owner: root
-    group: root
-    backup: false
-    force: true
-    content: |
-        TZ=':/etc/localtime'
-        export TZ
+#- name: Set TZ default value
+#  ansible.builtin.copy:
+#    dest: /etc/profile.d/set_tz.sh
+#    mode: "0644"
+#    owner: root
+#    group: root
+#    backup: false
+#    force: true
+#    content: |
+#        TZ=':/etc/localtime'
+#        export TZ
 
 - name: Install hardware management and monitoring tools - EL9
   ansible.builtin.dnf:
@@ -168,7 +169,6 @@
     mode: '0700'
     force: true
   when: ansible_facts['virtualization_role'] != 'guest'
-
 
 - name: Add cron job for smart_temp_report
   ansible.builtin.copy:

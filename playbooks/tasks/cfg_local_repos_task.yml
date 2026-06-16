@@ -1,0 +1,161 @@
+---
+# repoint_local_mirror.yml
+#
+# Point AlmaLinux / EPEL / ELRepo repositories at the local mirror on
+#   http://monitor.spacescience.ro/mirrors
+# and neutralize upstream mirrorlist/metalink so clients use ONLY the local
+# mirror (and never phone home to upstream, including countme telemetry).
+#
+# Why drop mirrorlist/metalink: in the DNF stack the source precedence is
+# metalink > mirrorlist > baseurl (first one set is used), with no reliable
+# fall-through from a failing mirrorlist to baseurl. Adding a baseurl while
+# leaving mirrorlist/metalink in place leaves the upstream source active and the
+# local baseurl ignored. Removing them is the deterministic fix.
+#
+# Portable across AlmaLinux 9 (dnf4) and 10 (dnf5): $releasever / el$releasever
+# are substituted by dnf per host. $basearch is intentionally hardcoded to
+# x86_64 (the only arch on the mirror); revisit if ARM hosts are added.
+#
+# Before editing, each target file that still points upstream is copied to
+#   <file>_ans_<YYYYMMDD_HHMMSS>
+# in place. That name does not end in .repo, so dnf ignores it. The backup is
+# only made when the file would actually change, keeping re-runs idempotent.
+#
+# Conventions: runs as root (no become), FQCN modules, no handlers,
+# self-contained, inline register/when. Edits are guarded by file presence so a
+# repo file absent on a host is never created.
+#
+# Override the directory for testing with -e repo_dir=/path/to/yum.repos.d
+
+- name: Default the repo directory
+  ansible.builtin.set_fact:
+    repo_dir: "{{ repo_dir | default('/etc/yum.repos.d') }}"
+
+- name: Set local mirror root
+  ansible.builtin.set_fact:
+    mirror_root: "http://monitor.spacescience.ro/mirrors"
+
+# Single-line repos handled cleanly by ini_file. 'drop' = the upstream key to
+# remove (mirrorlist for AlmaLinux, metalink for EPEL). Only repos that have a
+# matching directory on the local mirror are listed.
+- name: Define single-line repos to repoint
+  ansible.builtin.set_fact:
+    mirror_repos:
+      - { file: almalinux-baseos.repo,           section: baseos,           drop: mirrorlist, baseurl: "{{ mirror_root }}/almalinux/$releasever/BaseOS/x86_64/os/" }
+      - { file: almalinux-appstream.repo,        section: appstream,        drop: mirrorlist, baseurl: "{{ mirror_root }}/almalinux/$releasever/AppStream/x86_64/os/" }
+      - { file: almalinux-crb.repo,              section: crb,              drop: mirrorlist, baseurl: "{{ mirror_root }}/almalinux/$releasever/CRB/x86_64/os/" }
+      - { file: almalinux-extras.repo,           section: extras,           drop: mirrorlist, baseurl: "{{ mirror_root }}/almalinux/$releasever/extras/x86_64/os/" }
+      - { file: almalinux-highavailability.repo, section: highavailability, drop: mirrorlist, baseurl: "{{ mirror_root }}/almalinux/$releasever/HighAvailability/x86_64/os/" }
+      - { file: almalinux-plus.repo,             section: plus,             drop: mirrorlist, baseurl: "{{ mirror_root }}/almalinux/$releasever/plus/x86_64/os/" }
+      - { file: epel.repo,                       section: epel,             drop: metalink,   baseurl: "{{ mirror_root }}/epel/$releasever/Everything/x86_64/" }
+
+# ELRepo sub-repos ship a FOLDED multi-line baseurl plus a mirrorlist. The
+# continuation lines must be stripped first (ini_file is line-oriented and would
+# otherwise leave orphan lines that dnf folds back into the new baseurl).
+- name: Define ELRepo repos to repoint
+  ansible.builtin.set_fact:
+    elrepo_repos:
+      - { section: elrepo,        baseurl: "{{ mirror_root }}/elrepo/elrepo/el$releasever/x86_64/" }
+      - { section: elrepo-kernel, baseurl: "{{ mirror_root }}/elrepo/kernel/el$releasever/x86_64/" }
+      - { section: elrepo-extras, baseurl: "{{ mirror_root }}/elrepo/extras/el$releasever/x86_64/" }
+
+- name: Capture run timestamp for backup suffixes
+  ansible.builtin.set_fact:
+    ans_ts: "{{ lookup('pipe', 'date +%Y%m%d_%H%M%S') }}"
+
+- name: Discover present .repo files
+  ansible.builtin.find:
+    paths: "{{ repo_dir }}"
+    patterns: "*.repo"
+  register: repo_find
+
+- name: Build set of present repo filenames
+  ansible.builtin.set_fact:
+    present_repos: "{{ repo_find.files | map(attribute='path') | map('basename') | list }}"
+
+# --- Pre-edit backups (only files that still point upstream) ---------------
+- name: Find single-line repo files still pointing upstream
+  ansible.builtin.find:
+    paths: "{{ repo_dir }}"
+    patterns: "{{ mirror_repos | map(attribute='file') | list }}"
+    contains: '^(mirrorlist|metalink)='
+  register: bk_single
+
+- name: Find elrepo.repo if it still has folded upstream baseurl lines
+  ansible.builtin.find:
+    paths: "{{ repo_dir }}"
+    patterns: "elrepo.repo"
+    contains: '^[ \t]+https?://'
+  register: bk_elrepo
+
+- name: Back up repo files before in-place edit
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ item }}_ans_{{ ans_ts }}"
+    remote_src: true
+    mode: preserve
+  loop: "{{ (bk_single.files + bk_elrepo.files) | map(attribute='path') | list }}"
+  loop_control:
+    label: "{{ item }}"
+
+# --- AlmaLinux + EPEL ------------------------------------------------------
+- name: Set local baseurl (AlmaLinux + EPEL)
+  community.general.ini_file:
+    path: "{{ repo_dir }}/{{ item.file }}"
+    section: "{{ item.section }}"
+    option: baseurl
+    value: "{{ item.baseurl }}"
+    no_extra_spaces: true
+  loop: "{{ mirror_repos }}"
+  when: item.file in present_repos
+  register: r_set_single
+
+- name: Drop upstream mirrorlist/metalink (AlmaLinux + EPEL)
+  community.general.ini_file:
+    path: "{{ repo_dir }}/{{ item.file }}"
+    section: "{{ item.section }}"
+    option: "{{ item.drop }}"
+    state: absent
+  loop: "{{ mirror_repos }}"
+  when: item.file in present_repos
+  register: r_drop_single
+
+# --- ELRepo ----------------------------------------------------------------
+- name: Strip folded baseurl continuation lines in elrepo.repo
+  ansible.builtin.replace:
+    path: "{{ repo_dir }}/elrepo.repo"
+    regexp: '^[ \t]+https?://.*\n'
+    replace: ''
+  when: "'elrepo.repo' in present_repos"
+  register: r_elrepo_strip
+
+- name: Set local baseurl (ELRepo)
+  community.general.ini_file:
+    path: "{{ repo_dir }}/elrepo.repo"
+    section: "{{ item.section }}"
+    option: baseurl
+    value: "{{ item.baseurl }}"
+    no_extra_spaces: true
+  loop: "{{ elrepo_repos }}"
+  when: "'elrepo.repo' in present_repos"
+  register: r_elrepo_set
+
+- name: Drop mirrorlist (ELRepo)
+  community.general.ini_file:
+    path: "{{ repo_dir }}/elrepo.repo"
+    section: "{{ item.section }}"
+    option: mirrorlist
+    state: absent
+  loop: "{{ elrepo_repos }}"
+  when: "'elrepo.repo' in present_repos"
+  register: r_elrepo_drop
+
+# --- Refresh metadata only when something actually changed -----------------
+- name: Refresh dnf metadata after repo changes
+  ansible.builtin.command:
+    cmd: dnf -q clean all
+  when: >-
+    (r_set_single is changed) or (r_drop_single is changed) or
+    (r_elrepo_strip is changed) or (r_elrepo_set is changed) or
+    (r_elrepo_drop is changed)
+  changed_when: false

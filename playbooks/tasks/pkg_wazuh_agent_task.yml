@@ -1,0 +1,317 @@
+---
+# tasks/wazuh_agent.yml
+#
+# Deploys and enrolls the Wazuh agent across:
+#   - EL9  (AlmaLinux 9 / RHEL 9 / Rocky 9)
+#   - EL10 (AlmaLinux 10 / RHEL 10 / Rocky 10)
+#         [Assumption]: Wazuh 4.x yum repo ships EL10-compatible RPMs.
+#         Verify before running: curl -s https://packages.wazuh.com/4.x/yum/ | grep el10
+#   - Fedora
+#         [Assumption]: EL-compatible RPMs satisfy Fedora runtime deps for the
+#         agent binary. Test on target Fedora release before fleet rollout.
+#   - Ubuntu 22.04 / 24.04 / 26.04
+#         [Assumption]: Ubuntu 26.04 apt dependencies are satisfied by the
+#         Wazuh 4.x 'stable' apt suite. Verify before rollout.
+#   - Windows x86_64
+#
+# Preconditions:
+#   - gather_facts: true (default). All 'when' conditions rely on ansible_facts.
+#   - Linux targets: connection user is root. No become: true.
+#   - Windows targets: WinRM configured. ansible_connection: winrm.
+#
+# Required variables (group_vars or -e):
+#   wazuh_manager_ip      : FQDN or IP of the Wazuh manager
+#                           Example: sec.spacescience.ro
+#
+# Optional variables:
+#   wazuh_agent_name      : Registered agent name  (default: inventory_hostname)
+#   wazuh_agent_group     : Wazuh agent group       (default: default)
+#   wazuh_agent_version   : Version string for Windows MSI URL (default: 4.14.1)
+
+
+# ..............................................................................
+# SECTION 1 . EL9 / EL10 / Fedora
+# Condition: ansible_facts[ 'os_family' ] == "RedHat"
+# ..............................................................................
+
+- name: "[RPM] Import Wazuh GPG signing key"
+  ansible.builtin.rpm_key:
+    key: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+    state: present
+  when: ansible_facts[ 'os_family' ] == "RedHat"
+
+- name: "[RPM] Deploy Wazuh YUM repository (disabled by default)"
+  # Repo is deployed with enabled=0. The install task uses enablerepo: wazuh
+  # explicitly, so this file never needs to be toggled. Fully idempotent on
+  # re-runs . no spurious changes after the initial deployment.
+  ansible.builtin.copy:
+    dest: /etc/yum.repos.d/wazuh.repo
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      [wazuh]
+      gpgcheck=1
+      gpgkey=https://packages.wazuh.com/key/GPG-KEY-WAZUH
+      enabled=0
+      name=EL-$releasever - Wazuh
+      baseurl=https://packages.wazuh.com/4.x/yum/
+      priority=1
+  when: ansible_facts[ 'os_family' ] == "RedHat"
+
+- name: "[RPM] Install wazuh-agent package"
+  # enablerepo overrides enabled=0 for this transaction only.
+  # WAZUH_MANAGER / WAZUH_AGENT_NAME are consumed by the RPM %post scriptlet
+  # and written into /var/ossec/etc/ossec.conf on fresh install only.
+  ansible.builtin.dnf:
+    name: wazuh-agent
+    state: present
+    enablerepo: wazuh
+  environment:
+    WAZUH_MANAGER: "{{ wazuh_manager_ip }}"
+    WAZUH_AGENT_NAME: "{{ wazuh_agent_name | default(inventory_hostname) }}"
+    WAZUH_AGENT_GROUP: "{{ wazuh_agent_group | default('default') }}"
+  register: _wazuh_rpm_pkg
+  when: ansible_facts[ 'os_family' ] == "RedHat"
+
+- name: "[RPM] Ensure manager address is correct in ossec.conf"
+  # Idempotency guard for hosts where the package was pre-installed before
+  # this play ran (env vars above had no effect in that case).
+  ansible.builtin.lineinfile:
+    path: /var/ossec/etc/ossec.conf
+    regexp: '^\s*<address>.*</address>'
+    line: "      <address>{{ wazuh_manager_ip }}</address>"
+  register: _wazuh_rpm_conf
+  when: ansible_facts[ 'os_family' ] == "RedHat"
+
+- name: "[RPM] Reload systemd daemon after fresh package install"
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when:
+    - ansible_facts[ 'os_family' ] == "RedHat"
+    - _wazuh_rpm_pkg.changed
+
+- name: "[RPM] Enable wazuh-agent service at boot"
+  ansible.builtin.systemd:
+    name: wazuh-agent
+    enabled: true
+  when: ansible_facts[ 'os_family' ] == "RedHat"
+
+- name: "[RPM] Restart wazuh-agent on install or config change"
+  ansible.builtin.systemd:
+    name: wazuh-agent
+    state: restarted
+  when:
+    - ansible_facts[ 'os_family' ] == "RedHat"
+    - _wazuh_rpm_pkg.changed or _wazuh_rpm_conf.changed
+
+- name: "[RPM] Ensure wazuh-agent is running"
+  ansible.builtin.systemd:
+    name: wazuh-agent
+    state: started
+  when: ansible_facts[ 'os_family' ] == "RedHat"
+
+
+# ..............................................................................
+# SECTION 2 . Ubuntu 22.04 / 24.04 / 26.04
+# Condition: ansible_facts[ 'os_family' ] == "Debian"
+# Re-run behaviour note: the 'copy' task re-enables the deb line on every run
+# (it overwrites the commented-out version), and the lineinfile task comments
+# it out again. Both show as 'changed' on re-runs but are harmless . apt does
+# not reinstall an already-installed package. Accepted trade-off for simplicity.
+# ..............................................................................
+
+- name: "[DEB] Install prerequisites"
+  ansible.builtin.apt:
+    name:
+      - gnupg
+      - apt-transport-https
+    state: present
+    update_cache: true
+  when: ansible_facts[ 'os_family' ] == "Debian"
+
+- name: "[DEB] Download Wazuh GPG key"
+  ansible.builtin.get_url:
+    url: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+    dest: /tmp/wazuh-key.asc
+    mode: '0644'
+    force: false
+  when: ansible_facts[ 'os_family' ] == "Debian"
+
+- name: "[DEB] Dearmor GPG key into signed-by keyring"
+  # gpg --dearmor converts the ASCII-armored key to the binary format required
+  # by the signed-by apt directive. 'creates' makes this idempotent.
+  ansible.builtin.shell:
+    cmd: >
+      gpg --dearmor < /tmp/wazuh-key.asc > /usr/share/keyrings/wazuh.gpg
+      && chmod 644 /usr/share/keyrings/wazuh.gpg
+    creates: /usr/share/keyrings/wazuh.gpg
+  when: ansible_facts[ 'os_family' ] == "Debian"
+
+- name: "[DEB] Deploy Wazuh apt repository"
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/wazuh.list
+    owner: root
+    group: root
+    mode: '0644'
+    content: "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main\n"
+  when: ansible_facts[ 'os_family' ] == "Debian"
+
+- name: "[DEB] Update apt cache after repo deployment"
+  ansible.builtin.apt:
+    update_cache: true
+  when: ansible_facts[ 'os_family' ] == "Debian"
+
+- name: "[DEB] Install wazuh-agent package"
+  ansible.builtin.apt:
+    name: wazuh-agent
+    state: present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    WAZUH_MANAGER: "{{ wazuh_manager_ip }}"
+    WAZUH_AGENT_NAME: "{{ wazuh_agent_name | default(inventory_hostname) }}"
+    WAZUH_AGENT_GROUP: "{{ wazuh_agent_group | default('default') }}"
+  register: _wazuh_deb_pkg
+  when: ansible_facts[ 'os_family' ] == "Debian"
+
+- name: "[DEB] Disable Wazuh repository post-install"
+  # Prevents wazuh-agent from being pulled in by an unattended apt upgrade.
+  # regexp matches the active deb line (not already-commented lines).
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list.d/wazuh.list
+    regexp: '^deb '
+    line: '#deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main'
+  when: ansible_facts[ 'os_family' ] == "Debian"
+
+- name: "[DEB] Ensure manager address is correct in ossec.conf"
+  ansible.builtin.lineinfile:
+    path: /var/ossec/etc/ossec.conf
+    regexp: '^\s*<address>.*</address>'
+    line: "      <address>{{ wazuh_manager_ip }}</address>"
+  register: _wazuh_deb_conf
+  when: ansible_facts[ 'os_family' ] == "Debian"
+
+- name: "[DEB] Reload systemd daemon after fresh package install"
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when:
+    - ansible_facts[ 'os_family' ] == "Debian"
+    - _wazuh_deb_pkg.changed
+
+- name: "[DEB] Enable wazuh-agent service at boot"
+  ansible.builtin.systemd:
+    name: wazuh-agent
+    enabled: true
+  when: ansible_facts[ 'os_family' ] == "Debian"
+
+- name: "[DEB] Restart wazuh-agent on install or config change"
+  ansible.builtin.systemd:
+    name: wazuh-agent
+    state: restarted
+  when:
+    - ansible_facts[ 'os_family' ] == "Debian"
+    - _wazuh_deb_pkg.changed or _wazuh_deb_conf.changed
+
+- name: "[DEB] Ensure wazuh-agent is running"
+  ansible.builtin.systemd:
+    name: wazuh-agent
+    state: started
+  when: ansible_facts[ 'os_family' ] == "Debian"
+
+
+# ..............................................................................
+# SECTION 3 . Windows x86_64
+# Condition: ansible_facts[ 'os_family' ] == "Windows"
+# Assumes: WinRM configured, connection user has local Administrator privilege.
+# Service name in Wazuh 4.x: WazuhSvc
+# Install path: C:\Program Files (x86)\ossec-agent\
+# ..............................................................................
+
+- name: "[WIN] Check if Wazuh agent is already installed"
+  # Idempotency gate. Checking for the install directory is more reliable than
+  # win_package product_id string matching without the MSI GUID.
+  ansible.windows.win_stat:
+    path: 'C:\Program Files (x86)\ossec-agent'
+  register: _wazuh_win_installed
+  when: ansible_facts[ 'os_family' ] == "Windows"
+
+- name: "[WIN] Download Wazuh agent MSI"
+  ansible.windows.win_get_url:
+    url: "https://packages.wazuh.com/4.x/windows/wazuh-agent-{{ wazuh_agent_version | default('4.14.1') }}-1.msi"
+    dest: 'C:\Windows\Temp\wazuh-agent.msi'
+    force: false
+  when:
+    - ansible_facts[ 'os_family' ] == "Windows"
+    - not _wazuh_win_installed.stat.exists
+
+- name: "[WIN] Install Wazuh agent MSI (silent)"
+  ansible.windows.win_package:
+    path: 'C:\Windows\Temp\wazuh-agent.msi'
+    arguments: >-
+      /qn
+      WAZUH_MANAGER="{{ wazuh_manager_ip }}"
+      WAZUH_AGENT_NAME="{{ wazuh_agent_name | default(inventory_hostname) }}"
+      WAZUH_AGENT_GROUP="{{ wazuh_agent_group | default('default') }}"
+    state: present
+  register: _wazuh_win_pkg
+  when:
+    - ansible_facts[ 'os_family' ] == "Windows"
+    - not _wazuh_win_installed.stat.exists
+
+- name: "[WIN] Ensure manager address is correct in ossec.conf"
+  # Runs unconditionally to handle pre-installed agents pointing at wrong manager.
+  community.windows.win_lineinfile:
+    path: 'C:\Program Files (x86)\ossec-agent\ossec.conf'
+    regexp: '^\s*<address>.*</address>'
+    line: "      <address>{{ wazuh_manager_ip }}</address>"
+  register: _wazuh_win_conf
+  when: ansible_facts[ 'os_family' ] == "Windows"
+
+- name: "[WIN] Enable WazuhSvc at boot and ensure started"
+  ansible.windows.win_service:
+    name: WazuhSvc
+    start_mode: auto
+    state: started
+  when: ansible_facts[ 'os_family' ] == "Windows"
+
+- name: "[WIN] Restart WazuhSvc if config was modified"
+  ansible.windows.win_service:
+    name: WazuhSvc
+    state: restarted
+  when:
+    - ansible_facts[ 'os_family' ] == "Windows"
+    - _wazuh_win_conf.changed
+
+
+# ..............................................................................
+# SECTION 4 . Enrollment verification
+# ..............................................................................
+
+- name: "[LINUX] Verify established TCP connection to manager on port 1514"
+  # Checks for any ESTABLISHED outbound connection to port 1514.
+  # Does not grep for manager IP because ss shows the resolved IP while
+  # wazuh_manager_ip may be an FQDN. On a correctly configured single-manager
+  # host, the only connection on dport 1514 will be to the Wazuh manager.
+  ansible.builtin.shell:
+    cmd: "ss -tn state established '( dport = :1514 )' | grep -q ':1514'"
+  register: _wazuh_conn_linux
+  retries: 6
+  delay: 5
+  until: _wazuh_conn_linux.rc == 0
+  changed_when: false
+  failed_when: _wazuh_conn_linux.rc != 0
+  when: ansible_facts[ 'os_family' ] in ["RedHat", "Debian"]
+
+- name: "[WIN] Verify established TCP connection to manager on port 1514"
+  # findstr exits 0 on match, 1 on no match . correct basis for until loop.
+  ansible.windows.win_shell: >-
+    netstat -n | findstr ":1514" | findstr "ESTABLISHED"
+  register: _wazuh_conn_win
+  retries: 6
+  delay: 5
+  until: _wazuh_conn_win.rc == 0
+  changed_when: false
+  failed_when: _wazuh_conn_win.rc != 0
+  when: ansible_facts[ 'os_family' ] == "Windows"
+
+

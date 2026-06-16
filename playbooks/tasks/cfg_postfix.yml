@@ -1,0 +1,56 @@
+- name: Pre-seed postfix debconf selections (Debian/Ubuntu only)
+  when: ansible_facts['os_family'] == 'Debian'
+  ansible.builtin.debconf:
+    name: postfix
+    question: "{{ item.question }}"
+    value: "{{ item.value }}"
+    vtype: "{{ item.vtype }}"
+  loop:
+    - question: 'postfix/main_mailer_type'
+      value: 'Internet Site'
+      vtype: 'select'
+    - question: 'postfix/mailname'
+      value: '{{ ansible_facts["fqdn"] }}'
+      vtype: 'string'
+
+- name: Install postfix
+  ansible.builtin.package:
+    name: postfix
+    state: present
+
+- name: Enable and start postfix
+  ansible.builtin.systemd:
+    name: postfix
+    enabled: true
+    state: started
+
+- name: Configure postfix myorigin to FQDN
+  ansible.builtin.lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: '^#?\s*myorigin\s*='
+    line: "myorigin = $myhostname"
+    owner: root
+    group: root
+    mode: '0644'
+  register: postfix_cf_changed
+
+- name: Reload postfix if main.cf changed
+  ansible.builtin.systemd:
+    name: postfix
+    state: reloaded
+  when: postfix_cf_changed.changed
+
+- name: Set postfix root alias destination
+  ansible.builtin.lineinfile:
+    path: /etc/aliases
+    regexp: '^root\s*:'
+    line: "root: glite@spacescience.ro"
+    owner: root
+    group: root
+    mode: '0644'
+  register: aliases_changed
+
+- name: Rebuild aliases DB if changed
+  ansible.builtin.command:
+    cmd: newaliases
+  when: aliases_changed.changed
