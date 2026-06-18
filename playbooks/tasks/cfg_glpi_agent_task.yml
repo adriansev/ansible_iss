@@ -1,0 +1,87 @@
+---
+# tasks/glpi_agent.yml
+# GLPI Agent 1.17 . institutional inventory. AlmaLinux 9/10, Ubuntu, Windows.
+# Scanner role pinned to monitor.spacescience.ro (co-located with the GLPI server).
+# House style: FQCN, no handlers, no become (runs as root), inline register/when.
+# TARGETING: the calling play must target institutional hosts only.
+#            hal (personal home desktop) must NEVER be in scope . guarded below.
+
+- name: GLPI agent | enable CRB repo (EL)
+  ansible.builtin.command:
+    cmd: dnf config-manager --set-enabled crb
+  register: crb_enable
+  changed_when: true
+  when:
+    - ansible_facts['os_family'] == 'RedHat'
+
+- name: GLPI agent | common facts
+  ansible.builtin.set_fact:
+    glpi_agent_version: "1.17"
+    glpi_server_url: "https://inventory.spacescience.ro/front/inventory.php"
+    glpi_agent_tag: "iss"                                   # static institutional tag; change if you route by entity
+    glpi_scanner_host: "monitor.spacescience.ro"
+    glpi_is_scanner: "{{ inventory_hostname == 'monitor.spacescience.ro' }}"
+
+# ---- AlmaLinux 9 / 10 ----
+- name: GLPI agent | install (EL)
+  ansible.builtin.dnf:
+    name: "https://github.com/glpi-project/glpi-agent/releases/download/{{ glpi_agent_version }}/glpi-agent-{{ glpi_agent_version }}-1.noarch.rpm"
+    state: present
+    disable_gpg_check: true          # GitHub RPM unsigned for your keyring; verify published sha256 as compensating control
+  register: glpi_el
+  when: ansible_facts['os_family'] == 'RedHat'
+  # EL10/DNF5: if python-dnf bindings error, switch to ansible.builtin.dnf5. Needs EPEL (you mirror it) for perl deps.
+
+- name: GLPI agent | network task (scanner only, EL)
+  ansible.builtin.dnf:
+    name: "https://github.com/glpi-project/glpi-agent/releases/download/{{ glpi_agent_version }}/glpi-agent-task-network-{{ glpi_agent_version }}-1.noarch.rpm"
+    state: present
+    disable_gpg_check: true
+  when:
+    - glpi_is_scanner | bool
+    - ansible_facts['os_family'] == 'RedHat'
+
+# ---- Ubuntu ----
+- name: GLPI agent | install (Ubuntu)
+  ansible.builtin.apt:
+    deb: "https://github.com/glpi-project/glpi-agent/releases/download/{{ glpi_agent_version }}/glpi-agent_{{ glpi_agent_version }}-1_all.deb"
+    state: present
+  register: glpi_deb
+  when: ansible_facts['distribution'] == 'Ubuntu'
+
+# ---- Linux config (EL + Ubuntu) ----
+- name: GLPI agent | config (Linux)
+  ansible.builtin.copy:
+    dest: /etc/glpi-agent/conf.d/00-iss.cfg
+    owner: root
+    group: root
+    mode: '0640'
+    content: |
+      server = {{ glpi_server_url }}
+      tag = {{ glpi_agent_tag }}
+      {% if glpi_is_scanner %}
+      # scanner (co-located with GLPI server): accept loopback-triggered network tasks
+      httpd-trust = 127.0.0.1
+      {% else %}
+      no-httpd = 1
+      {% endif %}
+  register: glpi_cfg
+  when: ansible_facts['system'] == 'Linux'
+
+- name: GLPI agent | enable/(re)start service (Linux)
+  ansible.builtin.systemd:
+    name: glpi-agent
+    enabled: true
+    state: "{{ 'restarted' if glpi_cfg is changed else 'started' }}"
+  when: ansible_facts['system'] == 'Linux'
+
+# ---- Windows (over OpenSSH; ansible.windows) ----
+- name: GLPI agent | install MSI (Windows)
+  ansible.windows.win_package:
+    path: "https://github.com/glpi-project/glpi-agent/releases/download/{{ glpi_agent_version }}/GLPI-Agent-{{ glpi_agent_version }}-x64.msi"
+    state: present
+    arguments:
+      - SERVER={{ glpi_server_url }}
+      - RUNNOW=1
+      - TAG={{ glpi_agent_tag }}
+  when: ansible_facts['os_family'] == 'Windows'
