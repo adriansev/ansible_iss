@@ -1,0 +1,15 @@
+---
+- hosts: "{{ target }}"
+  gather_facts: true
+  vars:
+    frontier_logs: "/var/logs/frontier"
+    frontier_cache: "/home/frontier_cache"
+    frontier_allowed_networks: "85.120.46.0/24 46.243.114.128/25 10.10.8.0/22 2001:b30:4210::/48"
+
+  tasks:
+  - ansible.builtin.include_tasks:
+      file: "{{ task_item }}"
+    loop_control:
+      loop_var: task_item
+    with_items:
+      - "tasks/pkg_frontier_task.yml"
